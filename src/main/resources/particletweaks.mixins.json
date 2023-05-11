@@ -1,0 +1,35 @@
+{
+  "required": true,
+  "minVersion": "0.8.5",
+  "package": "net.lunade.particletweaks.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "client.BaseAshSmokeParticleMixin",
+    "client.BreakingItemParticleMixin",
+    "client.BubbleColumnUpParticleMixin",
+    "client.BubbleParticleMixin",
+    "client.CritParticleMixin",
+    "client.DripLandParticleMixin",
+    "client.DripParticleMixin",
+    "client.DustParticleBaseMixin",
+    "client.ExplodeParticleMixin",
+    "client.FallingDustParticleMixin",
+    "client.FallLandParticleMixin",
+    "client.GlowParticleMixin",
+    "client.HeartParticleMixin",
+    "client.NoteParticleMixin",
+    "client.ParticleMixin",
+    "client.PlayerCloudParticleMixin",
+    "client.SingleQuadParticleMixin",
+    "client.SnowflakeParticleMixin",
+    "client.SquidInkParticleMixin",
+    "client.SuspendedParticleMixin",
+    "client.TerrainParticleMixin",
+    "client.UnderwaterProviderMixin",
+    "client.WaterCurrentDownParticleMixin",
+    "client.WaterDropParticleMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

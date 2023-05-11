@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "particletweaks",
+  "version": "${version}",
+
+  "name": "Particle Tweaks",
+  "description": "Tweaks and improves particles.",
+  "authors": [
+    "Lunade"
+  ],
+
+  "license": "MIT",
+  "icon": "assets/particletweaks/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+
+  },
+  "mixins": [
+    "particletweaks.mixins.json"
+  ],
+  "accessWidener": "particletweaks.accesswidener",
+
+  "depends": {
+    "fabricloader": ">=0.14.12",
+    "fabric-api": ">=0.73.0",
+    "minecraft": ">=${minecraft_json_version}",
+    "java": ">=17"
+  }
+}
