@@ -201,8 +201,7 @@ public abstract class BubbleParticleMixin extends TextureSheetParticle implement
 			particleTweakInterface.particleTweaks$setScalesToZero();
 			particleTweakInterface.particleTweaks$setMovesWithWater(true);
 			if (!this.level.getFluidState(BlockPos.containing(this.x, this.y, this.z)).is(FluidTags.WATER)) {
-				this.y = -99999;
-				this.yo = -99999;
+				this.remove();
 			}
 		}
 	}
