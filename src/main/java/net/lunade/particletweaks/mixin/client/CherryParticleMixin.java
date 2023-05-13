@@ -54,6 +54,7 @@ public abstract class CherryParticleMixin extends TextureSheetParticle implement
 			particleTweakInterface.particleTweaks$setSwitchesExit(true);
 			particleTweakInterface.particleTweaks$setScalesToZero();
 			particleTweakInterface.particleTweaks$setSlowsInWater(true);
+			particleTweakInterface.particleTweaks$setMovesWithWater(true);
 		}
 	}
 
@@ -194,7 +195,6 @@ public abstract class CherryParticleMixin extends TextureSheetParticle implement
 
 	@Unique
 	private boolean particleTweaks$slowsInWater = false;
-
 	@Override
 	public void particleTweaks$setSlowsInWater(boolean set) {
 		this.particleTweaks$slowsInWater = set;
@@ -202,6 +202,17 @@ public abstract class CherryParticleMixin extends TextureSheetParticle implement
 	@Override
 	public boolean particleTweaks$slowsInWater() {
 		return this.particleTweaks$slowsInWater;
+	}
+
+	@Unique
+	private boolean particleTweaks$movesWithWater = false;
+	@Override
+	public void particleTweaks$setMovesWithWater(boolean set) {
+		this.particleTweaks$movesWithWater = set;
+	}
+	@Override
+	public boolean particleTweaks$movesWithWater() {
+		return this.particleTweaks$movesWithWater;
 	}
 
 }
