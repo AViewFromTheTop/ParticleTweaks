@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value = BreakingItemParticle.class, priority = 1001)
+@Mixin(value = BreakingItemParticle.class, priority = 999)
 public class BreakingItemParticleMixin {
 
 	@Inject(method = "<init>*", at = @At("TAIL"))

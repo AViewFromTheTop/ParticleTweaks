@@ -17,7 +17,7 @@ public class SnowflakeParticleMixin {
 		if (SnowflakeParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
 			particleTweakInterface.particleTweaks$setNewSystem(true);
 			particleTweakInterface.particleTweaks$setScaler(0.45F);
-			particleTweakInterface.particleTweaks$setFadeInsteadOfScale(true);
+			particleTweakInterface.particleTweaks$setSwitchesExit(true);
 			particleTweakInterface.particleTweaks$setSlowsInWater(true);
 			particleTweakInterface.particleTweaks$setMovesWithWater(true);
 		}
