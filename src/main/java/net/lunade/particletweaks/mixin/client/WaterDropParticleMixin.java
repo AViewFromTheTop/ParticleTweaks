@@ -155,7 +155,7 @@ public abstract class WaterDropParticleMixin extends TextureSheetParticle implem
 					return true;
 				}
 				this.particleTweaks$targetScaleDrip = 0F;
-				if (this.particleTweaks$prevScaleDrip <= 0.01F) {
+				if (this.particleTweaks$prevScaleDrip <= 0.04F) {
 					this.particleTweaks$scaleDrip = 0F;
 				}
 				return this.particleTweaks$prevScaleDrip == 0F;
