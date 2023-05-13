@@ -73,13 +73,20 @@ public abstract class BubbleParticleMixin extends TextureSheetParticle implement
 			}
 			BlockPos blockPos = BlockPos.containing(this.x, this.y, this.z);
 			FluidState fluidState = this.level.getFluidState(blockPos);
-			if (this.particleTweaks$slowsInWater() && fluidState.is(FluidTags.WATER)) {
+			boolean isFluidHighEnough = false;
+			boolean slowsInWater = this.particleTweaks$slowsInWater();
+			boolean movesWithWater = this.particleTweaks$movesWithWater();
+			if (slowsInWater || movesWithWater) {
+				isFluidHighEnough = !fluidState.isEmpty() && (fluidState.getHeight(this.level, blockPos) + (float)blockPos.getY()) >= this.y;
+			}
+
+			if (slowsInWater && isFluidHighEnough) {
 				this.xd *= 0.9;
 				this.yd += 0.02;
 				this.yd *= 0.2;
 				this.zd *= 0.9;
 			}
-			if (this.particleTweaks$movesWithWater()) {
+			if (movesWithWater && isFluidHighEnough) {
 				Vec3 flow = fluidState.getFlow(this.level, blockPos);
 				this.xd += flow.x() * 0.005;
 				this.yd += flow.y() * 0.005;
