@@ -8,6 +8,7 @@
     "client.BreakingItemParticleMixin",
     "client.BubbleColumnUpParticleMixin",
     "client.BubbleParticleMixin",
+    "client.CherryParticleMixin",
     "client.CritParticleMixin",
     "client.DripLandParticleMixin",
     "client.DripParticleMixin",

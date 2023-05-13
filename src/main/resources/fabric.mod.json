@@ -22,8 +22,8 @@
   "accessWidener": "particletweaks.accesswidener",
 
   "depends": {
-    "fabricloader": ">=0.14.12",
-    "fabric-api": ">=0.73.0",
+    "fabricloader": ">=0.14.19",
+    "fabric-api": ">=0.80.3",
     "minecraft": ">=${minecraft_json_version}",
     "java": ">=17"
   }
