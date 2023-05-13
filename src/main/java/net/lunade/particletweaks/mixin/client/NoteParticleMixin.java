@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(NoteParticle.class)
+@Mixin(value = NoteParticle.class, priority = 1001)
 public abstract class NoteParticleMixin extends TextureSheetParticle {
 
 	protected NoteParticleMixin(ClientLevel clientLevel, double d, double e, double f) {

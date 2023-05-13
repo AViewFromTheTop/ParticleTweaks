@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(DripParticle.class)
+@Mixin(value = DripParticle.class, priority = 1001)
 public abstract class DripParticleMixin extends TextureSheetParticle implements ParticleTweakInterface {
 
 	@Unique

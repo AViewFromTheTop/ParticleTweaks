@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(SingleQuadParticle.class)
+@Mixin(value = SingleQuadParticle.class, priority = 1001)
 public abstract class SingleQuadParticleMixin extends Particle implements ParticleTweakInterface {
 
 	@Unique

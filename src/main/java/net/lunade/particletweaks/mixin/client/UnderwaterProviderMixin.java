@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(SuspendedParticle.UnderwaterProvider.class)
+@Mixin(value = SuspendedParticle.UnderwaterProvider.class, priority = 1001)
 public class UnderwaterProviderMixin {
 
 	@Inject(method = "createParticle*", at = @At("TAIL"))
@@ -19,7 +19,7 @@ public class UnderwaterProviderMixin {
 			particleTweakInterface.particleTweaks$setNewSystem(true);
 			particleTweakInterface.particleTweaks$setScaler(0.05F);
 			particleTweakInterface.particleTweaks$setScalesToZero();
-			particleTweakInterface.particleTweaks$setSlowsInWater(false);
+			particleTweakInterface.particleTweaks$setSlowsInWater(true);
 			particleTweakInterface.particleTweaks$setMovesWithWater(false);
 		}
 	}

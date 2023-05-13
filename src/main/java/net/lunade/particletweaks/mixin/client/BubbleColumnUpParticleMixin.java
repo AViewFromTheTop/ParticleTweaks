@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(BubbleColumnUpParticle.class)
+@Mixin(value = BubbleColumnUpParticle.class, priority = 1001)
 public abstract class BubbleColumnUpParticleMixin extends TextureSheetParticle {
 
 	protected BubbleColumnUpParticleMixin(ClientLevel clientLevel, double d, double e, double f) {

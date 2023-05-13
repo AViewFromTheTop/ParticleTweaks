@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(CherryParticle.class)
+@Mixin(value = CherryParticle.class, priority = 1001)
 public abstract class CherryParticleMixin extends TextureSheetParticle implements ParticleTweakInterface {
 
 	@Unique

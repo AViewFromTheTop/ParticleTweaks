@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(DustParticleBase.class)
+@Mixin(value = DustParticleBase.class, priority = 1001)
 public abstract class DustParticleBaseMixin extends TextureSheetParticle {
 
 	protected DustParticleBaseMixin(ClientLevel clientLevel, double d, double e, double f) {

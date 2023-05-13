@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(DripParticle.FallAndLandParticle.class)
+@Mixin(value = DripParticle.FallAndLandParticle.class, priority = 1001)
 public class FallLandParticleMixin {
 
 	@Inject(method = "<init>*", at = @At("TAIL"))

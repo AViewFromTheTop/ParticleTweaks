@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(HeartParticle.class)
+@Mixin(value = HeartParticle.class, priority = 1001)
 public abstract class HeartParticleMixin extends TextureSheetParticle {
 
 	protected HeartParticleMixin(ClientLevel clientLevel, double d, double e, double f) {

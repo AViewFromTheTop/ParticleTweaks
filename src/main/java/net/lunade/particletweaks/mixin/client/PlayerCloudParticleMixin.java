@@ -11,14 +11,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(PlayerCloudParticle.class)
+@Mixin(value = PlayerCloudParticle.class, priority = 1001)
 public abstract class PlayerCloudParticleMixin extends TextureSheetParticle {
 
 	protected PlayerCloudParticleMixin(ClientLevel clientLevel, double d, double e, double f) {
 		super(clientLevel, d, e, f);
 	}
-
-	/*
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
 	private void particleTweaks$init(CallbackInfo info) {
@@ -48,7 +46,5 @@ public abstract class PlayerCloudParticleMixin extends TextureSheetParticle {
 	public void particleTweaks$getRenderType(CallbackInfoReturnable<ParticleRenderType> info) {
 		info.setReturnValue(ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT);
 	}
-
-	 */
 
 }
