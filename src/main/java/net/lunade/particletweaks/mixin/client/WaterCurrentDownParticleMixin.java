@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(WaterCurrentDownParticle.class)
+@Mixin(value = WaterCurrentDownParticle.class, priority = 1001)
 public abstract class WaterCurrentDownParticleMixin extends TextureSheetParticle {
 
 	protected WaterCurrentDownParticleMixin(ClientLevel clientLevel, double d, double e, double f) {

@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(CritParticle.class)
+@Mixin(value = CritParticle.class, priority = 1001)
 public abstract class CritParticleMixin extends TextureSheetParticle {
 
 	protected CritParticleMixin(ClientLevel clientLevel, double d, double e, double f) {

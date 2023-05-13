@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(FallingDustParticle.class)
+@Mixin(value = FallingDustParticle.class, priority = 1001)
 public abstract class FallingDustParticleMixin extends TextureSheetParticle implements ParticleTweakInterface {
 
 	@Unique

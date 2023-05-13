@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(SuspendedParticle.class)
+@Mixin(value = SuspendedParticle.class, priority = 1001)
 public class SuspendedParticleMixin {
 
 	@Inject(method = "<init>*", at = @At("TAIL"))

@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(TerrainParticle.class)
+@Mixin(value = TerrainParticle.class, priority = 1001)
 public class TerrainParticleMixin {
 
 	@Inject(method = "<init>*", at = @At("TAIL"))

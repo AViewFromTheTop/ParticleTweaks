@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(SquidInkParticle.class)
+@Mixin(value = SquidInkParticle.class, priority = 1001)
 public class SquidInkParticleMixin {
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
