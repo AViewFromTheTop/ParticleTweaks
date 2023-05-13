@@ -18,6 +18,7 @@ public class SuspendedParticleMixin {
 			particleTweakInterface.particleTweaks$setNewSystem(true);
 			particleTweakInterface.particleTweaks$setScalesToZero();
 			particleTweakInterface.particleTweaks$setSlowsInWater(true);
+			particleTweakInterface.particleTweaks$setMovesWithWater(true);
 		}
 	}
 

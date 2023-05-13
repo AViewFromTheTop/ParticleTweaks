@@ -32,4 +32,7 @@ public interface ParticleTweakInterface {
 
 	boolean particleTweaks$slowsInWater();
 
+	void particleTweaks$setMovesWithWater(boolean set);
+
+	boolean particleTweaks$movesWithWater();
 }

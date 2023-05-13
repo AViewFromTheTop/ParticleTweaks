@@ -8,6 +8,8 @@ import net.minecraft.client.particle.WaterDropParticle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.phys.Vec3;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -55,6 +57,7 @@ public abstract class WaterDropParticleMixin extends TextureSheetParticle implem
 		this.particleTweaks$setScalesToZero();
 		this.particleTweaks$setSwitchesExit(true);
 		this.particleTweaks$setSlowsInWater(true);
+		this.particleTweaks$setMovesWithWater(true);
 	}
 
 	@Inject(method = "tick", at = @At("HEAD"), cancellable = true)
@@ -73,10 +76,19 @@ public abstract class WaterDropParticleMixin extends TextureSheetParticle implem
 				this.remove();
 				info.cancel();
 			}
-			if (this.particleTweaks$slowsInWater() && this.level.getFluidState(BlockPos.containing(this.x, this.y, this.z)).is(FluidTags.WATER)) {
-				this.xd *= 0.98;
+			BlockPos blockPos = BlockPos.containing(this.x, this.y, this.z);
+			FluidState fluidState = this.level.getFluidState(blockPos);
+			if (this.particleTweaks$slowsInWater() && fluidState.is(FluidTags.WATER)) {
+				this.xd *= 0.9;
+				this.yd += 0.02;
 				this.yd *= 0.3;
-				this.zd *= 0.98;
+				this.zd *= 0.9;
+			}
+			if (this.particleTweaks$movesWithWater()) {
+				Vec3 flow = fluidState.getFlow(this.level, blockPos);
+				this.xd += flow.x() * 0.005;
+				this.yd += flow.y() * 0.005;
+				this.zd += flow.z() * 0.005;
 			}
 		}
 	}
@@ -200,7 +212,6 @@ public abstract class WaterDropParticleMixin extends TextureSheetParticle implem
 
 	@Unique
 	private boolean particleTweaks$slowsInWater = false;
-
 	@Override
 	public void particleTweaks$setSlowsInWater(boolean set) {
 		this.particleTweaks$slowsInWater = set;
@@ -210,4 +221,14 @@ public abstract class WaterDropParticleMixin extends TextureSheetParticle implem
 		return this.particleTweaks$slowsInWater;
 	}
 
+	@Unique
+	private boolean particleTweaks$movesWithWater = false;
+	@Override
+	public void particleTweaks$setMovesWithWater(boolean set) {
+		this.particleTweaks$movesWithWater = set;
+	}
+	@Override
+	public boolean particleTweaks$movesWithWater() {
+		return this.particleTweaks$movesWithWater;
+	}
 }
