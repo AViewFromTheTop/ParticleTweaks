@@ -58,7 +58,7 @@ public class ParticleMixin {
 			if (particleTweakInterface.particleTweaks$slowsInWater() && fluidState.is(FluidTags.WATER)) {
 				this.xd *= 0.9;
 				this.yd += 0.02;
-				this.yd *= 0.3;
+				this.yd *= 0.2;
 				this.zd *= 0.9;
 			}
 			if (particleTweakInterface.particleTweaks$movesWithWater()) {
