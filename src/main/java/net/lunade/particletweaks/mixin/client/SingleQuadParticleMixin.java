@@ -70,7 +70,7 @@ public abstract class SingleQuadParticleMixin extends Particle implements Partic
 					return true;
 				}
 				this.particleTweaks$targetScale = 0F;
-				if (this.particleTweaks$prevScale <= 0.005F) {
+				if (this.particleTweaks$prevScale <= 0.01F) {
 					this.particleTweaks$scale = 0F;
 				}
 				return this.particleTweaks$prevScale == 0F;
