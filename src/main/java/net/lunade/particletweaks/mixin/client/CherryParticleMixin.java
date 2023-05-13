@@ -74,8 +74,8 @@ public abstract class CherryParticleMixin extends TextureSheetParticle implement
 			BlockPos blockPos = BlockPos.containing(this.x, this.y, this.z);
 			FluidState fluidState = this.level.getFluidState(blockPos);
 			boolean isFluidHighEnough = false;
-			boolean slowsInWater = particleTweakInterface.particleTweaks$slowsInWater();
-			boolean movesWithWater = particleTweakInterface.particleTweaks$movesWithWater();
+			boolean slowsInWater = this.particleTweaks$slowsInWater();
+			boolean movesWithWater = this.particleTweaks$movesWithWater();
 			if (slowsInWater || movesWithWater) {
 				isFluidHighEnough = !fluidState.isEmpty() && (fluidState.getHeight(this.level, blockPos) + (float)blockPos.getY()) >= this.y;
 			}
