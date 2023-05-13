@@ -42,9 +42,4 @@ public abstract class PlayerCloudParticleMixin extends TextureSheetParticle {
 		}
 	}
 
-	@Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
-	public void particleTweaks$getRenderType(CallbackInfoReturnable<ParticleRenderType> info) {
-		info.setReturnValue(ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT);
-	}
-
 }
