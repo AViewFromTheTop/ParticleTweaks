@@ -2,6 +2,7 @@
   "required": true,
   "minVersion": "0.8.5",
   "package": "net.lunade.particletweaks.mixin",
+  "plugin": "net.lunade.particletweaks.mixin.ParticleTweaksMixinPlugin",
   "compatibilityLevel": "JAVA_17",
   "client": [
     "client.BaseAshSmokeParticleMixin",
@@ -27,7 +28,12 @@
     "client.TerrainParticleMixin",
     "client.UnderwaterProviderMixin",
     "client.WaterCurrentDownParticleMixin",
-    "client.WaterDropParticleMixin"
+    "client.WaterDropParticleMixin",
+    "client.wilderwild.FallingParticleMixin",
+    "client.wilderwild.MesogleaDripParticleMixin",
+    "client.wilderwild.MesogleaHangParticleMixin",
+    "client.wilderwild.MesogleaLandParticleMixin",
+    "client.wilderwild.SeedParticleMixin"
   ],
   "injectors": {
     "defaultRequire": 1

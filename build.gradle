@@ -157,6 +157,9 @@ dependencies {
 
 	// Fabric API
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${fabric_version}")
+
+	// Falling Leaves
+	modImplementation("maven.modrinth:wilder-wild:2.0-mc1.19.4")
 }
 
 
