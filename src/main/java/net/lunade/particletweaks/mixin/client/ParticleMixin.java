@@ -6,6 +6,8 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -51,10 +53,19 @@ public class ParticleMixin {
 					this.age = Mth.clamp(age - 1, 0, this.lifetime);
 				}
 			}
-			if (particleTweakInterface.particleTweaks$slowsInWater() && this.level.getFluidState(BlockPos.containing(this.x, this.y, this.z)).is(FluidTags.WATER)) {
-				this.xd *= 0.98;
+			BlockPos blockPos = BlockPos.containing(this.x, this.y, this.z);
+			FluidState fluidState = this.level.getFluidState(blockPos);
+			if (particleTweakInterface.particleTweaks$slowsInWater() && fluidState.is(FluidTags.WATER)) {
+				this.xd *= 0.9;
+				this.yd += 0.02;
 				this.yd *= 0.3;
-				this.zd *= 0.98;
+				this.zd *= 0.9;
+			}
+			if (particleTweakInterface.particleTweaks$movesWithWater()) {
+				Vec3 flow = fluidState.getFlow(this.level, blockPos);
+				this.xd += flow.x() * 0.005;
+				this.yd += flow.y() * 0.005;
+				this.zd += flow.z() * 0.005;
 			}
 		}
 	}

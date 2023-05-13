@@ -20,6 +20,7 @@ public class UnderwaterProviderMixin {
 			particleTweakInterface.particleTweaks$setScaler(0.05F);
 			particleTweakInterface.particleTweaks$setScalesToZero();
 			particleTweakInterface.particleTweaks$setSlowsInWater(false);
+			particleTweakInterface.particleTweaks$setMovesWithWater(false);
 		}
 	}
 }

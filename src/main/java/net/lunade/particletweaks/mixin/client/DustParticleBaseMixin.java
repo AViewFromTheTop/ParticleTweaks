@@ -26,6 +26,7 @@ public abstract class DustParticleBaseMixin extends TextureSheetParticle {
 			particleTweakInterface.particleTweaks$setScalesToZero();
 			particleTweakInterface.particleTweaks$setSwitchesExit(true);
 			particleTweakInterface.particleTweaks$setSlowsInWater(true);
+			particleTweakInterface.particleTweaks$setMovesWithWater(true);
 		}
 	}
 

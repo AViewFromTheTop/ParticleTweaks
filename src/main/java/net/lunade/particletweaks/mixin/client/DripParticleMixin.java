@@ -9,6 +9,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -65,10 +67,19 @@ public abstract class DripParticleMixin extends TextureSheetParticle implements 
 				this.remove();
 				info.cancel();
 			}
-			if (this.particleTweaks$slowsInWater() && this.level.getFluidState(BlockPos.containing(this.x, this.y, this.z)).is(FluidTags.WATER)) {
-				this.xd *= 0.98;
+			BlockPos blockPos = BlockPos.containing(this.x, this.y, this.z);
+			FluidState fluidState = this.level.getFluidState(blockPos);
+			if (this.particleTweaks$slowsInWater() && fluidState.is(FluidTags.WATER)) {
+				this.xd *= 0.9;
+				this.yd += 0.02;
 				this.yd *= 0.3;
-				this.zd *= 0.98;
+				this.zd *= 0.9;
+			}
+			if (this.particleTweaks$movesWithWater()) {
+				Vec3 flow = fluidState.getFlow(this.level, blockPos);
+				this.xd += flow.x() * 0.005;
+				this.yd += flow.y() * 0.005;
+				this.zd += flow.z() * 0.005;
 			}
 		}
 	}
@@ -175,7 +186,6 @@ public abstract class DripParticleMixin extends TextureSheetParticle implements 
 
 	@Unique
 	private boolean particleTweaks$slowsInWater = false;
-
 	@Override
 	public void particleTweaks$setSlowsInWater(boolean set) {
 		this.particleTweaks$slowsInWater = set;
@@ -185,6 +195,17 @@ public abstract class DripParticleMixin extends TextureSheetParticle implements 
 		return this.particleTweaks$slowsInWater;
 	}
 
+	@Unique
+	private boolean particleTweaks$movesWithWater = false;
+	@Override
+	public void particleTweaks$setMovesWithWater(boolean set) {
+		this.particleTweaks$movesWithWater = set;
+	}
+	@Override
+	public boolean particleTweaks$movesWithWater() {
+		return this.particleTweaks$movesWithWater;
+	}
+
 	@Inject(method = "createSporeBlossomFallParticle", at = @At("RETURN"))
 	private static void particleTweaks$createSporeBlossomFallParticle(SimpleParticleType simpleParticleType, ClientLevel clientLevel, double d, double e, double f, double g, double h, double i, CallbackInfoReturnable<TextureSheetParticle> info) {
 		if (info.getReturnValue() instanceof ParticleTweakInterface particleTweakInterface) {
@@ -192,6 +213,7 @@ public abstract class DripParticleMixin extends TextureSheetParticle implements 
 			particleTweakInterface.particleTweaks$setScaler(0.15F);
 			particleTweakInterface.particleTweaks$setScalesToZero();
 			particleTweakInterface.particleTweaks$setSlowsInWater(true);
+			particleTweakInterface.particleTweaks$setMovesWithWater(true);
 		}
 	}
 
@@ -291,6 +313,7 @@ public abstract class DripParticleMixin extends TextureSheetParticle implements 
 			particleTweakInterface.particleTweaks$setScalesToZero();
 			particleTweakInterface.particleTweaks$setCanShrink(false);
 			particleTweakInterface.particleTweaks$setSlowsInWater(true);
+			particleTweakInterface.particleTweaks$setMovesWithWater(true);
 		}
 	}
 
