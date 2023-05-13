@@ -139,7 +139,7 @@ public abstract class FallingDustParticleMixin extends TextureSheetParticle impl
 					return true;
 				}
 				this.particleTweaks$targetScale = 0F;
-				if (this.particleTweaks$prevScale <= 0.01F) {
+				if (this.particleTweaks$prevScale <= 0.04F) {
 					this.particleTweaks$scale = 0F;
 				}
 				return this.particleTweaks$prevScale == 0F;
