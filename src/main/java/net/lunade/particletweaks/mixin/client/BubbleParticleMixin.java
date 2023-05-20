@@ -7,7 +7,6 @@ import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
@@ -198,19 +197,6 @@ public abstract class BubbleParticleMixin extends TextureSheetParticle implement
 	@Override
 	public boolean particleTweaks$movesWithWater() {
 		return this.particleTweaks$movesWithWater;
-	}
-
-	@Inject(method = "<init>*", at = @At("TAIL"))
-	private void particleTweaks$init(CallbackInfo info) {
-		if (BubbleParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			particleTweakInterface.particleTweaks$setNewSystem(true);
-			particleTweakInterface.particleTweaks$setScaler(0.35F);
-			particleTweakInterface.particleTweaks$setScalesToZero();
-			particleTweakInterface.particleTweaks$setMovesWithWater(true);
-			if (!this.level.getFluidState(BlockPos.containing(this.x, this.y, this.z)).is(FluidTags.WATER)) {
-				this.remove();
-			}
-		}
 	}
 
 }
