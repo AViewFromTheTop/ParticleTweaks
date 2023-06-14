@@ -1,5 +1,6 @@
 package net.lunade.particletweaks.mixin.client;
 
+import net.lunade.particletweaks.ParticleTweaksSharedConstants;
 import net.lunade.particletweaks.interfaces.ParticleTweakInterface;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.BubbleParticle;
@@ -67,7 +68,9 @@ public abstract class BubbleParticleMixin extends TextureSheetParticle implement
 				this.lifetime = Math.min(this.lifetime + 1, this.particleTweaks$maxLifetime);
 			}
 			if (this.particleTweaks$runScaleRemoval()) {
-				this.level.addParticle(ParticleTypes.BUBBLE_POP, this.x, this.y, this.z, 0, 0, 0);
+				if (!ParticleTweaksSharedConstants.MAKE_BUBBLES_POP_MOD) {
+					this.level.addParticle(ParticleTypes.BUBBLE_POP, this.x, this.y, this.z, 0, 0, 0);
+				}
 				this.remove();
 				info.cancel();
 			}
