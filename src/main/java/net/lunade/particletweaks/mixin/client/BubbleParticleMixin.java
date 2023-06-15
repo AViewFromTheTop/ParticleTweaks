@@ -68,9 +68,7 @@ public abstract class BubbleParticleMixin extends TextureSheetParticle implement
 				this.lifetime = Math.min(this.lifetime + 1, this.particleTweaks$maxLifetime);
 			}
 			if (this.particleTweaks$runScaleRemoval()) {
-				if (!ParticleTweaksSharedConstants.MAKE_BUBBLES_POP_MOD) {
-					this.level.addParticle(ParticleTypes.BUBBLE_POP, this.x, this.y, this.z, 0, 0, 0);
-				}
+				this.level.addParticle(ParticleTypes.BUBBLE_POP, this.x, this.y, this.z, 0, 0, 0);
 				this.remove();
 				info.cancel();
 			}
