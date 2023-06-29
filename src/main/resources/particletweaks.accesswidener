@@ -1,3 +1,6 @@
 accessWidener    v2    named
 accessible class net/minecraft/client/particle/DripParticle$DripLandParticle
 accessible class net/minecraft/client/particle/DripParticle$FallAndLandParticle
+accessible field net/minecraft/client/particle/Particle age I
+accessible field net/minecraft/client/particle/Particle roll F
+accessible field net/minecraft/client/particle/Particle oRoll F

@@ -25,6 +25,9 @@ public class ParticleTweaksMixinPlugin implements IMixinConfigPlugin {
 		if (mixinClassName.contains("wilderwild")) {
 			return FabricLoader.getInstance().isModLoaded("wilderwild");
 		}
+		if (mixinClassName.contains("particlerain")) {
+			return FabricLoader.getInstance().isModLoaded("particlerain");
+		}
 		return true;
 	}
 
