@@ -45,7 +45,7 @@ public class RainDropParticleMixin {
 		return null;
 	}
 
-	@Inject(method = "tick", at = @At(value = "INVOKE", target = "Lpigcart/particlerain/particle/RainDropParticle;remove()V", shift = At.Shift.AFTER), cancellable = true)
+	@Inject(method = "tick", at = @At(value = "INVOKE", target = "Lpigcart/particlerain/particle/RainDropParticle;remove()V", shift = At.Shift.AFTER))
 	public void particleTweaks$tick(CallbackInfo info) {
 		if (RainDropParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
 			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
