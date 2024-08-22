@@ -2,6 +2,7 @@ package net.lunade.particletweaks.mixin.client;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.lunade.particletweaks.impl.FluidFallingCalculator;
 import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
@@ -84,10 +85,10 @@ public abstract class WaterDropParticleMixin extends TextureSheetParticle implem
 			}
 
 			if (slowsInWater && isFluidHighEnough) {
-				this.xd *= 0.9;
-				this.yd += 0.02;
-				this.yd *= 0.2;
-				this.zd *= 0.9;
+				this.xd *= 0.8;
+				this.yd = FluidFallingCalculator.getFluidFallingAdjustedMovement(this.gravity, this.yd * 0.016D);
+				this.yd += 0.06D;
+				this.zd *= 0.8;
 			}
 			if (movesWithWater && isFluidHighEnough) {
 				Vec3 flow = fluidState.getFlow(this.level, blockPos);
@@ -102,11 +103,12 @@ public abstract class WaterDropParticleMixin extends TextureSheetParticle implem
 	private int particleTweaks$storedLifetime;
 
 	@Inject(
-		method = "tick", at = @At(
+		method = "tick",
+		at = @At(
 			value = "FIELD",
-		target = "Lnet/minecraft/client/particle/WaterDropParticle;lifetime:I",
-		shift = At.Shift.BEFORE
-	)
+			target = "Lnet/minecraft/client/particle/WaterDropParticle;lifetime:I",
+			shift = At.Shift.BEFORE
+		)
 	)
 	public void particleTweaks$stopLifetimeCheck(CallbackInfo ci) {
 		if (this.particleTweaks$usesNewSystem()) {

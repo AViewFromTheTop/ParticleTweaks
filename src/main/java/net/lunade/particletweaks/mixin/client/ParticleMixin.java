@@ -1,5 +1,6 @@
 package net.lunade.particletweaks.mixin.client;
 
+import net.lunade.particletweaks.impl.FluidFallingCalculator;
 import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
@@ -39,6 +40,9 @@ public abstract class ParticleMixin {
 	@Shadow
 	public abstract void remove();
 
+	@Shadow
+	protected float gravity;
+
 	@Inject(method = "tick", at = @At("HEAD"))
 	public void particleTweaks$runScaling(CallbackInfo info) {
 		if (Particle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
@@ -59,16 +63,16 @@ public abstract class ParticleMixin {
 			}
 
 			if (slowsInWater && isFluidHighEnough) {
-				this.xd *= 0.9;
-				this.yd += 0.02;
-				this.yd *= 0.2;
-				this.zd *= 0.9;
+				this.xd *= 0.8;
+				this.yd = FluidFallingCalculator.getFluidFallingAdjustedMovement(this.gravity, this.yd * 0.016D);
+				this.yd += 0.06D;
+				this.zd *= 0.8;
 			}
 			if (movesWithWater && isFluidHighEnough) {
 				Vec3 flow = fluidState.getFlow(this.level, blockPos);
-				this.xd += flow.x() * 0.005;
-				this.yd += flow.y() * 0.005;
-				this.zd += flow.z() * 0.005;
+				this.xd += flow.x() * 0.005D;
+				this.yd += flow.y() * 0.005D;
+				this.zd += flow.z() * 0.005D;
 			}
 		}
 	}

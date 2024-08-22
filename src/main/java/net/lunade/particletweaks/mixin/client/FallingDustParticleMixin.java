@@ -1,5 +1,6 @@
 package net.lunade.particletweaks.mixin.client;
 
+import net.lunade.particletweaks.impl.FluidFallingCalculator;
 import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.FallingDustParticle;
@@ -74,10 +75,10 @@ public abstract class FallingDustParticleMixin extends TextureSheetParticle impl
 			}
 
 			if (slowsInWater && isFluidHighEnough) {
-				this.xd *= 0.9;
-				this.yd += 0.01;
-				this.yd *= 0.2;
-				this.zd *= 0.9;
+				this.xd *= 0.8;
+				this.yd = FluidFallingCalculator.getFluidFallingAdjustedMovement(this.gravity, this.yd * 0.016D);
+				this.yd += 0.06D;
+				this.zd *= 0.8;
 			}
 			if (movesWithWater && isFluidHighEnough) {
 				Vec3 flow = fluidState.getFlow(this.level, blockPos);

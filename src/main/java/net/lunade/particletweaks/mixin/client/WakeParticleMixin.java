@@ -1,27 +1,25 @@
-package net.lunade.particletweaks.mixin.client.wilderwild;
+package net.lunade.particletweaks.mixin.client;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.frozenblock.wilderwild.particle.MesogleaDripParticle;
-import net.lunade.particletweaks.impl.FluidFallingCalculator;
 import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.WakeParticle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(value = MesogleaDripParticle.class, priority = 1001)
-public abstract class MesogleaDripParticleMixin extends TextureSheetParticle implements ParticleTweakInterface {
+@Mixin(value = WakeParticle.class, priority = 1001)
+public abstract class WakeParticleMixin extends TextureSheetParticle implements ParticleTweakInterface {
 
 	@Unique
 	private float particleTweaks$scalerDrip = 0.15F;
@@ -46,8 +44,18 @@ public abstract class MesogleaDripParticleMixin extends TextureSheetParticle imp
 	@Unique
 	private boolean particleTweaks$switchesExit = false;
 
-	protected MesogleaDripParticleMixin(ClientLevel clientLevel, double d, double e, double f) {
+	protected WakeParticleMixin(ClientLevel clientLevel, double d, double e, double f) {
 		super(clientLevel, d, e, f);
+	}
+
+	@Inject(method = "<init>*", at = @At("TAIL"))
+	private void particleTweaks$init(CallbackInfo info) {
+		this.particleTweaks$setNewSystem(true);
+		this.particleTweaks$setScaler(0.3F);
+		this.particleTweaks$setScalesToZero();
+		this.particleTweaks$setSwitchesExit(true);
+		this.particleTweaks$setSlowsInWater(true);
+		this.particleTweaks$setMovesWithWater(true);
 	}
 
 	@Inject(method = "tick", at = @At("HEAD"), cancellable = true)
@@ -63,7 +71,6 @@ public abstract class MesogleaDripParticleMixin extends TextureSheetParticle imp
 				this.lifetime = Math.min(this.lifetime + 1, this.particleTweaks$maxLifetime);
 			}
 			if (this.particleTweaks$runScaleRemoval()) {
-				this.preMoveUpdate();
 				this.remove();
 				info.cancel();
 			}
@@ -77,10 +84,10 @@ public abstract class MesogleaDripParticleMixin extends TextureSheetParticle imp
 			}
 
 			if (slowsInWater && isFluidHighEnough) {
-				this.xd *= 0.8;
-				this.yd = FluidFallingCalculator.getFluidFallingAdjustedMovement(this.gravity, this.yd * 0.016D);
-				this.yd += 0.06D;
-				this.zd *= 0.8;
+				this.xd *= 0.9;
+				this.yd += 0.02;
+				this.yd *= 0.2;
+				this.zd *= 0.9;
 			}
 			if (movesWithWater && isFluidHighEnough) {
 				Vec3 flow = fluidState.getFlow(this.level, blockPos);
@@ -91,27 +98,58 @@ public abstract class MesogleaDripParticleMixin extends TextureSheetParticle imp
 		}
 	}
 
-	@Shadow
-	protected void preMoveUpdate() {}
+	@Unique
+	private int particleTweaks$storedLifetime;
+
+	@Inject(
+		method = "tick",
+		at = @At(
+			value = "FIELD",
+			target = "Lnet/minecraft/client/particle/WakeParticle;lifetime:I",
+			shift = At.Shift.BEFORE
+		)
+	)
+	public void particleTweaks$stopLifetimeCheck(CallbackInfo ci) {
+		if (this.particleTweaks$usesNewSystem()) {
+			this.particleTweaks$storedLifetime = this.lifetime;
+			this.lifetime = 100;
+		}
+	}
+
+	@Inject(
+		method = "tick",
+		at = @At(
+			value = "FIELD",
+			target = "Lnet/minecraft/client/particle/WakeParticle;lifetime:I",
+			shift = At.Shift.AFTER
+		)
+	)
+	public void particleTweaks$fixLifetimeCheck(CallbackInfo ci) {
+		if (this.particleTweaks$usesNewSystem()) {
+			this.lifetime = this.particleTweaks$storedLifetime - 1;
+		}
+	}
+
+	@WrapOperation(
+		method = "tick",
+		at = @At(
+			value = "INVOKE",
+			target = "Lnet/minecraft/client/particle/WakeParticle;remove()V"
+		)
+	)
+	public void particleTweaks$cancelRemoveOne(WakeParticle instance, Operation<Void> original) {
+		if (!this.particleTweaks$usesNewSystem()) {
+			original.call(instance);
+		} else {
+			this.lifetime = 0;
+			this.particleTweaks$setScaler(0.75F);
+			this.yd *= 0.0005;
+		}
+	}
 
 	@Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
 	public void particleTweaks$getRenderType(CallbackInfoReturnable<ParticleRenderType> info) {
 		info.setReturnValue(ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT);
-	}
-
-	@WrapOperation(
-		method = "preMoveUpdate",
-		at = @At(
-			value = "INVOKE",
-			target = "Lnet/frozenblock/wilderwild/particle/MesogleaDripParticle;remove()V"
-		)
-	)
-	public void particleTweaks$preMoveUpdate(MesogleaDripParticle instance, Operation<Void> original) {
-		if (this.particleTweaks$usesNewSystem()) {
-			this.lifetime = 0;
-		} else {
-			original.call(instance);
-		}
 	}
 
 	@Override
@@ -218,5 +256,4 @@ public abstract class MesogleaDripParticleMixin extends TextureSheetParticle imp
 	public boolean particleTweaks$movesWithWater() {
 		return this.particleTweaks$movesWithWater;
 	}
-
 }

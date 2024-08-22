@@ -28,6 +28,7 @@
     "client.SuspendedParticleMixin",
     "client.TerrainParticleMixin",
     "client.UnderwaterProviderMixin",
+    "client.WakeParticleMixin",
     "client.WaterCurrentDownParticleMixin",
     "client.WaterDropParticleMixin",
     "client.particlerain.DesertDustParticleMixin",
