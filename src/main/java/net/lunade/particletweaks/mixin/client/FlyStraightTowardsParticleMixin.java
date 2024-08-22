@@ -55,15 +55,15 @@ public abstract class FlyStraightTowardsParticleMixin extends TextureSheetPartic
 
 			if (slowsInWater && isFluidHighEnough) {
 				this.xd *= 0.8;
-				this.yd = FluidFallingCalculator.getFluidFallingAdjustedMovement(this.gravity, this.yd * 0.016D);
+				this.yd = FluidFallingCalculator.getFluidFallingAdjustedMovement(this.yd * 0.016D);
 				this.yd += 0.06D;
 				this.zd *= 0.8;
 			}
 			if (movesWithWater && isFluidHighEnough) {
 				Vec3 flow = fluidState.getFlow(this.level, blockPos);
-				this.xd += flow.x() * 0.005D;
-				this.yd += flow.y() * 0.005D;
-				this.zd += flow.z() * 0.005D;
+				this.xd += flow.x() * 0.015;
+				this.yd += flow.y() * 0.015;
+				this.zd += flow.z() * 0.015;
 			}
 		}
 	}

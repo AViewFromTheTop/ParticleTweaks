@@ -72,9 +72,9 @@ public abstract class WakeParticleMixin extends TextureSheetParticle implements 
 			}
 			if (movesWithWater && isFluidHighEnough) {
 				Vec3 flow = fluidState.getFlow(this.level, blockPos);
-				this.xd += flow.x() * 0.005;
-				this.yd += flow.y() * 0.005;
-				this.zd += flow.z() * 0.005;
+				this.xd += flow.x() * 0.015;
+				this.yd += flow.y() * 0.015;
+				this.zd += flow.z() * 0.015;
 			}
 		}
 	}
