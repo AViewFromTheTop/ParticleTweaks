@@ -25,6 +25,7 @@
     "client.PlayerCloudParticleMixin",
     "client.SingleQuadParticleMixin",
     "client.SnowflakeParticleMixin",
+    "client.SpellParticleMixin",
     "client.SquidInkParticleMixin",
     "client.SuspendedParticleMixin",
     "client.TerrainParticleMixin",
