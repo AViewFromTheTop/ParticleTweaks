@@ -34,7 +34,7 @@ public abstract class FlyStraightTowardsParticleMixin extends TextureSheetPartic
 		}
 	}
 
-	@Inject(method = "tick", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "tick", at = @At("HEAD"))
 	public void particleTweaks$runScaling(CallbackInfo info) {
 		if (Particle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
 			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
