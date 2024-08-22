@@ -37,10 +37,10 @@ public abstract class BaseAshSmokeParticleMixin extends TextureSheetParticle {
 
 	@Inject(method = "getQuadSize", at = @At("RETURN"), cancellable = true)
 	public void particleTweaks$getQuadSize(float partialTicks, CallbackInfoReturnable<Float> info) {
-		if (BaseAshSmokeParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			boolean switched = particleTweakInterface.particleTweaks$hasSwitchedToShrinking() && particleTweakInterface.particleTweaks$switchesExit();
-			if (!particleTweakInterface.particleTweaks$fadeInsteadOfScale() && !switched) {
-				if (!particleTweakInterface.particleTweaks$fadeInsteadOfScale()) {
+		if (this instanceof ParticleTweakInterface particleTweakInterface) {
+			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
+				boolean switched = particleTweakInterface.particleTweaks$hasSwitchedToShrinking() && particleTweakInterface.particleTweaks$switchesExit();
+				if (!particleTweakInterface.particleTweaks$fadeInsteadOfScale() && !switched) {
 					info.setReturnValue(info.getReturnValue() * particleTweakInterface.particleTweaks$getScale(partialTicks));
 				} else {
 					this.alpha = particleTweakInterface.particleTweaks$getScale(partialTicks);
