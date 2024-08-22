@@ -22,7 +22,7 @@ public abstract class CritParticleMixin extends TextureSheetParticle {
 	private void particleTweaks$init(CallbackInfo info) {
 		if (CritParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
 			particleTweakInterface.particleTweaks$setNewSystem(true);
-			particleTweakInterface.particleTweaks$setScaler(0.375F);
+			particleTweakInterface.particleTweaks$setScaler(0.45F);
 			particleTweakInterface.particleTweaks$setSwitchesExit(true);
 			particleTweakInterface.particleTweaks$setScalesToZero();
 		}

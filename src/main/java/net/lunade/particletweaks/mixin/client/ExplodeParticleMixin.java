@@ -16,8 +16,9 @@ public class ExplodeParticleMixin {
 	private void particleTweaks$init(CallbackInfo info) {
 		if (ExplodeParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
 			particleTweakInterface.particleTweaks$setNewSystem(true);
-			particleTweakInterface.particleTweaks$setScaler(0.45F);
-			particleTweakInterface.particleTweaks$setFadeInsteadOfScale(true);
+			particleTweakInterface.particleTweaks$setScaler(0.3F);
+			particleTweakInterface.particleTweaks$setSwitchesExit(true);
+			particleTweakInterface.particleTweaks$setScalesToZero();
 		}
 	}
 

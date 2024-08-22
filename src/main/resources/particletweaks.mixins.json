@@ -11,6 +11,7 @@
     "client.BubbleParticleMixin",
     "client.CherryParticleMixin",
     "client.CritParticleMixin",
+    "client.DamageIndicatorParticleMixin",
     "client.DripLandParticleMixin",
     "client.DripParticleMixin",
     "client.DustParticleBaseMixin",
