@@ -14,7 +14,7 @@ public class SpellParticleMixin{
 	private void particleTweaks$init(CallbackInfo info) {
 		if (SpellParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
 			particleTweakInterface.particleTweaks$setNewSystem(true);
-			particleTweakInterface.particleTweaks$setScaler(0.15F);
+			particleTweakInterface.particleTweaks$setScaler(0.35F);
 			particleTweakInterface.particleTweaks$setScalesToZero();
 			particleTweakInterface.particleTweaks$setSwitchesExit(true);
 		}
