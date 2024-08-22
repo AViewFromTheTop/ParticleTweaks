@@ -30,6 +30,7 @@
     "client.ReversePortalParticleMixin",
     "client.SingleQuadParticleMixin",
     "client.SnowflakeParticleMixin",
+    "client.SoulParticleMixin",
     "client.SpellParticleMixin",
     "client.SquidInkParticleMixin",
     "client.SuspendedParticleMixin",
