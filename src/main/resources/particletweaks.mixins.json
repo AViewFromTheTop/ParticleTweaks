@@ -9,6 +9,7 @@
     "client.BreakingItemParticleMixin",
     "client.BubbleColumnUpParticleMixin",
     "client.BubbleParticleMixin",
+    "client.CampfireSmokeParticleMixin",
     "client.CherryParticleMixin",
     "client.CritParticleMixin",
     "client.DamageIndicatorParticleMixin",
