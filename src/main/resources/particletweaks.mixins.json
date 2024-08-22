@@ -41,6 +41,7 @@
     "client.TerrainParticleMixin",
     "client.TrialSpawnerDetectionParticleMixin",
     "client.UnderwaterProviderMixin",
+    "client.VibrationSignalParticleMixin",
     "client.WakeParticleMixin",
     "client.WaterCurrentDownParticleMixin",
     "client.WaterDropParticleMixin",
