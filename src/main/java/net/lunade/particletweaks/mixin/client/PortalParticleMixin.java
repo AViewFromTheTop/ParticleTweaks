@@ -23,7 +23,7 @@ public abstract class PortalParticleMixin extends TextureSheetParticle {
 	private void particleTweaks$init(CallbackInfo info) {
 		if (this instanceof ParticleTweakInterface particleTweakInterface) {
             particleTweakInterface.particleTweaks$setNewSystem(true);
-            particleTweakInterface.particleTweaks$setScaler(0.375F);
+            particleTweakInterface.particleTweaks$setScaler(0.45F);
             particleTweakInterface.particleTweaks$setScalesToZero();
 			particleTweakInterface.particleTweaks$setFadeInsteadOfScale(true);
             particleTweakInterface.particleTweaks$setSwitchesExit(true);
