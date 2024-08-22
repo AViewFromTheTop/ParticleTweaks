@@ -19,6 +19,7 @@
     "client.ExplodeParticleMixin",
     "client.FallingDustParticleMixin",
     "client.FallLandParticleMixin",
+    "client.FlameParticleMixin",
     "client.FlyStraightTowardsParticleMixin",
     "client.GlowParticleMixin",
     "client.HeartParticleMixin",
