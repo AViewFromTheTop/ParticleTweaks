@@ -40,7 +40,7 @@ public abstract class BubbleColumnUpParticleMixin extends TextureSheetParticle {
 	public void particleTweaks$outOfWater(BubbleColumnUpParticle instance, Operation<Void> original) {
 		if (instance instanceof ParticleTweakInterface particleTweakInterface) {
 			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
-				if (!ParticleTweaksSharedConstants.MAKE_BUBBLES_POP_MOD){
+				if (!ParticleTweaksSharedConstants.MAKE_BUBBLES_POP_MOD) {
 					this.level.addParticle(ParticleTypes.BUBBLE_POP, this.x, this.y, this.z, 0, 0, 0);
 				}
 				original.call(instance);

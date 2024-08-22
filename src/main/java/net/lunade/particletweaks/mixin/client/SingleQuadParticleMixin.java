@@ -6,6 +6,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.util.Mth;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -13,6 +14,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = SingleQuadParticle.class, priority = 1001)
 public abstract class SingleQuadParticleMixin extends Particle implements ParticleTweakInterface {
+
+	@Shadow
+	public abstract Particle scale(float scale);
 
 	@Unique
 	private float particleTweaks$scaler = 0.15F;
@@ -108,6 +112,16 @@ public abstract class SingleQuadParticleMixin extends Particle implements Partic
 	}
 
 	@Override
+	public void particleTweaks$setSwitchedToShrinking(boolean set) {
+		this.particleTweaks$hasSwitchedToShrinking = set;
+	}
+
+	@Override
+	public boolean particleTweaks$canShrink() {
+		return this.particleTweaks$canShrink;
+	}
+
+	@Override
 	public void particleTweaks$setCanShrink(boolean canShrink) {
 		this.particleTweaks$canShrink = canShrink;
 	}
@@ -152,5 +166,35 @@ public abstract class SingleQuadParticleMixin extends Particle implements Partic
 	@Override
 	public boolean particleTweaks$movesWithWater() {
 		return this.particleTweaks$movesWithWater;
+	}
+
+	@Override
+	public void particleTweaks$setScale(float f) {
+		this.particleTweaks$scale = f;
+	}
+
+	@Override
+	public float particleTweaks$getScale() {
+		return this.particleTweaks$scale;
+	}
+
+	@Override
+	public void particleTweaks$setPrevScale(float f) {
+		this.particleTweaks$prevScale = f;
+	}
+
+	@Override
+	public float particleTweaks$getPrevScale() {
+		return this.particleTweaks$prevScale;
+	}
+
+	@Override
+	public void particleTweaks$setTargetScale(float f) {
+		this.particleTweaks$targetScale = f;
+	}
+
+	@Override
+	public float particleTweaks$getTargetScale() {
+		return this.particleTweaks$targetScale;
 	}
 }

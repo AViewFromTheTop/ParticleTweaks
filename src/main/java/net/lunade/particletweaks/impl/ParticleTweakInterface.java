@@ -18,6 +18,10 @@ public interface ParticleTweakInterface {
 
 	boolean particleTweaks$hasSwitchedToShrinking();
 
+	void particleTweaks$setSwitchedToShrinking(boolean set);
+
+	boolean particleTweaks$canShrink();
+
 	void particleTweaks$setCanShrink(boolean set);
 
 	void particleTweaks$setFadeInsteadOfScale(boolean set);
@@ -35,4 +39,16 @@ public interface ParticleTweakInterface {
 	void particleTweaks$setMovesWithWater(boolean set);
 
 	boolean particleTweaks$movesWithWater();
+
+	void particleTweaks$setScale(float f);
+
+	float particleTweaks$getScale();
+
+	void particleTweaks$setPrevScale(float f);
+
+	float particleTweaks$getPrevScale();
+
+	void particleTweaks$setTargetScale(float f);
+
+	float particleTweaks$getTargetScale();
 }
