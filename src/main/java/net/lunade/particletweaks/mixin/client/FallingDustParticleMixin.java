@@ -93,7 +93,7 @@ public abstract class FallingDustParticleMixin extends TextureSheetParticle impl
 		if (FallingDustParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
 			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
 				if (particleTweakInterface.particleTweaks$runScaleRemoval()) {
-					FallingDustParticle.class.cast(this).remove();
+					this.remove();
 					info.cancel();
 				}
 			}

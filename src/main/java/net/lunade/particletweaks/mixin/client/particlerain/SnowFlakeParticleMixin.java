@@ -1,5 +1,7 @@
 package net.lunade.particletweaks.mixin.client.particlerain;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.lunade.particletweaks.impl.WeatherParticleInterface;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,19 +25,22 @@ public class SnowFlakeParticleMixin {
 		}
 	}
 
-	@Inject(method = "tick", at = @At(value = "INVOKE", target = "Lpigcart/particlerain/particle/SnowFlakeParticle;remove()V", shift = At.Shift.BEFORE), cancellable = true)
-	public void particleTweaks$tick(CallbackInfo info) {
-		if (SnowFlakeParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
-				SnowFlakeParticle.class.cast(this).roll = SnowFlakeParticle.class.cast(this).oRoll;
-				if (SnowFlakeParticle.class.cast(this) instanceof WeatherParticleInterface weatherParticleInterface) {
-					weatherParticleInterface.particleTweaks$setAlreadyRemoving(true);
-				}
-				SnowFlakeParticle.class.cast(this).age = SnowFlakeParticle.class.cast(this).getLifetime() + 2;
-				if (particleTweakInterface.particleTweaks$runScaleRemoval()) {
-					SnowFlakeParticle.class.cast(this).remove();
-				}
-				info.cancel();
+	@WrapOperation(
+		method = "tick",
+		at = @At(
+			value = "INVOKE",
+			target = "Lpigcart/particlerain/particle/SnowFlakeParticle;remove()V"
+		)
+	)
+	public void particleTweaks$tick(SnowFlakeParticle instance, Operation<Void> original) {
+		if (instance instanceof ParticleTweakInterface particleTweakInterface && particleTweakInterface.particleTweaks$usesNewSystem()) {
+			instance.roll = instance.oRoll;
+			if (instance instanceof WeatherParticleInterface weatherParticleInterface) {
+				weatherParticleInterface.particleTweaks$setAlreadyRemoving(true);
+			}
+			instance.age = instance.getLifetime() + 2;
+			if (particleTweakInterface.particleTweaks$runScaleRemoval()) {
+				original.call(instance);
 			}
 		}
 	}

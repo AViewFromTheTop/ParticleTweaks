@@ -1,5 +1,7 @@
 package net.lunade.particletweaks.mixin.client.particlerain;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.lunade.particletweaks.impl.WeatherParticleInterface;
 import net.minecraft.client.particle.ParticleRenderType;
@@ -25,18 +27,21 @@ public class DesertDustParticleMixin {
 		}
 	}
 
-	@Inject(method = "tick", at = @At(value = "INVOKE", target = "Lpigcart/particlerain/particle/DesertDustParticle;remove()V", shift = At.Shift.BEFORE), cancellable = true)
-	public void particleTweaks$tick(CallbackInfo info) {
-		if (DesertDustParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
-				if (DesertDustParticle.class.cast(this) instanceof WeatherParticleInterface weatherParticleInterface) {
-					weatherParticleInterface.particleTweaks$setAlreadyRemoving(true);
-				}
-				DesertDustParticle.class.cast(this).age = DesertDustParticle.class.cast(this).getLifetime() + 2;
-				if (particleTweakInterface.particleTweaks$runScaleRemoval()) {
-					DesertDustParticle.class.cast(this).remove();
-				}
-				info.cancel();
+	@WrapOperation(
+		method = "tick",
+		at = @At(
+			value = "INVOKE",
+			target = "Lpigcart/particlerain/particle/DesertDustParticle;remove()V"
+		)
+	)
+	public void particleTweaks$tick(DesertDustParticle instance, Operation<Void> original) {
+		if (instance instanceof ParticleTweakInterface particleTweakInterface && particleTweakInterface.particleTweaks$usesNewSystem()) {
+			if (instance instanceof WeatherParticleInterface weatherParticleInterface) {
+				weatherParticleInterface.particleTweaks$setAlreadyRemoving(true);
+			}
+			instance.age = instance.getLifetime() + 2;
+			if (particleTweakInterface.particleTweaks$runScaleRemoval()) {
+				original.call(instance);
 			}
 		}
 	}

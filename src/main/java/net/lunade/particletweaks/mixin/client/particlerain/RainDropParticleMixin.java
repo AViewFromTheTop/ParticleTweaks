@@ -1,8 +1,9 @@
 package net.lunade.particletweaks.mixin.client.particlerain;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.lunade.particletweaks.impl.WeatherParticleInterface;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.particles.ParticleOptions;
@@ -10,7 +11,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import pigcart.particlerain.particle.RainDropParticle;
 
@@ -31,32 +31,47 @@ public class RainDropParticleMixin {
 		}
 	}
 
-	@Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lpigcart/particlerain/particle/RainDropParticle;remove()V"))
-	public void particleTweaks$pseudoRemove(RainDropParticle instance) {
-
-	}
-
-	@Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/ParticleEngine;createParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)Lnet/minecraft/client/particle/Particle;"))
-	public Particle particleTweaks$newSplash(ParticleEngine instance, ParticleOptions particleOptions, double d, double e, double f, double g, double h, double i) {
+	@WrapOperation(
+		method = "tick",
+		at = @At(
+			value = "INVOKE",
+			target = "Lnet/minecraft/client/particle/ParticleEngine;createParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)Lnet/minecraft/client/particle/Particle;"
+		)
+	)
+	public Particle particleTweaks$newSplash(
+		ParticleEngine instance,
+		ParticleOptions options,
+		double x,
+		double y,
+		double z,
+		double velocityX,
+		double velocityY,
+		double velocityZ,
+		Operation<Particle> original
+	) {
 		if (!this.particleTweaks$hasSpawnedSplash) {
 			this.particleTweaks$hasSpawnedSplash = true;
-			return Minecraft.getInstance().particleEngine.createParticle(particleOptions, d, e, f, g, h, i);
+			return original.call(instance, options, x, y, z, velocityX, velocityY, velocityZ);
 		}
 		return null;
 	}
 
-	@Inject(method = "tick", at = @At(value = "INVOKE", target = "Lpigcart/particlerain/particle/RainDropParticle;remove()V", shift = At.Shift.AFTER))
-	public void particleTweaks$tick(CallbackInfo info) {
-		if (RainDropParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
-				if (RainDropParticle.class.cast(this) instanceof WeatherParticleInterface weatherParticleInterface) {
-					weatherParticleInterface.particleTweaks$setAlreadyRemoving(true);
-				}
-				particleTweakInterface.particleTweaks$setScaler(1F);
-				RainDropParticle.class.cast(this).age = RainDropParticle.class.cast(this).getLifetime() +  2;
-				if (particleTweakInterface.particleTweaks$runScaleRemoval()) {
-					RainDropParticle.class.cast(this).remove();
-				}
+	@WrapOperation(
+		method = "tick",
+		at = @At(
+			value = "INVOKE",
+			target = "Lpigcart/particlerain/particle/RainDropParticle;remove()V"
+		)
+	)
+	public void particleTweaks$tick(RainDropParticle instance, Operation<Void> original) {
+		if (instance instanceof ParticleTweakInterface particleTweakInterface && particleTweakInterface.particleTweaks$usesNewSystem()) {
+			if (instance instanceof WeatherParticleInterface weatherParticleInterface) {
+				weatherParticleInterface.particleTweaks$setAlreadyRemoving(true);
+			}
+			particleTweakInterface.particleTweaks$setScaler(1F);
+			instance.age = instance.getLifetime() + 2;
+			if (particleTweakInterface.particleTweaks$runScaleRemoval()) {
+				original.call(instance);
 			}
 		}
 	}

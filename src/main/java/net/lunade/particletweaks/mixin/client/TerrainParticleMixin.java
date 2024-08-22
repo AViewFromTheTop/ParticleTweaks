@@ -10,7 +10,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = TerrainParticle.class, priority = 999)
 public class TerrainParticleMixin {
 
-	@Inject(method = "<init>(Lnet/minecraft/client/multiplayer/ClientLevel;DDDDDDLnet/minecraft/world/level/block/state/BlockState;)V", at = @At("TAIL"))
+	@Inject(
+		method = "<init>(Lnet/minecraft/client/multiplayer/ClientLevel;DDDDDDLnet/minecraft/world/level/block/state/BlockState;)V",
+		at = @At("TAIL")
+	)
 	private void particleTweaks$initNonPos(CallbackInfo info) {
 		if (TerrainParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
 			particleTweakInterface.particleTweaks$setNewSystem(true);
@@ -21,7 +24,10 @@ public class TerrainParticleMixin {
 		}
 	}
 
-	@Inject(method = "<init>(Lnet/minecraft/client/multiplayer/ClientLevel;DDDDDDLnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;)V", at = @At("TAIL"))
+	@Inject(
+		method = "<init>(Lnet/minecraft/client/multiplayer/ClientLevel;DDDDDDLnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;)V",
+		at = @At("TAIL")
+	)
 	private void particleTweaks$init(CallbackInfo info) {
 		if (TerrainParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
 			particleTweakInterface.particleTweaks$setNewSystem(true);

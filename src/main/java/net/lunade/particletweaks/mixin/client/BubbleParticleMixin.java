@@ -1,5 +1,7 @@
 package net.lunade.particletweaks.mixin.client;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.BubbleParticle;
@@ -14,7 +16,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -46,6 +47,16 @@ public abstract class BubbleParticleMixin extends TextureSheetParticle implement
 
 	protected BubbleParticleMixin(ClientLevel clientLevel, double d, double e, double f) {
 		super(clientLevel, d, e, f);
+	}
+
+	@Inject(method = "<init>*", at = @At("TAIL"))
+	private void particleTweaks$init(CallbackInfo info) {
+		if (BubbleParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
+			particleTweakInterface.particleTweaks$setNewSystem(true);
+			particleTweakInterface.particleTweaks$setScaler(0.35F);
+			particleTweakInterface.particleTweaks$setScalesToZero();
+			particleTweakInterface.particleTweaks$setMovesWithWater(true);
+		}
 	}
 
 	@Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
@@ -94,8 +105,14 @@ public abstract class BubbleParticleMixin extends TextureSheetParticle implement
 		}
 	}
 
-	@Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/BubbleParticle;remove()V"))
-	public void particleTweaks$outOfWater(BubbleParticle particle) {
+	@WrapOperation(
+		method = "tick",
+		at = @At(
+			value = "INVOKE",
+			target = "Lnet/minecraft/client/particle/BubbleParticle;remove()V"
+		)
+	)
+	public void particleTweaks$outOfWater(BubbleParticle instance, Operation<Void> original) {
 		if (this.particleTweaks$usesNewSystem()) {
 			this.lifetime = 0;
 		}
@@ -197,16 +214,6 @@ public abstract class BubbleParticleMixin extends TextureSheetParticle implement
 	@Override
 	public boolean particleTweaks$movesWithWater() {
 		return this.particleTweaks$movesWithWater;
-	}
-
-	@Inject(method = "<init>*", at = @At("TAIL"))
-	private void particleTweaks$init(CallbackInfo info) {
-		if (BubbleParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			particleTweakInterface.particleTweaks$setNewSystem(true);
-			particleTweakInterface.particleTweaks$setScaler(0.35F);
-			particleTweakInterface.particleTweaks$setScalesToZero();
-			particleTweakInterface.particleTweaks$setMovesWithWater(true);
-		}
 	}
 
 }

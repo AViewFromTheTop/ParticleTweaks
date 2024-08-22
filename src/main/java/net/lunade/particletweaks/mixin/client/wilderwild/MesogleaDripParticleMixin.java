@@ -1,5 +1,7 @@
 package net.lunade.particletweaks.mixin.client.wilderwild;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.frozenblock.wilderwild.particle.MesogleaDripParticle;
 import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -14,7 +16,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -97,12 +98,18 @@ public abstract class MesogleaDripParticleMixin extends TextureSheetParticle imp
 		info.setReturnValue(ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT);
 	}
 
-	@Redirect(method = "preMoveUpdate", at = @At(value = "INVOKE", target = "Lnet/frozenblock/wilderwild/particle/MesogleaDripParticle;remove()V"))
-	public void particleTweaks$preMoveUpdate(MesogleaDripParticle particle) {
+	@WrapOperation(
+		method = "preMoveUpdate",
+		at = @At(
+			value = "INVOKE",
+			target = "Lnet/frozenblock/wilderwild/particle/MesogleaDripParticle;remove()V"
+		)
+	)
+	public void particleTweaks$preMoveUpdate(MesogleaDripParticle instance, Operation<Void> original) {
 		if (this.particleTweaks$usesNewSystem()) {
 			this.lifetime = 0;
 		} else {
-			this.remove();
+			original.call(instance);
 		}
 	}
 

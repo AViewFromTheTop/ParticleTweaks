@@ -15,20 +15,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = Particle.class, priority = 1001)
-public class ParticleMixin {
+public abstract class ParticleMixin {
 
 	@Shadow
 	public int age;
 	@Shadow
-	public int lifetime;
+	protected int lifetime;
 	@Shadow @Final
-	public ClientLevel level;
-	@Shadow
-	public double xo;
-	@Shadow
-	public double yo;
-	@Shadow
-	public double zo;
+	protected ClientLevel level;
 	@Shadow
 	public double x;
 	@Shadow
@@ -36,11 +30,14 @@ public class ParticleMixin {
 	@Shadow
 	public double z;
 	@Shadow
-	public double xd;
+	protected double xd;
 	@Shadow
-	public double yd;
+	protected double yd;
 	@Shadow
-	public double zd;
+	protected double zd;
+
+	@Shadow
+	public abstract void remove();
 
 	@Inject(method = "tick", at = @At("HEAD"))
 	public void particleTweaks$runScaling(CallbackInfo info) {
@@ -81,7 +78,7 @@ public class ParticleMixin {
 		if (Particle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
 			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
 				if (particleTweakInterface.particleTweaks$runScaleRemoval()) {
-					Particle.class.cast(this).remove();
+					this.remove();
 					info.cancel();
 				}
 			}

@@ -14,7 +14,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class UnderwaterProviderMixin {
 
 	@Inject(method = "createParticle*", at = @At("TAIL"))
-	public void particleTweaks$createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, CallbackInfoReturnable<Particle> info) {
+	public void particleTweaks$createParticle(
+		SimpleParticleType type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, CallbackInfoReturnable<Particle> info
+	) {
 		if (info.getReturnValue() instanceof ParticleTweakInterface particleTweakInterface) {
 			particleTweakInterface.particleTweaks$setNewSystem(true);
 			particleTweakInterface.particleTweaks$setScaler(0.05F);

@@ -1,5 +1,7 @@
 package net.lunade.particletweaks.mixin.client;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.CherryParticle;
@@ -13,7 +15,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -58,7 +59,7 @@ public abstract class CherryParticleMixin extends TextureSheetParticle implement
 		}
 	}
 
-	@Inject(method = "tick", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "tick", at = @At("HEAD"))
 	public void particleTweaks$runScaling(CallbackInfo info) {
 		if (this.particleTweaks$usesNewSystem()) {
 			if (!this.particleTweaks$hasSetMaxLifetime) {
@@ -94,15 +95,20 @@ public abstract class CherryParticleMixin extends TextureSheetParticle implement
 		}
 	}
 
-	@Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/CherryParticle;remove()V", ordinal = 1))
-	public void particleTweaks$onRemove(CherryParticle particle) {
-		if (CherryParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
-				this.lifetime = 0;
-				return;
-			}
+	@WrapOperation(
+		method = "tick",
+		at = @At(
+			value = "INVOKE",
+			target = "Lnet/minecraft/client/particle/CherryParticle;remove()V",
+			ordinal = 1
+		)
+	)
+	public void particleTweaks$onRemove(CherryParticle instance, Operation<Void> original) {
+		if (instance instanceof ParticleTweakInterface particleTweakInterface && particleTweakInterface.particleTweaks$usesNewSystem()) {
+			this.lifetime = 0;
+		} else {
+			original.call(instance);
 		}
-		this.remove();
 	}
 
 	@Inject(method = "tick", at = @At("TAIL"), cancellable = true)
@@ -110,7 +116,7 @@ public abstract class CherryParticleMixin extends TextureSheetParticle implement
 		if (CherryParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
 			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
 				if (particleTweakInterface.particleTweaks$runScaleRemoval()) {
-					CherryParticle.class.cast(this).remove();
+					this.remove();
 					info.cancel();
 				}
 			}

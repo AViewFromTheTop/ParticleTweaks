@@ -1,5 +1,7 @@
 package net.lunade.particletweaks.mixin.client;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
@@ -13,7 +15,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -100,7 +101,13 @@ public abstract class WaterDropParticleMixin extends TextureSheetParticle implem
 	@Unique
 	private int particleTweaks$storedLifetime;
 
-	@Inject(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/client/particle/WaterDropParticle;lifetime:I", shift = At.Shift.BEFORE))
+	@Inject(
+		method = "tick", at = @At(
+			value = "FIELD",
+		target = "Lnet/minecraft/client/particle/WaterDropParticle;lifetime:I",
+		shift = At.Shift.BEFORE
+	)
+	)
 	public void particleTweaks$stopLifetimeCheck(CallbackInfo ci) {
 		if (this.particleTweaks$usesNewSystem()) {
 			this.particleTweaks$storedLifetime = this.lifetime;
@@ -108,17 +115,30 @@ public abstract class WaterDropParticleMixin extends TextureSheetParticle implem
 		}
 	}
 
-	@Inject(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/client/particle/WaterDropParticle;lifetime:I", shift = At.Shift.AFTER))
+	@Inject(
+		method = "tick",
+		at = @At(
+			value = "FIELD",
+			target = "Lnet/minecraft/client/particle/WaterDropParticle;lifetime:I",
+			shift = At.Shift.AFTER
+		)
+	)
 	public void particleTweaks$fixLifetimeCheck(CallbackInfo ci) {
 		if (this.particleTweaks$usesNewSystem()) {
 			this.lifetime = this.particleTweaks$storedLifetime - 1;
 		}
 	}
 
-	@Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/WaterDropParticle;remove()V"))
-	public void particleTweaks$cancelRemoveOne(WaterDropParticle waterDropParticle) {
+	@WrapOperation(
+		method = "tick",
+		at = @At(
+			value = "INVOKE",
+			target = "Lnet/minecraft/client/particle/WaterDropParticle;remove()V"
+		)
+	)
+	public void particleTweaks$cancelRemoveOne(WaterDropParticle instance, Operation<Void> original) {
 		if (!this.particleTweaks$usesNewSystem()) {
-			this.remove();
+			original.call(instance);
 		} else {
 			this.lifetime = 0;
 			this.particleTweaks$setScaler(0.75F);
