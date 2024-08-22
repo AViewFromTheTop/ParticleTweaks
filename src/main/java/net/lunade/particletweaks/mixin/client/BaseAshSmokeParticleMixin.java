@@ -31,6 +31,7 @@ public abstract class BaseAshSmokeParticleMixin extends TextureSheetParticle {
 			particleTweakInterface.particleTweaks$setFadeInsteadOfScale(true);
 			particleTweakInterface.particleTweaks$setSlowsInWater(true);
 			particleTweakInterface.particleTweaks$setMovesWithWater(true);
+			particleTweakInterface.particleTweaks$setScalesToZero();
 		}
 	}
 
