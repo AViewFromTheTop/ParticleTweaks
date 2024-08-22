@@ -11,7 +11,6 @@ public class ParticleTweaksMixinPlugin implements IMixinConfigPlugin {
 
 	@Override
 	public void onLoad(String mixinPackage) {
-
 	}
 
 	@Override

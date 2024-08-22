@@ -28,6 +28,8 @@
     "client.PlayerCloudParticleMixin",
     "client.PortalParticleMixin",
     "client.ReversePortalParticleMixin",
+    "client.SculkChargeParticleMixin",
+    "client.SculkChargePopParticleMixin",
     "client.SingleQuadParticleMixin",
     "client.SnowflakeParticleMixin",
     "client.SoulParticleMixin",
