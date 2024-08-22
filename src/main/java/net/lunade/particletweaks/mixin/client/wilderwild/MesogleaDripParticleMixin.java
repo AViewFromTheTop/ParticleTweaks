@@ -1,7 +1,7 @@
 package net.lunade.particletweaks.mixin.client.wilderwild;
 
 import net.frozenblock.wilderwild.particle.MesogleaDripParticle;
-import net.lunade.particletweaks.interfaces.ParticleTweakInterface;
+import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.TextureSheetParticle;

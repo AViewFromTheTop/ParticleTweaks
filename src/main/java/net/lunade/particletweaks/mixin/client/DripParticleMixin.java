@@ -1,13 +1,12 @@
 package net.lunade.particletweaks.mixin.client;
 
-import net.lunade.particletweaks.interfaces.ParticleTweakInterface;
+import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.DripParticle;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;

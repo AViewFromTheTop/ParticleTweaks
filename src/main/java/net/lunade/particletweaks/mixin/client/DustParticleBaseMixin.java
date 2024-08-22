@@ -1,6 +1,6 @@
 package net.lunade.particletweaks.mixin.client;
 
-import net.lunade.particletweaks.interfaces.ParticleTweakInterface;
+import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.DustParticleBase;
 import net.minecraft.client.particle.ParticleRenderType;

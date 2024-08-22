@@ -1,8 +1,7 @@
 package net.lunade.particletweaks.mixin.client;
 
-import net.lunade.particletweaks.interfaces.ParticleTweakInterface;
+import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.PlayerCloudParticle;
 import net.minecraft.client.particle.TextureSheetParticle;
 import org.spongepowered.asm.mixin.Mixin;

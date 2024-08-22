@@ -1,4 +1,4 @@
-package net.lunade.particletweaks.interfaces;
+package net.lunade.particletweaks.impl;
 
 public interface ParticleTweakInterface {
 

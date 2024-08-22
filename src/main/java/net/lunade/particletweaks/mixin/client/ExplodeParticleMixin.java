@@ -1,6 +1,6 @@
 package net.lunade.particletweaks.mixin.client;
 
-import net.lunade.particletweaks.interfaces.ParticleTweakInterface;
+import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.minecraft.client.particle.ExplodeParticle;
 import net.minecraft.client.particle.ParticleRenderType;
 import org.spongepowered.asm.mixin.Mixin;
