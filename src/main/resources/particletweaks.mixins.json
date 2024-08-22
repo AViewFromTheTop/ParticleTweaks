@@ -1,5 +1,5 @@
 {
-  "required": false,
+  "required": true,
   "minVersion": "0.8.5",
   "package": "net.lunade.particletweaks.mixin",
   "plugin": "net.lunade.particletweaks.mixin.ParticleTweaksMixinPlugin",
