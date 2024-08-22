@@ -90,7 +90,7 @@ public abstract class MesogleaDripParticleMixin extends TextureSheetParticle imp
 	}
 
 	@Shadow
-	public void preMoveUpdate() {}
+	protected void preMoveUpdate() {}
 
 	@Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
 	public void particleTweaks$getRenderType(CallbackInfoReturnable<ParticleRenderType> info) {

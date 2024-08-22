@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
 public class ParticleTweaksMixinPlugin implements IMixinConfigPlugin {
-	private static final String MIXIN_PATH = "net.lunade.particletweaks.mixin.";
 
 	@Override
 	public void onLoad(String mixinPackage) {
