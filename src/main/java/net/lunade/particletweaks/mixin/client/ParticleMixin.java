@@ -57,7 +57,7 @@ public abstract class ParticleMixin {
 				new Vec3(this.x, this.y, this.z),
 				new Vec3(this.xd, this.yd, this.zd),
 				Particle.class.cast(this),
-				false,
+				!particleTweakInterface.particleTweaks$canBurn(),
 				particleTweakInterface.particleTweaks$slowsInFluid(),
 				particleTweakInterface.particleTweaks$movesWithFluid()
 			);

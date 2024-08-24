@@ -48,7 +48,7 @@ public abstract class FlyStraightTowardsParticleMixin extends TextureSheetPartic
 				new Vec3(this.x, this.y, this.z),
 				new Vec3(this.xd, this.yd, this.zd),
 				this,
-				false,
+				!particleTweakInterface.particleTweaks$canBurn(),
 				particleTweakInterface.particleTweaks$slowsInFluid(),
 				particleTweakInterface.particleTweaks$movesWithFluid()
 			);

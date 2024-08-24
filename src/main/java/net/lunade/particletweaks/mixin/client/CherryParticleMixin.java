@@ -54,7 +54,7 @@ public abstract class CherryParticleMixin extends TextureSheetParticle implement
 				new Vec3(this.x, this.y, this.z),
 				new Vec3(this.xd, this.yd, this.zd),
 				this,
-				false,
+				!this.particleTweaks$canBurn(),
 				this.particleTweaks$slowsInFluid(),
 				this.particleTweaks$movesWithFluid()
 			);

@@ -53,7 +53,7 @@ public abstract class MesogleaDripParticleMixin extends TextureSheetParticle imp
 				new Vec3(this.x, this.y, this.z),
 				new Vec3(this.xd, this.yd, this.zd),
 				Particle.class.cast(this),
-				false,
+				!this.particleTweaks$canBurn(),
 				this.particleTweaks$slowsInFluid(),
 				this.particleTweaks$movesWithFluid()
 			);
