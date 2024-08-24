@@ -17,7 +17,7 @@ public class SquidInkParticleMixin {
 			particleTweakInterface.particleTweaks$setScaler(0.25F);
 			particleTweakInterface.particleTweaks$setSwitchesExit(true);
 			particleTweakInterface.particleTweaks$setScalesToZero();
-			particleTweakInterface.particleTweaks$setMovesWithWater(true);
+			particleTweakInterface.particleTweaks$setMovesWithFluid(true);
 		}
 	}
 

@@ -16,8 +16,8 @@ public class BreakingItemParticleMixin {
 			particleTweakInterface.particleTweaks$setNewSystem(true);
 			particleTweakInterface.particleTweaks$setScaler(0.35F);
 			particleTweakInterface.particleTweaks$setFadeInsteadOfScale(true);
-			particleTweakInterface.particleTweaks$setSlowsInWater(true);
-			particleTweakInterface.particleTweaks$setMovesWithWater(true);
+			particleTweakInterface.particleTweaks$setSlowsInFluid(true);
+			particleTweakInterface.particleTweaks$setMovesWithFluid(true);
 		}
 	}
 

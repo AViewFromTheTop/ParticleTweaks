@@ -25,7 +25,7 @@ public class RainDropParticleMixin {
 		if (RainDropParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
 			particleTweakInterface.particleTweaks$setNewSystem(true);
 			particleTweakInterface.particleTweaks$setScaler(0.35F);
-			particleTweakInterface.particleTweaks$setSlowsInWater(true);
+			particleTweakInterface.particleTweaks$setSlowsInFluid(true);
 			particleTweakInterface.particleTweaks$setScalesToZero();
 			particleTweakInterface.particleTweaks$setFadeInsteadOfScale(true);
 		}

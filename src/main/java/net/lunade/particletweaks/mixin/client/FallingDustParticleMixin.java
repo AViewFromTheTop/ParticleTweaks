@@ -6,9 +6,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.FallingDustParticle;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.TextureSheetParticle;
-import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -30,12 +28,12 @@ public abstract class FallingDustParticleMixin extends TextureSheetParticle impl
 			particleTweakInterface.particleTweaks$setScaler(0.25F);
 			particleTweakInterface.particleTweaks$setScalesToZero();
 			particleTweakInterface.particleTweaks$setSwitchesExit(true);
-			particleTweakInterface.particleTweaks$setSlowsInWater(true);
-			particleTweakInterface.particleTweaks$setMovesWithWater(true);
+			particleTweakInterface.particleTweaks$setSlowsInFluid(true);
+			particleTweakInterface.particleTweaks$setMovesWithFluid(true);
 		}
 	}
 
-	@Inject(method = "tick", at = @At("HEAD"))
+	@Inject(method = "tick", at = @At("HEAD"), cancellable = true)
 	public void particleTweaks$runScaling(CallbackInfo info) {
 		if (FallingDustParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
 			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
@@ -45,26 +43,22 @@ public abstract class FallingDustParticleMixin extends TextureSheetParticle impl
 					this.age = Mth.clamp(age - 1, 0, this.lifetime);
 				}
 			}
-			BlockPos blockPos = BlockPos.containing(this.x, this.y, this.z);
-			FluidState fluidState = this.level.getFluidState(blockPos);
-			boolean isFluidHighEnough = false;
-			boolean slowsInWater = particleTweakInterface.particleTweaks$slowsInWater();
-			boolean movesWithWater = particleTweakInterface.particleTweaks$movesWithWater();
-			if (slowsInWater || movesWithWater) {
-				isFluidHighEnough = !fluidState.isEmpty() && (fluidState.getHeight(this.level, blockPos) + (float)blockPos.getY()) >= this.y;
-			}
+			Vec3 fluidMovement = FluidFallingCalculator.handleFluidInteraction(
+				this.level,
+				new Vec3(this.x, this.y, this.z),
+				new Vec3(this.xd, this.yd, this.zd),
+				this,
+				false,
+				this.particleTweaks$slowsInFluid(),
+				this.particleTweaks$movesWithFluid()
+			);
 
-			if (slowsInWater && isFluidHighEnough) {
-				this.xd *= 0.8;
-				this.yd = FluidFallingCalculator.getFluidFallingAdjustedMovement(this.yd * 0.016D);
-				this.yd += 0.06D;
-				this.zd *= 0.8;
-			}
-			if (movesWithWater && isFluidHighEnough) {
-				Vec3 flow = fluidState.getFlow(this.level, blockPos);
-				this.xd += flow.x() * 0.015;
-				this.yd += flow.y() * 0.015;
-				this.zd += flow.z() * 0.015;
+			if (fluidMovement != null) {
+				this.xd = fluidMovement.x;
+				this.yd = fluidMovement.y;
+				this.zd = fluidMovement.z;
+			} else {
+				info.cancel();
 			}
 		}
 	}

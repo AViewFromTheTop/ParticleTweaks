@@ -35,8 +35,8 @@ public abstract class WakeParticleMixin extends TextureSheetParticle implements 
 		this.particleTweaks$setScaler(0.3F);
 		this.particleTweaks$setScalesToZero();
 		this.particleTweaks$setSwitchesExit(true);
-		this.particleTweaks$setSlowsInWater(true);
-		this.particleTweaks$setMovesWithWater(true);
+		this.particleTweaks$setSlowsInFluid(true);
+		this.particleTweaks$setMovesWithFluid(true);
 	}
 
 	@Inject(method = "tick", at = @At("HEAD"), cancellable = true)
@@ -58,8 +58,8 @@ public abstract class WakeParticleMixin extends TextureSheetParticle implements 
 			BlockPos blockPos = BlockPos.containing(this.x, this.y, this.z);
 			FluidState fluidState = this.level.getFluidState(blockPos);
 			boolean isFluidHighEnough = false;
-			boolean slowsInWater = this.particleTweaks$slowsInWater();
-			boolean movesWithWater = this.particleTweaks$movesWithWater();
+			boolean slowsInWater = this.particleTweaks$slowsInFluid();
+			boolean movesWithWater = this.particleTweaks$movesWithFluid();
 			if (slowsInWater || movesWithWater) {
 				isFluidHighEnough = !fluidState.isEmpty() && (fluidState.getHeight(this.level, blockPos) + (float)blockPos.getY()) >= this.y;
 			}

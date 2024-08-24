@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = NoteParticle.class, priority = 1001)
-public abstract class NoteParticleMixin extends TextureSheetParticle {
+public abstract class NoteParticleMixin extends TextureSheetParticle implements ParticleTweakInterface {
 
 	protected NoteParticleMixin(ClientLevel clientLevel, double d, double e, double f) {
 		super(clientLevel, d, e, f);
@@ -20,24 +20,20 @@ public abstract class NoteParticleMixin extends TextureSheetParticle {
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
 	private void particleTweaks$init(CallbackInfo info) {
-		if (NoteParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			particleTweakInterface.particleTweaks$setNewSystem(true);
-			particleTweakInterface.particleTweaks$setScaler(0.375F);
-			particleTweakInterface.particleTweaks$setScalesToZero();
-			particleTweakInterface.particleTweaks$setSwitchesExit(true);
-		}
+		this.particleTweaks$setNewSystem(true);
+		this.particleTweaks$setScaler(0.375F);
+		this.particleTweaks$setScalesToZero();
+		this.particleTweaks$setSwitchesExit(true);
 	}
 
 	@Inject(method = "getQuadSize", at = @At("RETURN"), cancellable = true)
 	public void particleTweaks$getQuadSize(float partialTicks, CallbackInfoReturnable<Float> info) {
-		if (NoteParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
-				boolean switched = particleTweakInterface.particleTweaks$hasSwitchedToShrinking() && particleTweakInterface.particleTweaks$switchesExit();
-				if (!particleTweakInterface.particleTweaks$fadeInsteadOfScale() && !switched) {
-					info.setReturnValue(info.getReturnValue() * particleTweakInterface.particleTweaks$getScale(partialTicks));
-				} else {
-					this.alpha = particleTweakInterface.particleTweaks$getScale(partialTicks);
-				}
+		if (this.particleTweaks$usesNewSystem()) {
+			boolean switched = this.particleTweaks$hasSwitchedToShrinking() && this.particleTweaks$switchesExit();
+			if (!this.particleTweaks$fadeInsteadOfScale() && !switched) {
+				info.setReturnValue(info.getReturnValue() * this.particleTweaks$getScale(partialTicks));
+			} else {
+				this.alpha = this.particleTweaks$getScale(partialTicks);
 			}
 		}
 	}
@@ -45,6 +41,11 @@ public abstract class NoteParticleMixin extends TextureSheetParticle {
 	@Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
 	public void particleTweaks$getRenderType(CallbackInfoReturnable<ParticleRenderType> info) {
 		info.setReturnValue(ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT);
+	}
+
+	@Override
+	public boolean particleTweaks$canBurn() {
+		return false;
 	}
 
 }

@@ -17,7 +17,7 @@ public class GlowParticleMixin {
 			particleTweakInterface.particleTweaks$setScaler(0.375F);
 			particleTweakInterface.particleTweaks$setScalesToZero();
 			particleTweakInterface.particleTweaks$setSwitchesExit(true);
-			particleTweakInterface.particleTweaks$setSlowsInWater(true);
+			particleTweakInterface.particleTweaks$setSlowsInFluid(true);
 		}
 	}
 

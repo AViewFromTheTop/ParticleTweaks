@@ -17,8 +17,8 @@ public class SuspendedParticleMixin {
 		if (SuspendedParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
 			particleTweakInterface.particleTweaks$setNewSystem(true);
 			particleTweakInterface.particleTweaks$setScalesToZero();
-			particleTweakInterface.particleTweaks$setSlowsInWater(true);
-			particleTweakInterface.particleTweaks$setMovesWithWater(true);
+			particleTweakInterface.particleTweaks$setSlowsInFluid(true);
+			particleTweakInterface.particleTweaks$setMovesWithFluid(true);
 		}
 	}
 

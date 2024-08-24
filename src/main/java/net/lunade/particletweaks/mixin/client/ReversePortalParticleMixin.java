@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = ReversePortalParticle.class, priority = 1001)
-public abstract class ReversePortalParticleMixin extends TextureSheetParticle {
+public abstract class ReversePortalParticleMixin extends TextureSheetParticle implements ParticleTweakInterface {
 
 	protected ReversePortalParticleMixin(ClientLevel clientLevel, double d, double e, double f) {
 		super(clientLevel, d, e, f);
@@ -20,41 +20,40 @@ public abstract class ReversePortalParticleMixin extends TextureSheetParticle {
 
 	@Inject(method = "tick", at = @At("HEAD"))
 	public void particleTweaks$runScaling(CallbackInfo info) {
-		if (this instanceof ParticleTweakInterface particleTweakInterface) {
-			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
-				particleTweakInterface.particleTweaks$calcScale();
+		if (this.particleTweaks$usesNewSystem()) {
+			this.particleTweaks$calcScale();
+			this.age = Mth.clamp(age - 1, 0, this.lifetime);
+			if (this.particleTweaks$getScale(0F) <= 0.85F && !this.particleTweaks$hasSwitchedToShrinking()) {
 				this.age = Mth.clamp(age - 1, 0, this.lifetime);
-				if (particleTweakInterface.particleTweaks$getScale(0F) <= 0.85F && !particleTweakInterface.particleTweaks$hasSwitchedToShrinking()) {
-					this.age = Mth.clamp(age - 1, 0, this.lifetime);
-				}
 			}
 		}
 	}
 
 	@Inject(method = "tick", at = @At("TAIL"), cancellable = true)
 	public void particleTweaks$removeOnceSmall(CallbackInfo info) {
-		if (this instanceof ParticleTweakInterface particleTweakInterface) {
-			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
-				if (particleTweakInterface.particleTweaks$runScaleRemoval()) {
-					this.remove();
-					info.cancel();
-				}
+		if (this.particleTweaks$usesNewSystem()) {
+			if (this.particleTweaks$runScaleRemoval()) {
+				this.remove();
+				info.cancel();
 			}
 		}
 	}
 
 	@Inject(method = "getQuadSize", at = @At("RETURN"), cancellable = true)
 	public void particleTweaks$getQuadSize(float partialTicks, CallbackInfoReturnable<Float> info) {
-		if (this instanceof ParticleTweakInterface particleTweakInterface) {
-			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
-				boolean switched = particleTweakInterface.particleTweaks$hasSwitchedToShrinking() && particleTweakInterface.particleTweaks$switchesExit();
-				if (!particleTweakInterface.particleTweaks$fadeInsteadOfScale() && !switched) {
-					info.setReturnValue(info.getReturnValue() * particleTweakInterface.particleTweaks$getScale(partialTicks));
-				} else {
-					this.alpha = particleTweakInterface.particleTweaks$getScale(partialTicks);
-				}
+		if (this.particleTweaks$usesNewSystem()) {
+			boolean switched = this.particleTweaks$hasSwitchedToShrinking() && this.particleTweaks$switchesExit();
+			if (!this.particleTweaks$fadeInsteadOfScale() && !switched) {
+				info.setReturnValue(info.getReturnValue() * this.particleTweaks$getScale(partialTicks));
+			} else {
+				this.alpha = this.particleTweaks$getScale(partialTicks);
 			}
 		}
+	}
+
+	@Override
+	public boolean particleTweaks$canBurn() {
+		return false;
 	}
 
 }

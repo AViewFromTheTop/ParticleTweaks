@@ -8,16 +8,19 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = SoulParticle.class, priority = 1001)
-public class SoulParticleMixin {
+public abstract class SoulParticleMixin implements ParticleTweakInterface {
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
 	private void particleTweaks$init(CallbackInfo info) {
-		if (SoulParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			particleTweakInterface.particleTweaks$setNewSystem(true);
-			particleTweakInterface.particleTweaks$setScaler(0.75F);
-			particleTweakInterface.particleTweaks$setScalesToZero();
-			particleTweakInterface.particleTweaks$setSwitchesExit(true);
-		}
+		this.particleTweaks$setNewSystem(true);
+		this.particleTweaks$setScaler(0.75F);
+		this.particleTweaks$setScalesToZero();
+		this.particleTweaks$setSwitchesExit(true);
+	}
+
+	@Override
+	public boolean particleTweaks$canBurn() {
+		return false;
 	}
 
 }

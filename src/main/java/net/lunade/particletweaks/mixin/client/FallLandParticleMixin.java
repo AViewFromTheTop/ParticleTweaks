@@ -13,7 +13,7 @@ public class FallLandParticleMixin {
 	@Inject(method = "<init>*", at = @At("TAIL"))
 	private void particleTweaks$init(CallbackInfo info) {
 		if (DripParticle.FallAndLandParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			particleTweakInterface.particleTweaks$setSlowsInWater(true);
+			particleTweakInterface.particleTweaks$setSlowsInFluid(true);
 		}
 	}
 

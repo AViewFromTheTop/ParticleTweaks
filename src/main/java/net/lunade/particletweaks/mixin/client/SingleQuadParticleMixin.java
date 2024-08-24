@@ -149,22 +149,22 @@ public abstract class SingleQuadParticleMixin extends Particle implements Partic
 	@Unique
 	private boolean particleTweaks$slowsInWater = false;
 	@Override
-	public void particleTweaks$setSlowsInWater(boolean set) {
+	public void particleTweaks$setSlowsInFluid(boolean set) {
 		this.particleTweaks$slowsInWater = set;
 	}
 	@Override
-	public boolean particleTweaks$slowsInWater() {
+	public boolean particleTweaks$slowsInFluid() {
 		return this.particleTweaks$slowsInWater;
 	}
 
 	@Unique
 	private boolean particleTweaks$movesWithWater = false;
 	@Override
-	public void particleTweaks$setMovesWithWater(boolean set) {
+	public void particleTweaks$setMovesWithFluid(boolean set) {
 		this.particleTweaks$movesWithWater = set;
 	}
 	@Override
-	public boolean particleTweaks$movesWithWater() {
+	public boolean particleTweaks$movesWithFluid() {
 		return this.particleTweaks$movesWithWater;
 	}
 

@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = TrialSpawnerDetectionParticle.class, priority = 1001)
-public abstract class TrialSpawnerDetectionParticleMixin extends TextureSheetParticle {
+public abstract class TrialSpawnerDetectionParticleMixin extends TextureSheetParticle implements ParticleTweakInterface {
 
 	protected TrialSpawnerDetectionParticleMixin(ClientLevel world, double d, double e, double f) {
 		super(world, d, e, f);
@@ -20,12 +20,10 @@ public abstract class TrialSpawnerDetectionParticleMixin extends TextureSheetPar
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
 	private void particleTweaks$init(CallbackInfo info) {
-		if (TrialSpawnerDetectionParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			particleTweakInterface.particleTweaks$setNewSystem(true);
-			particleTweakInterface.particleTweaks$setScaler(0.35F);
-			particleTweakInterface.particleTweaks$setScalesToZero();
-			particleTweakInterface.particleTweaks$setSwitchesExit(true);
-		}
+		this.particleTweaks$setNewSystem(true);
+		this.particleTweaks$setScaler(0.35F);
+		this.particleTweaks$setScalesToZero();
+		this.particleTweaks$setSwitchesExit(true);
 	}
 
 	@Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
@@ -35,16 +33,19 @@ public abstract class TrialSpawnerDetectionParticleMixin extends TextureSheetPar
 
 	@Inject(method = "getQuadSize", at = @At("RETURN"), cancellable = true)
 	public void particleTweaks$getQuadSize(float partialTicks, CallbackInfoReturnable<Float> info) {
-		if (this instanceof ParticleTweakInterface particleTweakInterface) {
-			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
-				boolean switched = particleTweakInterface.particleTweaks$hasSwitchedToShrinking() && particleTweakInterface.particleTweaks$switchesExit();
-				if (!particleTweakInterface.particleTweaks$fadeInsteadOfScale() && !switched) {
-					info.setReturnValue(info.getReturnValue() * particleTweakInterface.particleTweaks$getScale(partialTicks));
-				} else {
-					this.alpha = particleTweakInterface.particleTweaks$getScale(partialTicks);
-				}
+		if (this.particleTweaks$usesNewSystem()) {
+			boolean switched = this.particleTweaks$hasSwitchedToShrinking() && this.particleTweaks$switchesExit();
+			if (!this.particleTweaks$fadeInsteadOfScale() && !switched) {
+				info.setReturnValue(info.getReturnValue() * this.particleTweaks$getScale(partialTicks));
+			} else {
+				this.alpha = this.particleTweaks$getScale(partialTicks);
 			}
 		}
+	}
+
+	@Override
+	public boolean particleTweaks$canBurn() {
+		return false;
 	}
 
 }

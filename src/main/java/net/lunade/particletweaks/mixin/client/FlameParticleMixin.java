@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = FlameParticle.class, priority = 1001)
-public abstract class FlameParticleMixin extends RisingParticle {
+public abstract class FlameParticleMixin extends RisingParticle implements ParticleTweakInterface {
 
 	protected FlameParticleMixin(ClientLevel world, double d, double e, double f, double g, double h, double i) {
 		super(world, d, e, f, g, h, i);
@@ -23,22 +23,18 @@ public abstract class FlameParticleMixin extends RisingParticle {
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
 	private void particleTweaks$init(CallbackInfo info) {
-		if (FlameParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			particleTweakInterface.particleTweaks$setNewSystem(true);
-			particleTweakInterface.particleTweaks$setScaler(0.15F);
-			particleTweakInterface.particleTweaks$setScalesToZero();
-			particleTweakInterface.particleTweaks$setCanShrink(false);
-		}
+		this.particleTweaks$setNewSystem(true);
+		this.particleTweaks$setScaler(0.15F);
+		this.particleTweaks$setScalesToZero();
+		this.particleTweaks$setCanShrink(false);
 	}
 
 	@Inject(method = "getQuadSize", at = @At("RETURN"), cancellable = true)
 	public void particleTweaks$getQuadSize(float partialTicks, CallbackInfoReturnable<Float> info) {
-		if (FlameParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
-				if (!particleTweakInterface.particleTweaks$fadeInsteadOfScale()) {
-					float scale = particleTweakInterface.particleTweaks$getScale(partialTicks);
-					info.setReturnValue(info.getReturnValue() * scale);
-				}
+		if (this.particleTweaks$usesNewSystem()) {
+			if (!this.particleTweaks$fadeInsteadOfScale()) {
+				float scale = this.particleTweaks$getScale(partialTicks);
+				info.setReturnValue(info.getReturnValue() * scale);
 			}
 		}
 	}
@@ -54,10 +50,8 @@ public abstract class FlameParticleMixin extends RisingParticle {
 		float value, float min, float max, Operation<Float> original,
 		float partialTicks
 	) {
-		if (FlameParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
-				return particleTweakInterface.particleTweaks$getScale(partialTicks);
-			}
+		if (this.particleTweaks$usesNewSystem()) {
+			return this.particleTweaks$getScale(partialTicks);
 		}
 		return original.call(value, min, max);
 	}
@@ -68,6 +62,11 @@ public abstract class FlameParticleMixin extends RisingParticle {
 	)
 	public float particleTweaks$getQuadSize(float constant) {
 		return 1F;
+	}
+
+	@Override
+	public boolean particleTweaks$canBurn() {
+		return false;
 	}
 
 }

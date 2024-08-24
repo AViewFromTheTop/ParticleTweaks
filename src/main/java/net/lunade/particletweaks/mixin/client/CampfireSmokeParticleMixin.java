@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = CampfireSmokeParticle.class, priority = 1001)
-public abstract class CampfireSmokeParticleMixin extends TextureSheetParticle {
+public abstract class CampfireSmokeParticleMixin extends TextureSheetParticle implements ParticleTweakInterface {
 
 	protected CampfireSmokeParticleMixin(ClientLevel clientLevel, double d, double e, double f) {
 		super(clientLevel, d, e, f);
@@ -18,21 +18,22 @@ public abstract class CampfireSmokeParticleMixin extends TextureSheetParticle {
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
 	private void particleTweaks$init(CallbackInfo info) {
-		if (this instanceof ParticleTweakInterface particleTweakInterface) {
-            particleTweakInterface.particleTweaks$setNewSystem(true);
-            particleTweakInterface.particleTweaks$setScaler(0.15F);
-            particleTweakInterface.particleTweaks$setScalesToZero();
-            particleTweakInterface.particleTweaks$setCanShrink(false);
-		}
+		this.particleTweaks$setNewSystem(true);
+		this.particleTweaks$setScaler(0.15F);
+		this.particleTweaks$setScalesToZero();
+		this.particleTweaks$setCanShrink(false);
 	}
 
 	@Inject(method = "tick", at = @At("HEAD"))
 	public void particleTweaks$runScaling(CallbackInfo info) {
-		if (this instanceof ParticleTweakInterface particleTweakInterface) {
-			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
-				particleTweakInterface.particleTweaks$calcScale();
-			}
+		if (this.particleTweaks$usesNewSystem()) {
+			this.particleTweaks$calcScale();
 		}
+	}
+
+	@Override
+	public boolean particleTweaks$canBurn() {
+		return false;
 	}
 
 }

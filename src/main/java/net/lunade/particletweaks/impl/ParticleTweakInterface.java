@@ -32,13 +32,17 @@ public interface ParticleTweakInterface {
 
 	boolean particleTweaks$switchesExit();
 
-	void particleTweaks$setSlowsInWater(boolean set);
+	void particleTweaks$setSlowsInFluid(boolean set);
 
-	boolean particleTweaks$slowsInWater();
+	boolean particleTweaks$slowsInFluid();
 
-	void particleTweaks$setMovesWithWater(boolean set);
+	void particleTweaks$setMovesWithFluid(boolean set);
 
-	boolean particleTweaks$movesWithWater();
+	boolean particleTweaks$movesWithFluid();
+
+	default boolean particleTweaks$canBurn() {
+		return true;
+	}
 
 	void particleTweaks$setScale(float f);
 

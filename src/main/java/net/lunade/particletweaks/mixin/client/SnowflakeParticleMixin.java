@@ -18,8 +18,8 @@ public class SnowflakeParticleMixin {
 			particleTweakInterface.particleTweaks$setNewSystem(true);
 			particleTweakInterface.particleTweaks$setScaler(0.45F);
 			particleTweakInterface.particleTweaks$setSwitchesExit(true);
-			particleTweakInterface.particleTweaks$setSlowsInWater(true);
-			particleTweakInterface.particleTweaks$setMovesWithWater(true);
+			particleTweakInterface.particleTweaks$setSlowsInFluid(true);
+			particleTweakInterface.particleTweaks$setMovesWithFluid(true);
 			particleTweakInterface.particleTweaks$setScalesToZero();
 		}
 	}

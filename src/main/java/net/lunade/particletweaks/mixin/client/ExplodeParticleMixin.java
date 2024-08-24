@@ -10,21 +10,24 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = ExplodeParticle.class, priority = 1001)
-public class ExplodeParticleMixin {
+public abstract class ExplodeParticleMixin implements ParticleTweakInterface {
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
 	private void particleTweaks$init(CallbackInfo info) {
-		if (ExplodeParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			particleTweakInterface.particleTweaks$setNewSystem(true);
-			particleTweakInterface.particleTweaks$setScaler(0.3F);
-			particleTweakInterface.particleTweaks$setSwitchesExit(true);
-			particleTweakInterface.particleTweaks$setScalesToZero();
-		}
+		this.particleTweaks$setNewSystem(true);
+		this.particleTweaks$setScaler(0.3F);
+		this.particleTweaks$setSwitchesExit(true);
+		this.particleTweaks$setScalesToZero();
 	}
 
 	@Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
 	public void particleTweaks$getRenderType(CallbackInfoReturnable<ParticleRenderType> info) {
 		info.setReturnValue(ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT);
+	}
+
+	@Override
+	public boolean particleTweaks$canBurn() {
+		return false;
 	}
 
 }

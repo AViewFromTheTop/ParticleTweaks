@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = GustParticle.class, priority = 1001)
-public abstract class GustParticleMixin extends TextureSheetParticle {
+public abstract class GustParticleMixin extends TextureSheetParticle implements ParticleTweakInterface {
 
 	protected GustParticleMixin(ClientLevel clientLevel, double d, double e, double f) {
 		super(clientLevel, d, e, f);
@@ -19,35 +19,34 @@ public abstract class GustParticleMixin extends TextureSheetParticle {
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
 	private void particleTweaks$init(CallbackInfo info) {
-		if (this instanceof ParticleTweakInterface particleTweakInterface) {
-            particleTweakInterface.particleTweaks$setNewSystem(true);
-            particleTweakInterface.particleTweaks$setScaler(0.675F);
-            particleTweakInterface.particleTweaks$setScalesToZero();
-		}
+		this.particleTweaks$setNewSystem(true);
+		this.particleTweaks$setScaler(0.675F);
+		this.particleTweaks$setScalesToZero();
 	}
 
 	@Inject(method = "tick", at = @At("HEAD"))
 	public void particleTweaks$runScaling(CallbackInfo info) {
-		if (this instanceof ParticleTweakInterface particleTweakInterface) {
-			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
-				particleTweakInterface.particleTweaks$calcScale();
+		if (this.particleTweaks$usesNewSystem()) {
+			this.particleTweaks$calcScale();
+			this.age = Mth.clamp(age - 1, 0, this.lifetime);
+			if (this.particleTweaks$getScale(0F) <= 0.85F && !this.particleTweaks$hasSwitchedToShrinking()) {
 				this.age = Mth.clamp(age - 1, 0, this.lifetime);
-				if (particleTweakInterface.particleTweaks$getScale(0F) <= 0.85F && !particleTweakInterface.particleTweaks$hasSwitchedToShrinking()) {
-					this.age = Mth.clamp(age - 1, 0, this.lifetime);
-				}
 			}
 		}
 	}
 
 	@Inject(method = "tick", at = @At("TAIL"), cancellable = true)
 	public void particleTweaks$removeOnceSmall(CallbackInfo info) {
-		if (this instanceof ParticleTweakInterface particleTweakInterface) {
-			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
-				if (particleTweakInterface.particleTweaks$runScaleRemoval()) {
-					this.remove();
-					info.cancel();
-				}
+		if (this.particleTweaks$usesNewSystem()) {
+			if (this.particleTweaks$runScaleRemoval()) {
+				this.remove();
+				info.cancel();
 			}
 		}
+	}
+
+	@Override
+	public boolean particleTweaks$canBurn() {
+		return false;
 	}
 }
