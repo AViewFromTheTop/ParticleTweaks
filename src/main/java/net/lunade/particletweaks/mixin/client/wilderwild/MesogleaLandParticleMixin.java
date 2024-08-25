@@ -27,6 +27,7 @@ public class MesogleaLandParticleMixin {
 			particleTweakInterface.particleTweaks$setCanShrink(true);
 			particleTweakInterface.particleTweaks$setSlowsInFluid(true);
 			particleTweakInterface.particleTweaks$setFadeInsteadOfScale(true);
+			particleTweakInterface.particleTweaks$setCanBurn(true);
 		}
 	}
 

@@ -37,6 +37,7 @@ public abstract class WakeParticleMixin extends TextureSheetParticle implements 
 		this.particleTweaks$setSwitchesExit(true);
 		this.particleTweaks$setSlowsInFluid(true);
 		this.particleTweaks$setMovesWithFluid(true);
+		this.particleTweaks$setCanBurn(true);
 	}
 
 	@Inject(method = "tick", at = @At("HEAD"), cancellable = true)

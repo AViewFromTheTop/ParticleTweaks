@@ -26,6 +26,7 @@ public class MesogleaHangParticleMixin {
 			particleTweakInterface.particleTweaks$setScaler(0.15F);
 			particleTweakInterface.particleTweaks$setScalesToZero();
 			particleTweakInterface.particleTweaks$setCanShrink(false);
+			particleTweakInterface.particleTweaks$setCanBurn(true);
 		}
 	}
 

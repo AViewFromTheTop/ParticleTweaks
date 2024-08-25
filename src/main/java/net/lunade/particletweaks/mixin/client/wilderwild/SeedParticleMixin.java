@@ -24,6 +24,7 @@ public abstract class SeedParticleMixin extends TextureSheetParticle {
 			particleTweakInterface.particleTweaks$setScalesToZero();
 			particleTweakInterface.particleTweaks$setSwitchesExit(true);
 			particleTweakInterface.particleTweaks$setMovesWithFluid(true);
+			particleTweakInterface.particleTweaks$setCanBurn(true);
 		}
 	}
 

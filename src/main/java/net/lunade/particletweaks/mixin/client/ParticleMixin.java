@@ -75,11 +75,9 @@ public abstract class ParticleMixin {
 	@Inject(method = "tick", at = @At("TAIL"), cancellable = true)
 	public void particleTweaks$removeOnceSmall(CallbackInfo info) {
 		if (Particle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
-				if (particleTweakInterface.particleTweaks$runScaleRemoval()) {
-					this.remove();
-					info.cancel();
-				}
+			if (particleTweakInterface.particleTweaks$usesNewSystem() && particleTweakInterface.particleTweaks$runScaleRemoval()) {
+				this.remove();
+				info.cancel();
 			}
 		}
 	}

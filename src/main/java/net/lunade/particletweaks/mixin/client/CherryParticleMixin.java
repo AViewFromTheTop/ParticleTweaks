@@ -22,6 +22,7 @@ public abstract class CherryParticleMixin extends TextureSheetParticle implement
 	private boolean particleTweaks$hasSetMaxLifetime;
 	@Unique
 	private int particleTweaks$maxLifetime;
+
 	protected CherryParticleMixin(ClientLevel clientLevel, double d, double e, double f) {
 		super(clientLevel, d, e, f);
 	}
@@ -34,6 +35,7 @@ public abstract class CherryParticleMixin extends TextureSheetParticle implement
 		this.particleTweaks$setScalesToZero();
 		this.particleTweaks$setSlowsInFluid(true);
 		this.particleTweaks$setMovesWithFluid(true);
+		this.particleTweaks$setCanBurn(true);
 	}
 
 	@Inject(method = "tick", at = @At("HEAD"), cancellable = true)
@@ -87,13 +89,9 @@ public abstract class CherryParticleMixin extends TextureSheetParticle implement
 
 	@Inject(method = "tick", at = @At("TAIL"), cancellable = true)
 	public void particleTweaks$removeOnceSmall(CallbackInfo info) {
-		if (CherryParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
-				if (particleTweakInterface.particleTweaks$runScaleRemoval()) {
-					this.remove();
-					info.cancel();
-				}
-			}
+		if (this.particleTweaks$usesNewSystem() && this.particleTweaks$runScaleRemoval()) {
+			this.remove();
+			info.cancel();
 		}
 	}
 

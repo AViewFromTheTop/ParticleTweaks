@@ -31,9 +31,4 @@ public abstract class CampfireSmokeParticleMixin extends TextureSheetParticle im
 		}
 	}
 
-	@Override
-	public boolean particleTweaks$canBurn() {
-		return false;
-	}
-
 }

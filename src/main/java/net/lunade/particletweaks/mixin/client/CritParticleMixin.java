@@ -43,9 +43,4 @@ public abstract class CritParticleMixin extends TextureSheetParticle implements 
 		}
 	}
 
-	@Override
-	public boolean particleTweaks$canBurn() {
-		return false;
-	}
-
 }

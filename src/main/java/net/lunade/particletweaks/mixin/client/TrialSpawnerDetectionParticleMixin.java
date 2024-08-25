@@ -43,9 +43,4 @@ public abstract class TrialSpawnerDetectionParticleMixin extends TextureSheetPar
 		}
 	}
 
-	@Override
-	public boolean particleTweaks$canBurn() {
-		return false;
-	}
-
 }

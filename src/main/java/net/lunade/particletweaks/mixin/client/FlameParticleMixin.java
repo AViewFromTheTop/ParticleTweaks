@@ -31,11 +31,9 @@ public abstract class FlameParticleMixin extends RisingParticle implements Parti
 
 	@Inject(method = "getQuadSize", at = @At("RETURN"), cancellable = true)
 	public void particleTweaks$getQuadSize(float partialTicks, CallbackInfoReturnable<Float> info) {
-		if (this.particleTweaks$usesNewSystem()) {
-			if (!this.particleTweaks$fadeInsteadOfScale()) {
-				float scale = this.particleTweaks$getScale(partialTicks);
-				info.setReturnValue(info.getReturnValue() * scale);
-			}
+		if (this.particleTweaks$usesNewSystem() && !this.particleTweaks$fadeInsteadOfScale()) {
+			float scale = this.particleTweaks$getScale(partialTicks);
+			info.setReturnValue(info.getReturnValue() * scale);
 		}
 	}
 
@@ -62,11 +60,6 @@ public abstract class FlameParticleMixin extends RisingParticle implements Parti
 	)
 	public float particleTweaks$getQuadSize(float constant) {
 		return 1F;
-	}
-
-	@Override
-	public boolean particleTweaks$canBurn() {
-		return false;
 	}
 
 }

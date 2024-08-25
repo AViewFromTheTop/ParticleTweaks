@@ -10,18 +10,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = SnowflakeParticle.class, priority = 1001)
-public class SnowflakeParticleMixin {
+public abstract class SnowflakeParticleMixin implements ParticleTweakInterface {
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
 	private void particleTweaks$init(CallbackInfo info) {
-		if (SnowflakeParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			particleTweakInterface.particleTweaks$setNewSystem(true);
-			particleTweakInterface.particleTweaks$setScaler(0.45F);
-			particleTweakInterface.particleTweaks$setSwitchesExit(true);
-			particleTweakInterface.particleTweaks$setSlowsInFluid(true);
-			particleTweakInterface.particleTweaks$setMovesWithFluid(true);
-			particleTweakInterface.particleTweaks$setScalesToZero();
-		}
+		this.particleTweaks$setNewSystem(true);
+		this.particleTweaks$setScaler(0.45F);
+		this.particleTweaks$setSwitchesExit(true);
+		this.particleTweaks$setSlowsInFluid(true);
+		this.particleTweaks$setMovesWithFluid(true);
+		this.particleTweaks$setScalesToZero();
+		this.particleTweaks$setCanBurn(true);
 	}
 
 	@Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)

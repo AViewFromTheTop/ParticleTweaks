@@ -30,6 +30,11 @@ public abstract class MesogleaDripParticleMixin extends TextureSheetParticle imp
 		super(clientLevel, d, e, f);
 	}
 
+	@Inject(method = "<init>*", at = @At("TAIL"))
+	private void particleTweaks$init(CallbackInfo info) {
+		this.particleTweaks$setCanBurn(true);
+	}
+
 	@Inject(method = "tick", at = @At("HEAD"), cancellable = true)
 	public void particleTweaks$runScaling(CallbackInfo info) {
 		if (this.particleTweaks$usesNewSystem()) {

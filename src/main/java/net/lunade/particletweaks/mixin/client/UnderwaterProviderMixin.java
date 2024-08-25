@@ -15,7 +15,8 @@ public class UnderwaterProviderMixin {
 
 	@Inject(method = "createParticle*", at = @At("TAIL"))
 	public void particleTweaks$createParticle(
-		SimpleParticleType type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, CallbackInfoReturnable<Particle> info
+		SimpleParticleType type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed,
+		CallbackInfoReturnable<Particle> info
 	) {
 		if (info.getReturnValue() instanceof ParticleTweakInterface particleTweakInterface) {
 			particleTweakInterface.particleTweaks$setNewSystem(true);
@@ -23,6 +24,7 @@ public class UnderwaterProviderMixin {
 			particleTweakInterface.particleTweaks$setScalesToZero();
 			particleTweakInterface.particleTweaks$setSlowsInFluid(false);
 			particleTweakInterface.particleTweaks$setMovesWithFluid(false);
+			particleTweakInterface.particleTweaks$setCanBurn(true);
 		}
 	}
 }

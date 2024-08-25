@@ -8,17 +8,15 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = GlowParticle.class, priority = 1001)
-public class GlowParticleMixin {
+public abstract class GlowParticleMixin implements ParticleTweakInterface {
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
 	private void particleTweaks$init(CallbackInfo info) {
-		if (GlowParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			particleTweakInterface.particleTweaks$setNewSystem(true);
-			particleTweakInterface.particleTweaks$setScaler(0.375F);
-			particleTweakInterface.particleTweaks$setScalesToZero();
-			particleTweakInterface.particleTweaks$setSwitchesExit(true);
-			particleTweakInterface.particleTweaks$setSlowsInFluid(true);
-		}
+		this.particleTweaks$setNewSystem(true);
+		this.particleTweaks$setScaler(0.375F);
+		this.particleTweaks$setScalesToZero();
+		this.particleTweaks$setSwitchesExit(true);
+		this.particleTweaks$setSlowsInFluid(true);
 	}
 
 }

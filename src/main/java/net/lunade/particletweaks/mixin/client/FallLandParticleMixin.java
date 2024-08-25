@@ -8,13 +8,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = DripParticle.FallAndLandParticle.class, priority = 1001)
-public class FallLandParticleMixin {
+public abstract class FallLandParticleMixin implements ParticleTweakInterface {
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
 	private void particleTweaks$init(CallbackInfo info) {
-		if (DripParticle.FallAndLandParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			particleTweakInterface.particleTweaks$setSlowsInFluid(true);
-		}
+		this.particleTweaks$setSlowsInFluid(true);
 	}
 
 }

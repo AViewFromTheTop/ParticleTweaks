@@ -66,8 +66,4 @@ public abstract class PortalParticleMixin extends TextureSheetParticle implement
 		info.setReturnValue(ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT);
 	}
 
-	@Override
-	public boolean particleTweaks$canBurn() {
-		return false;
-	}
 }

@@ -31,9 +31,4 @@ public abstract class VibrationSignalParticleMixin extends TextureSheetParticle 
 		}
 	}
 
-	@Override
-	public boolean particleTweaks$canBurn() {
-		return false;
-	}
-
 }

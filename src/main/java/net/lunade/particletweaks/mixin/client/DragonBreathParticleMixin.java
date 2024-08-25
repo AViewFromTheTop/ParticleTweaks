@@ -65,8 +65,4 @@ public abstract class DragonBreathParticleMixin extends TextureSheetParticle imp
 		info.setReturnValue(ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT);
 	}
 
-	@Override
-	public boolean particleTweaks$canBurn() {
-		return false;
-	}
 }

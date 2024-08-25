@@ -198,7 +198,7 @@ dependencies {
     }
 
     // Particle Rain
-    modCompileOnly("maven.modrinth:particle-rain:v2.0.5")
+    modCompileOnly("maven.modrinth:particle-rain:2.1.4")
 
     // Wilder Wild
     modCompileOnly("maven.modrinth:wilder-wild:$wilderwild_version")

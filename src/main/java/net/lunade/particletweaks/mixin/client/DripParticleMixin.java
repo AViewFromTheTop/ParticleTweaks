@@ -31,6 +31,11 @@ public abstract class DripParticleMixin extends TextureSheetParticle implements 
 		super(clientLevel, d, e, f);
 	}
 
+	@Inject(method = "<init>*", at = @At("TAIL"))
+	private void particleTweaks$init(CallbackInfo info) {
+		this.particleTweaks$setCanBurn(!this.getType().is(FluidTags.LAVA));
+	}
+
 	@Inject(method = "tick", at = @At("HEAD"), cancellable = true)
 	public void particleTweaks$runScaling(CallbackInfo info) {
 		if (this.particleTweaks$usesNewSystem()) {
@@ -55,7 +60,7 @@ public abstract class DripParticleMixin extends TextureSheetParticle implements 
 				new Vec3(this.x, this.y, this.z),
 				new Vec3(this.xd, this.yd, this.zd),
 				this,
-				this.getType().is(FluidTags.LAVA),
+				!this.particleTweaks$canBurn(),
 				this.particleTweaks$slowsInFluid(),
 				this.particleTweaks$movesWithFluid()
 			);

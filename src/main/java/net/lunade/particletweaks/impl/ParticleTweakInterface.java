@@ -40,9 +40,9 @@ public interface ParticleTweakInterface {
 
 	boolean particleTweaks$movesWithFluid();
 
-	default boolean particleTweaks$canBurn() {
-		return true;
-	}
+	void particleTweaks$setCanBurn(boolean set);
+
+	boolean particleTweaks$canBurn();
 
 	void particleTweaks$setScale(float f);
 

@@ -18,9 +18,4 @@ public abstract class SpellParticleMixin implements ParticleTweakInterface {
 		this.particleTweaks$setSwitchesExit(true);
 	}
 
-	@Override
-	public boolean particleTweaks$canBurn() {
-		return false;
-	}
-
 }

@@ -27,6 +27,7 @@ public abstract class FallingParticleMixin extends TextureSheetParticle {
 			particleTweakInterface.particleTweaks$setSwitchesExit(true);
 			particleTweakInterface.particleTweaks$setSlowsInFluid(true);
 			particleTweakInterface.particleTweaks$setMovesWithFluid(true);
+			particleTweakInterface.particleTweaks$setCanBurn(true);
 		}
 	}
 

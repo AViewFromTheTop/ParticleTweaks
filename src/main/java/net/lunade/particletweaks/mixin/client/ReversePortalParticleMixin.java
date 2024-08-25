@@ -51,9 +51,4 @@ public abstract class ReversePortalParticleMixin extends TextureSheetParticle im
 		}
 	}
 
-	@Override
-	public boolean particleTweaks$canBurn() {
-		return false;
-	}
-
 }

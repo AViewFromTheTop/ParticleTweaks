@@ -45,9 +45,4 @@ public abstract class BaseAshSmokeParticleMixin extends TextureSheetParticle imp
 		}
 	}
 
-	@Override
-	public boolean particleTweaks$canBurn() {
-		return false;
-	}
-
 }

@@ -23,55 +23,48 @@ public abstract class FallingDustParticleMixin extends TextureSheetParticle impl
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
 	private void particleTweaks$init(CallbackInfo info) {
-		if (FallingDustParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			particleTweakInterface.particleTweaks$setNewSystem(true);
-			particleTweakInterface.particleTweaks$setScaler(0.25F);
-			particleTweakInterface.particleTweaks$setScalesToZero();
-			particleTweakInterface.particleTweaks$setSwitchesExit(true);
-			particleTweakInterface.particleTweaks$setSlowsInFluid(true);
-			particleTweakInterface.particleTweaks$setMovesWithFluid(true);
-		}
+		this.particleTweaks$setNewSystem(true);
+		this.particleTweaks$setScaler(0.25F);
+		this.particleTweaks$setScalesToZero();
+		this.particleTweaks$setSwitchesExit(true);
+		this.particleTweaks$setSlowsInFluid(true);
+		this.particleTweaks$setMovesWithFluid(true);
+		this.particleTweaks$setCanBurn(true);
 	}
 
 	@Inject(method = "tick", at = @At("HEAD"), cancellable = true)
 	public void particleTweaks$runScaling(CallbackInfo info) {
-		if (FallingDustParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
-				particleTweakInterface.particleTweaks$calcScale();
+		if (this.particleTweaks$usesNewSystem()) {
+			this.particleTweaks$calcScale();
+			this.age = Mth.clamp(age - 1, 0, this.lifetime);
+			if (this.particleTweaks$getScale(0F) <= 0.85F && !this.particleTweaks$hasSwitchedToShrinking()) {
 				this.age = Mth.clamp(age - 1, 0, this.lifetime);
-				if (particleTweakInterface.particleTweaks$getScale(0F) <= 0.85F && !particleTweakInterface.particleTweaks$hasSwitchedToShrinking()) {
-					this.age = Mth.clamp(age - 1, 0, this.lifetime);
-				}
 			}
-			Vec3 fluidMovement = FluidFallingCalculator.handleFluidInteraction(
-				this.level,
-				new Vec3(this.x, this.y, this.z),
-				new Vec3(this.xd, this.yd, this.zd),
-				this,
-				!this.particleTweaks$canBurn(),
-				this.particleTweaks$slowsInFluid(),
-				this.particleTweaks$movesWithFluid()
-			);
+		}
+		Vec3 fluidMovement = FluidFallingCalculator.handleFluidInteraction(
+			this.level,
+			new Vec3(this.x, this.y, this.z),
+			new Vec3(this.xd, this.yd, this.zd),
+			this,
+			!this.particleTweaks$canBurn(),
+			this.particleTweaks$slowsInFluid(),
+			this.particleTweaks$movesWithFluid()
+		);
 
-			if (fluidMovement != null) {
-				this.xd = fluidMovement.x;
-				this.yd = fluidMovement.y;
-				this.zd = fluidMovement.z;
-			} else {
-				info.cancel();
-			}
+		if (fluidMovement != null) {
+			this.xd = fluidMovement.x;
+			this.yd = fluidMovement.y;
+			this.zd = fluidMovement.z;
+		} else {
+			info.cancel();
 		}
 	}
 
 	@Inject(method = "tick", at = @At("TAIL"), cancellable = true)
 	public void particleTweaks$removeOnceSmall(CallbackInfo info) {
-		if (FallingDustParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
-				if (particleTweakInterface.particleTweaks$runScaleRemoval()) {
-					this.remove();
-					info.cancel();
-				}
-			}
+		if (this.particleTweaks$usesNewSystem() && this.particleTweaks$runScaleRemoval()) {
+			this.remove();
+			info.cancel();
 		}
 	}
 

@@ -18,9 +18,4 @@ public abstract class SoulParticleMixin implements ParticleTweakInterface {
 		this.particleTweaks$setSwitchesExit(true);
 	}
 
-	@Override
-	public boolean particleTweaks$canBurn() {
-		return false;
-	}
-
 }

@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = BubbleColumnUpParticle.class, priority = 1001)
-public abstract class BubbleColumnUpParticleMixin extends TextureSheetParticle {
+public abstract class BubbleColumnUpParticleMixin extends TextureSheetParticle implements ParticleTweakInterface {
 
 	protected BubbleColumnUpParticleMixin(ClientLevel clientLevel, double d, double e, double f) {
 		super(clientLevel, d, e, f);
@@ -22,12 +22,11 @@ public abstract class BubbleColumnUpParticleMixin extends TextureSheetParticle {
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
 	private void particleTweaks$init(CallbackInfo info) {
-		if (BubbleColumnUpParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			particleTweakInterface.particleTweaks$setNewSystem(true);
-			particleTweakInterface.particleTweaks$setScaler(0.35F);
-			particleTweakInterface.particleTweaks$setScalesToZero();
-			particleTweakInterface.particleTweaks$setMovesWithFluid(true);
-		}
+		this.particleTweaks$setNewSystem(true);
+		this.particleTweaks$setScaler(0.35F);
+		this.particleTweaks$setScalesToZero();
+		this.particleTweaks$setMovesWithFluid(true);
+		this.particleTweaks$setCanBurn(true);
 	}
 
 	@WrapOperation(
@@ -38,13 +37,11 @@ public abstract class BubbleColumnUpParticleMixin extends TextureSheetParticle {
 		)
 	)
 	public void particleTweaks$outOfWater(BubbleColumnUpParticle instance, Operation<Void> original) {
-		if (instance instanceof ParticleTweakInterface particleTweakInterface) {
-			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
-				if (!ParticleTweaksSharedConstants.MAKE_BUBBLES_POP_MOD) {
-					this.level.addParticle(ParticleTypes.BUBBLE_POP, this.x, this.y, this.z, 0, 0, 0);
-				}
-				original.call(instance);
+		if (this.particleTweaks$usesNewSystem()) {
+			if (!ParticleTweaksSharedConstants.MAKE_BUBBLES_POP_MOD) {
+				this.level.addParticle(ParticleTypes.BUBBLE_POP, this.x, this.y, this.z, 0, 0, 0);
 			}
+			original.call(instance);
 		}
 	}
 

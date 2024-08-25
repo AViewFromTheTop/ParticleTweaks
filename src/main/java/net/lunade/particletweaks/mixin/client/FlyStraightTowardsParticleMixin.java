@@ -4,7 +4,6 @@ import net.lunade.particletweaks.impl.FluidFallingCalculator;
 import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.FlyStraightTowardsParticle;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.util.Mth;
@@ -16,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = FlyStraightTowardsParticle.class, priority = 1001)
-public abstract class FlyStraightTowardsParticleMixin extends TextureSheetParticle {
+public abstract class FlyStraightTowardsParticleMixin extends TextureSheetParticle implements ParticleTweakInterface {
 
 	protected FlyStraightTowardsParticleMixin(ClientLevel clientLevel, double d, double e, double f) {
 		super(clientLevel, d, e, f);
@@ -24,21 +23,18 @@ public abstract class FlyStraightTowardsParticleMixin extends TextureSheetPartic
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
 	private void particleTweaks$init(CallbackInfo info) {
-		if (this instanceof ParticleTweakInterface particleTweakInterface) {
-			particleTweakInterface.particleTweaks$setNewSystem(true);
-			particleTweakInterface.particleTweaks$setScaler(0.3F);
-			particleTweakInterface.particleTweaks$setScalesToZero();
-			particleTweakInterface.particleTweaks$setSwitchesExit(true);
-		}
+		this.particleTweaks$setNewSystem(true);
+		this.particleTweaks$setScaler(0.3F);
+		this.particleTweaks$setScalesToZero();
+		this.particleTweaks$setSwitchesExit(true);
 	}
 
 	@Inject(method = "tick", at = @At("HEAD"), cancellable = true)
 	public void particleTweaks$runScaling(CallbackInfo info) {
-		if (Particle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
-				particleTweakInterface.particleTweaks$calcScale();
+			if (this.particleTweaks$usesNewSystem()) {
+				this.particleTweaks$calcScale();
 				this.age = Mth.clamp(age - 1, 0, this.lifetime);
-				if (particleTweakInterface.particleTweaks$getScale(0F) <= 0.85F && !particleTweakInterface.particleTweaks$hasSwitchedToShrinking()) {
+				if (this.particleTweaks$getScale(0F) <= 0.85F && !this.particleTweaks$hasSwitchedToShrinking()) {
 					this.age = Mth.clamp(age - 1, 0, this.lifetime);
 				}
 			}
@@ -48,9 +44,9 @@ public abstract class FlyStraightTowardsParticleMixin extends TextureSheetPartic
 				new Vec3(this.x, this.y, this.z),
 				new Vec3(this.xd, this.yd, this.zd),
 				this,
-				!particleTweakInterface.particleTweaks$canBurn(),
-				particleTweakInterface.particleTweaks$slowsInFluid(),
-				particleTweakInterface.particleTweaks$movesWithFluid()
+				!this.particleTweaks$canBurn(),
+				this.particleTweaks$slowsInFluid(),
+				this.particleTweaks$movesWithFluid()
 			);
 
 			if (fluidMovement != null) {
@@ -60,18 +56,13 @@ public abstract class FlyStraightTowardsParticleMixin extends TextureSheetPartic
 			} else {
 				info.cancel();
 			}
-		}
 	}
 
 	@Inject(method = "tick", at = @At("TAIL"), cancellable = true)
 	public void particleTweaks$removeOnceSmall(CallbackInfo info) {
-		if (this instanceof ParticleTweakInterface particleTweakInterface) {
-			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
-				if (particleTweakInterface.particleTweaks$runScaleRemoval()) {
-					this.remove();
-					info.cancel();
-				}
-			}
+		if (this.particleTweaks$usesNewSystem() && this.particleTweaks$runScaleRemoval()) {
+			this.remove();
+			info.cancel();
 		}
 	}
 

@@ -37,16 +37,10 @@ public abstract class GustParticleMixin extends TextureSheetParticle implements 
 
 	@Inject(method = "tick", at = @At("TAIL"), cancellable = true)
 	public void particleTweaks$removeOnceSmall(CallbackInfo info) {
-		if (this.particleTweaks$usesNewSystem()) {
-			if (this.particleTweaks$runScaleRemoval()) {
-				this.remove();
-				info.cancel();
-			}
+		if (this.particleTweaks$usesNewSystem() && this.particleTweaks$runScaleRemoval()) {
+			this.remove();
+			info.cancel();
 		}
 	}
 
-	@Override
-	public boolean particleTweaks$canBurn() {
-		return false;
-	}
 }

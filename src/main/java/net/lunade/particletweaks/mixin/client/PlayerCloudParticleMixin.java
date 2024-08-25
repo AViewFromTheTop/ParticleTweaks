@@ -37,9 +37,4 @@ public abstract class PlayerCloudParticleMixin extends TextureSheetParticle impl
 		}
 	}
 
-	@Override
-	public boolean particleTweaks$canBurn() {
-		return false;
-	}
-
 }

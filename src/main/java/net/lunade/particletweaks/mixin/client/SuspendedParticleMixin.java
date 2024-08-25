@@ -10,16 +10,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = SuspendedParticle.class, priority = 1001)
-public class SuspendedParticleMixin {
+public abstract class SuspendedParticleMixin implements ParticleTweakInterface {
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
 	public void particleTweaks$initSuspendedParticles(CallbackInfo info) {
-		if (SuspendedParticle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			particleTweakInterface.particleTweaks$setNewSystem(true);
-			particleTweakInterface.particleTweaks$setScalesToZero();
-			particleTweakInterface.particleTweaks$setSlowsInFluid(true);
-			particleTweakInterface.particleTweaks$setMovesWithFluid(true);
-		}
+		this.particleTweaks$setNewSystem(true);
+		this.particleTweaks$setScalesToZero();
+		this.particleTweaks$setSlowsInFluid(true);
+		this.particleTweaks$setMovesWithFluid(true);
+		this.particleTweaks$setCanBurn(true);
 	}
 
 	@Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
