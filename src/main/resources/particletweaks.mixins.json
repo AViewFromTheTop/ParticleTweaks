@@ -39,6 +39,7 @@
     "client.SquidInkParticleMixin",
     "client.SuspendedParticleMixin",
     "client.TerrainParticleMixin",
+    "client.TrailParticleMixin",
     "client.TrialSpawnerDetectionParticleMixin",
     "client.UnderwaterProviderMixin",
     "client.VibrationSignalParticleMixin",

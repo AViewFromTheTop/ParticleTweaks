@@ -5,6 +5,10 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.TerrainParticle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.item.component.DamageResistant;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,7 +31,10 @@ public abstract class TerrainParticleMixin implements ParticleTweakInterface {
 		this.particleTweaks$setFadeInsteadOfScale(true);
 		this.particleTweaks$setSlowsInFluid(true);
 		this.particleTweaks$setMovesWithFluid(true);
-		this.particleTweaks$setCanBurn(!state.getBlock().asItem().components().has(DataComponents.FIRE_RESISTANT));
+		DamageResistant damageResistant = state.getBlock().asItem().components().get(DataComponents.DAMAGE_RESISTANT);
+		boolean fireResistant = damageResistant != null
+			&& damageResistant.isResistantTo(new DamageSource(world.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.IN_FIRE)));
+		this.particleTweaks$setCanBurn(!fireResistant);
 	}
 
 	@Inject(
@@ -43,7 +50,10 @@ public abstract class TerrainParticleMixin implements ParticleTweakInterface {
 		this.particleTweaks$setFadeInsteadOfScale(true);
 		this.particleTweaks$setSlowsInFluid(true);
 		this.particleTweaks$setMovesWithFluid(true);
-		this.particleTweaks$setCanBurn(!state.getBlock().asItem().components().has(DataComponents.FIRE_RESISTANT));
+		DamageResistant damageResistant = state.getBlock().asItem().components().get(DataComponents.DAMAGE_RESISTANT);
+		boolean fireResistant = damageResistant != null
+			&& damageResistant.isResistantTo(new DamageSource(world.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.IN_FIRE)));
+		this.particleTweaks$setCanBurn(!fireResistant);
 	}
 
 }

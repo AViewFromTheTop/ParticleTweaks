@@ -21,9 +21,7 @@ public class ParticleTweaksMixinPlugin implements IMixinConfigPlugin {
 
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, @NotNull String mixinClassName) {
-		if (mixinClassName.contains("wilderwild")) {
-			return FabricLoader.getInstance().isModLoaded("wilderwild");
-		}
+		if (mixinClassName.contains("wilderwild")) return FabricLoader.getInstance().isModLoaded("wilderwild");
 		return true;
 	}
 
@@ -39,11 +37,9 @@ public class ParticleTweaksMixinPlugin implements IMixinConfigPlugin {
 
 	@Override
 	public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
-
 	}
 
 	@Override
 	public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
-
 	}
 }

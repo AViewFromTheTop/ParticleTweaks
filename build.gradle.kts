@@ -179,7 +179,7 @@ dependencies {
     minecraft("com.mojang:minecraft:$minecraft_version")
     mappings(loom.layered {
         // please annoy treetrain if this doesnt work
-        mappings("org.quiltmc:quilt-mappings:$quilt_mappings:intermediary-v2")
+        //mappings("org.quiltmc:quilt-mappings:$quilt_mappings:intermediary-v2")
         //parchment("org.parchmentmc.data:parchment-$parchment_mappings@zip")
         officialMojangMappings {
             nameSyntheticMembers = false
@@ -189,10 +189,10 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:$fabric_api_version")
 
     // Mod Menu
-    modImplementation("com.terraformersmc:modmenu:$modmenu_version")
+    modCompileOnly("com.terraformersmc:modmenu:$modmenu_version")
 
     // Cloth Config
-    modImplementation("me.shedaniel.cloth:cloth-config-fabric:$cloth_config_version") {
+    modCompileOnly("me.shedaniel.cloth:cloth-config-fabric:$cloth_config_version") {
         exclude(group = "net.fabricmc.fabric-api")
         exclude(group = "com.terraformersmc")
     }
@@ -204,7 +204,7 @@ dependencies {
     modCompileOnly("maven.modrinth:wilder-wild:$wilderwild_version")
 
     // FrozenLib
-    modImplementation("maven.modrinth:frozenlib:$frozenlib_version")
+    modCompileOnly("maven.modrinth:frozenlib:$frozenlib_version")
 
     // Sodium
     if (shouldRunSodium)
