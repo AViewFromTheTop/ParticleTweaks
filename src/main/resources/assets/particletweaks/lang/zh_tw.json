@@ -1,0 +1,35 @@
+{
+  "option.particletweaks.component.title": "Particle Tweaks 設定",
+  "option.particletweaks.config": "組態",
+
+  "option.particletweaks.false": "§c停用",
+  "option.particletweaks.true": "§a啟用",
+
+  "option.particletweaks.trailer_cave_dust": "預告片洞穴粉塵",
+  "tooltip.particletweaks.trailer_cave_dust": "洞穴粉塵粒子將會生成，類似於洞穴與山崖、荒野更新和足跡與故事預告片。",
+
+  "option.particletweaks.trailer_torches": "預告片火把",
+  "tooltip.particletweaks.trailer_torches": "火把將會散發類似於洞穴與山崖預告片的粒子。",
+  "option.particletweaks.trailer_campfires": "預告片營火",
+  "tooltip.particletweaks.trailer_campfires": "營火將會散發類似於足跡與故事預告片的粒子。",
+
+  "option.particletweaks.trailer_bubbles": "預告片氣泡",
+  "tooltip.particletweaks.trailer_bubbles": "氣泡會停留更長時間，並且不會在會立即破裂的地方生成。\n啟用預告片水流動粒子後，氣泡將會生成。",
+  "option.particletweaks.trailer_water_movement": "預告片水流動",
+  "tooltip.particletweaks.trailer_water_movement": "水粒子將會跟隨實體在水中移動，類似於洞穴與山崖、荒野更新和足跡與故事預告片。",
+  "option.particletweaks.trailer_ambient_water": "預告片環境水",
+  "tooltip.particletweaks.trailer_ambient_water": "環境水粒子將會類似於荒野更新預告片的外觀和行為。",
+  "option.particletweaks.trailer_splashes": "預告片飛濺",
+  "tooltip.particletweaks.trailer_splashes": "可以生成飛濺和漣漪粒子，類似於洞穴與山崖預告片。",
+
+  "option.particletweaks.trailer_flowing_fluids": "預告片流動液體",
+  "tooltip.particletweaks.trailer_flowing_fluids": "粒子將會在流動的液體中生成，類似於荒野更新和足跡與故事預告片。",
+  "option.particletweaks.trailer_cascades": "預告片瀑布",
+  "tooltip.particletweaks.trailer_cascades": "水可以產生瀑布，類似於洞穴與山崖、荒野更新和足跡與故事預告片。",
+
+  "option.particletweaks.trailer_poof": "預告片煙霧",
+  "tooltip.particletweaks.trailer_poof": "煙霧粒子將會類似於足跡與故事和棘巧試煉預告片中的行為和外觀\n煙霧粒子會在生物死亡或透過生怪磚生成時產生。",
+
+  "option.particletweaks.trailer_spell": "預告片藥水",
+  "tooltip.particletweaks.trailer_spell": "藥水粒子將會類似於棘巧試煉預告片中的行為。"
+}
