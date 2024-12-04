@@ -28,6 +28,8 @@ public class ParticleTweaksParticleConfig implements ConfigData {
 	public boolean trailerPoof;
 	public boolean trailerSpell;
 
+	public boolean trailerLeaves;
+
 	@Environment(EnvType.CLIENT)
 	static void setupEntries(@NotNull ConfigCategory category, @NotNull ConfigEntryBuilder entryBuilder) {
 		var config = ParticleTweaksConfig.get().config;
@@ -127,6 +129,15 @@ public class ParticleTweaksParticleConfig implements ConfigData {
 				.setDefaultValue(false)
 				.setSaveConsumer(newValue -> config.trailerSpell = newValue)
 				.setTooltip(ParticleTweaksConstants.tooltip("trailer_spell"))
+				.setYesNoTextSupplier(value -> ParticleTweaksConstants.text(value ? "true" : "false"))
+				.build()
+		);
+
+		category.addEntry(
+			entryBuilder.startBooleanToggle(ParticleTweaksConstants.text("trailer_leaves"), config.trailerLeaves)
+				.setDefaultValue(false)
+				.setSaveConsumer(newValue -> config.trailerLeaves = newValue)
+				.setTooltip(ParticleTweaksConstants.tooltip("trailer_leaves"))
 				.setYesNoTextSupplier(value -> ParticleTweaksConstants.text(value ? "true" : "false"))
 				.build()
 		);

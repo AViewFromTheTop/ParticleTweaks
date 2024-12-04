@@ -189,11 +189,11 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:$fabric_api_version")
 
     // Mod Menu
-    modImplementation("com.terraformersmc:modmenu:$modmenu_version")
-    modImplementation("maven.modrinth:placeholder-api:2.5.0+1.21.2")
+    modCompileOnly("com.terraformersmc:modmenu:$modmenu_version")
+    modCompileOnly("maven.modrinth:placeholder-api:2.5.0+1.21.2")
 
     // Cloth Config
-    modImplementation("me.shedaniel.cloth:cloth-config-fabric:$cloth_config_version") {
+    modCompileOnly("me.shedaniel.cloth:cloth-config-fabric:$cloth_config_version") {
         exclude(group = "net.fabricmc.fabric-api")
         exclude(group = "com.terraformersmc")
     }

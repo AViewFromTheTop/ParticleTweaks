@@ -1,5 +1,9 @@
 package net.lunade.particletweaks.impl;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
+@Environment(EnvType.CLIENT)
 public interface ParticleTweakInterface {
 
 	float particleTweaks$getScale(float partialTick);

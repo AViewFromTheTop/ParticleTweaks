@@ -3,12 +3,7 @@ package net.lunade.particletweaks.mixin.client.tweaks;
 import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.BreakingItemParticle;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.DamageResistant;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -19,7 +14,7 @@ public abstract class BreakingItemParticleMixin implements ParticleTweakInterfac
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
 	private void particleTweaks$init(
-		ClientLevel world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, ItemStack stack,
+		ClientLevel world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, ItemStackRenderState itemStackRenderState,
 		CallbackInfo info
 	) {
 		this.particleTweaks$setNewSystem(true);
@@ -27,10 +22,6 @@ public abstract class BreakingItemParticleMixin implements ParticleTweakInterfac
 		this.particleTweaks$setFadeInsteadOfScale(true);
 		this.particleTweaks$setSlowsInFluid(true);
 		this.particleTweaks$setMovesWithFluid(true);
-		DamageResistant damageResistant = stack.getComponents().get(DataComponents.DAMAGE_RESISTANT);
-		boolean fireResistant = damageResistant != null
-			&& damageResistant.isResistantTo(new DamageSource(world.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.IN_FIRE)));
-		this.particleTweaks$setCanBurn(!fireResistant);
 	}
 
 }
