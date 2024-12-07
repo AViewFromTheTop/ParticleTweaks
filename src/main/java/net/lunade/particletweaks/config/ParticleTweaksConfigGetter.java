@@ -50,6 +50,6 @@ public class ParticleTweaksConfigGetter {
 	}
 
 	public static boolean trailerLeaves() {
-		return ParticleTweaksConstants.CLOTH_CONFIG && ParticleTweaksConfig.get().config.trailerSpell;
+		return ParticleTweaksConstants.CLOTH_CONFIG && ParticleTweaksConfig.get().config.trailerLeaves;
 	}
 }

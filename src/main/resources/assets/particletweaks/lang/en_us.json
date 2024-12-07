@@ -31,5 +31,8 @@
   "tooltip.particletweaks.trailer_poof": "Poof particles will act and look similarly to the Trails & Tales and Tricky Trials trailers.\nPoof particles are created upon a mob dying, or spawning via spawner.",
 
   "option.particletweaks.trailer_spell": "Trailer Potions",
-  "tooltip.particletweaks.trailer_spell": "Potion particles will act similarly to the Tricky Trials trailer."
+  "tooltip.particletweaks.trailer_spell": "Potion particles will act similarly to the Tricky Trials trailer.",
+
+  "option.particletweaks.trailer_leaves": "Trailer Falling Leaves",
+  "tooltip.particletweaks.trailer_leaves": "Falling Leaves particles will appear similarly to The Garden Awakens' trailer."
 }
