@@ -47,6 +47,7 @@ val modmenu_version: String by project
 val cloth_config_version: String by project
 val fallingleaves_version: String by project
 val wilderwild_version: String by project
+val trailiertales_version: String by project
 val frozenlib_version: String by project
 val makebubblespop_version: String by project
 
@@ -203,6 +204,9 @@ dependencies {
 
     // Wilder Wild
     modCompileOnly("maven.modrinth:wilder-wild:$wilderwild_version")
+
+    // Trailier Tales
+    modCompileOnly("maven.modrinth:trailier-tales:$trailiertales_version")
 
     // FrozenLib
     modCompileOnly("maven.modrinth:frozenlib:$frozenlib_version")
