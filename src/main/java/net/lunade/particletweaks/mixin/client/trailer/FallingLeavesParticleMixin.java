@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.state.QuadParticleRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -122,6 +122,11 @@ public abstract class FallingLeavesParticleMixin extends SingleQuadParticle impl
 			return;
 		}
 
+		final Vec3 pos = camera.getPosition();
+		final float x = (float)(Mth.lerp(partialTick, this.xo, this.x) - pos.x());
+		final float y = (float)(Mth.lerp(partialTick, this.yo, this.y) - pos.y());
+		final float z = (float)(Mth.lerp(partialTick, this.zo, this.z) - pos.z());
+
 		float roll = Mth.lerp(partialTick, this.oRoll, this.roll);
 		float xRot = (Mth.lerp(partialTick, this.particleTweaks$prevXRot, this.particleTweaks$xRot)) + Mth.HALF_PI;
 		float yRot = Mth.lerp(partialTick, this.particleTweaks$prevYRot, this.particleTweaks$yRot);
@@ -129,17 +134,11 @@ public abstract class FallingLeavesParticleMixin extends SingleQuadParticle impl
 			.rotateY(yRot)
 			.rotateZ(roll)
 			.rotateX(xRot);
+		final Quaternionf flippedRotation = new Quaternionf()
+			.rotateY(-Mth.PI + yRot)
+			.rotateZ(-roll)
+			.rotateX(-xRot);
 
-		this.extractRotatedQuad(quadParticleRenderState, camera, rotation, partialTick);
-	}
-
-	@Override
-	protected void extractRotatedQuad(
-		@NotNull QuadParticleRenderState quadParticleRenderState,
-		@NotNull Quaternionf quaternionf,
-		float x, float y, float z,
-		float partialTick
-	) {
 		final Layer layer = this.getLayer();
 		final float quadSize = this.getQuadSize(partialTick);
 		final float UA = this.getU0();
@@ -152,18 +151,17 @@ public abstract class FallingLeavesParticleMixin extends SingleQuadParticle impl
 		quadParticleRenderState.add(
 			layer,
 			x, y, z,
-			quaternionf.x, quaternionf.y, quaternionf.z, quaternionf.w,
+			rotation.x, rotation.y, rotation.z, rotation.w,
 			quadSize,
 			UA, UB, V0, V1,
 			color,
 			lightColor
 		);
 
-		final Quaternionf oppositeRot = quaternionf.conjugate().rotateY(-Mth.PI);
 		quadParticleRenderState.add(
 			layer,
 			x, y, z,
-			oppositeRot.x, oppositeRot.y, oppositeRot.z, oppositeRot.w,
+			flippedRotation.x, flippedRotation.y, flippedRotation.z, flippedRotation.w,
 			quadSize,
 			UB, UA, V0, V1,
 			color,
