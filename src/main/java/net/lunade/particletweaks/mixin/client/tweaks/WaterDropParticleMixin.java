@@ -5,9 +5,9 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.lunade.particletweaks.impl.FlowingFluidParticleUtil;
 import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleRenderType;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.client.particle.WaterDropParticle;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -17,15 +17,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = WaterDropParticle.class, priority = 1001)
-public abstract class WaterDropParticleMixin extends TextureSheetParticle implements ParticleTweakInterface {
+public abstract class WaterDropParticleMixin extends SingleQuadParticle implements ParticleTweakInterface {
 
 	@Unique
 	private boolean particleTweaks$hasSetMaxLifetime;
 	@Unique
 	private int particleTweaks$maxLifetime;
 
-	protected WaterDropParticleMixin(ClientLevel clientLevel, double d, double e, double f) {
-		super(clientLevel, d, e, f);
+	protected WaterDropParticleMixin(ClientLevel clientLevel, double d, double e, double f, TextureAtlasSprite textureAtlasSprite) {
+		super(clientLevel, d, e, f, textureAtlasSprite);
 	}
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
@@ -42,39 +42,41 @@ public abstract class WaterDropParticleMixin extends TextureSheetParticle implem
 
 	@Inject(method = "tick", at = @At("HEAD"), cancellable = true)
 	public void particleTweaks$runScaling(CallbackInfo info) {
-		if (this.particleTweaks$usesNewSystem()) {
-			if (!this.particleTweaks$hasSetMaxLifetime) {
-				this.particleTweaks$hasSetMaxLifetime = true;
-				this.particleTweaks$maxLifetime = this.lifetime;
-			}
-			this.particleTweaks$calcScale();
+		if (!this.particleTweaks$usesNewSystem()) return;
+
+		if (!this.particleTweaks$hasSetMaxLifetime) {
+			this.particleTweaks$hasSetMaxLifetime = true;
+			this.particleTweaks$maxLifetime = this.lifetime;
+		}
+
+		this.particleTweaks$calcScale();
+		this.lifetime = Math.min(this.lifetime + 1, this.particleTweaks$maxLifetime);
+		if (this.particleTweaks$getScale(0F) < 0.5F && !this.particleTweaks$hasSwitchedToShrinking()) {
 			this.lifetime = Math.min(this.lifetime + 1, this.particleTweaks$maxLifetime);
-			if (this.particleTweaks$getScale(0F) < 0.5F && !this.particleTweaks$hasSwitchedToShrinking()) {
-				this.lifetime = Math.min(this.lifetime + 1, this.particleTweaks$maxLifetime);
-			}
-			if (this.particleTweaks$runScaleRemoval()) {
-				this.remove();
-				info.cancel();
-			}
+		}
 
-			Vec3 fluidMovement = FlowingFluidParticleUtil.handleFluidInteraction(
-				this.level,
-				new Vec3(this.x, this.y, this.z),
-				new Vec3(this.xd, this.yd, this.zd),
-				this,
-				!this.particleTweaks$canBurn(),
-				this.particleTweaks$slowsInFluid(),
-				this.particleTweaks$movesWithFluid(),
-				this.particleTweaks$getFluidMovementScale()
-			);
+		if (this.particleTweaks$runScaleRemoval()) {
+			this.remove();
+			info.cancel();
+		}
 
-			if (fluidMovement != null) {
-				this.xd = fluidMovement.x;
-				this.yd = fluidMovement.y;
-				this.zd = fluidMovement.z;
-			} else {
-				info.cancel();
-			}
+		final Vec3 fluidMovement = FlowingFluidParticleUtil.handleFluidInteraction(
+			this.level,
+			new Vec3(this.x, this.y, this.z),
+			new Vec3(this.xd, this.yd, this.zd),
+			this,
+			!this.particleTweaks$canBurn(),
+			this.particleTweaks$slowsInFluid(),
+			this.particleTweaks$movesWithFluid(),
+			this.particleTweaks$getFluidMovementScale()
+		);
+
+		if (fluidMovement != null) {
+			this.xd = fluidMovement.x;
+			this.yd = fluidMovement.y;
+			this.zd = fluidMovement.z;
+		} else {
+			info.cancel();
 		}
 	}
 
@@ -90,10 +92,9 @@ public abstract class WaterDropParticleMixin extends TextureSheetParticle implem
 		)
 	)
 	public void particleTweaks$stopLifetimeCheck(CallbackInfo ci) {
-		if (this.particleTweaks$usesNewSystem()) {
-			this.particleTweaks$storedLifetime = this.lifetime;
-			this.lifetime = 100;
-		}
+		if (!this.particleTweaks$usesNewSystem()) return;
+		this.particleTweaks$storedLifetime = this.lifetime;
+		this.lifetime = 100;
 	}
 
 	@Inject(
@@ -105,9 +106,7 @@ public abstract class WaterDropParticleMixin extends TextureSheetParticle implem
 		)
 	)
 	public void particleTweaks$fixLifetimeCheck(CallbackInfo ci) {
-		if (this.particleTweaks$usesNewSystem()) {
-			this.lifetime = this.particleTweaks$storedLifetime - 1;
-		}
+		if (this.particleTweaks$usesNewSystem()) this.lifetime = this.particleTweaks$storedLifetime - 1;
 	}
 
 	@WrapOperation(
@@ -127,9 +126,9 @@ public abstract class WaterDropParticleMixin extends TextureSheetParticle implem
 		}
 	}
 
-	@Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
-	public void particleTweaks$getRenderType(CallbackInfoReturnable<ParticleRenderType> info) {
-		info.setReturnValue(ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT);
+	@Inject(method = "getLayer", at = @At("HEAD"), cancellable = true)
+	public void particleTweaks$getRenderType(CallbackInfoReturnable<Layer> info) {
+		info.setReturnValue(Layer.TRANSLUCENT);
 	}
 
 	@Override

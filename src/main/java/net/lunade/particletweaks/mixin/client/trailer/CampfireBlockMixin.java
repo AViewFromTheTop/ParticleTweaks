@@ -3,7 +3,7 @@ package net.lunade.particletweaks.mixin.client.trailer;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lunade.particletweaks.config.ParticleTweaksConfigGetter;
+import net.lunade.particletweaks.config.ParticleTweaksConfig;
 import net.lunade.particletweaks.registry.ParticleTweaksParticleTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
@@ -28,10 +28,8 @@ public class CampfireBlockMixin {
 			target = "Lnet/minecraft/world/level/Level;addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V"
 		)
 	)
-	public boolean particleTweaks$removeLava(
-		Level instance, ParticleOptions parameters, double x, double y, double z, double velocityX, double velocityY, double velocityZ
-	) {
-		return !ParticleTweaksConfigGetter.trailerCampfires();
+	public boolean particleTweaks$removeLava(Level instance, ParticleOptions parameters, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
+		return !ParticleTweaksConfig.TRAILER_CAMPFIRES;
 	}
 
 	@Inject(
@@ -43,23 +41,20 @@ public class CampfireBlockMixin {
 			shift = At.Shift.BEFORE
 		)
 	)
-	public void particleTweaks$AddFlares(
-		BlockState state, Level world, BlockPos pos, RandomSource random, CallbackInfo info
-	) {
-		if (ParticleTweaksConfigGetter.trailerCampfires()) {
-			ParticleOptions particle = ParticleTweaksParticleTypes.CAMPFIRE_FLARE;
-			if (state.is(Blocks.SOUL_CAMPFIRE)) particle = ParticleTweaksParticleTypes.SOUL_CAMPFIRE_FLARE;
+	public void particleTweaks$AddFlares(BlockState state, Level world, BlockPos pos, RandomSource random, CallbackInfo info) {
+		if (!ParticleTweaksConfig.TRAILER_CAMPFIRES) return;
+		ParticleOptions particle = ParticleTweaksParticleTypes.CAMPFIRE_FLARE;
+		if (state.is(Blocks.SOUL_CAMPFIRE)) particle = ParticleTweaksParticleTypes.SOUL_CAMPFIRE_FLARE;
 
-			world.addParticle(
-				particle,
-				(double) pos.getX() + 0.5D + (random.nextDouble() - 0.5D) * 0.7D,
-				(double) pos.getY() + 0.5D + (random.nextDouble()) * 0.25D,
-				(double) pos.getZ() + 0.5D + (random.nextDouble() - 0.5D) * 0.7D,
-				random.nextFloat() * 0.5F,
-				0.02D,
-				random.nextFloat() * 0.5F
-			);
-		}
+		world.addParticle(
+			particle,
+			(double) pos.getX() + 0.5D + (random.nextDouble() - 0.5D) * 0.7D,
+			(double) pos.getY() + 0.5D + (random.nextDouble()) * 0.25D,
+			(double) pos.getZ() + 0.5D + (random.nextDouble() - 0.5D) * 0.7D,
+			random.nextFloat() * 0.5F,
+			0.02D,
+			random.nextFloat() * 0.5F
+		);
 	}
 
 }

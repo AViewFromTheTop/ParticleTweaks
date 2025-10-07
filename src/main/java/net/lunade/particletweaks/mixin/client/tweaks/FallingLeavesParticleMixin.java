@@ -9,8 +9,8 @@ import net.lunade.particletweaks.impl.FlowingFluidParticleUtil;
 import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.FallingLeavesParticle;
-import net.minecraft.client.particle.ParticleRenderType;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = FallingLeavesParticle.class, priority = 1001)
-public abstract class FallingLeavesParticleMixin extends TextureSheetParticle implements ParticleTweakInterface {
+public abstract class FallingLeavesParticleMixin extends SingleQuadParticle implements ParticleTweakInterface {
 
 	@Mutable
 	@Shadow
@@ -39,8 +39,8 @@ public abstract class FallingLeavesParticleMixin extends TextureSheetParticle im
 	@Unique
 	private boolean particleTweaks$shouldStartRemoval;
 
-	protected FallingLeavesParticleMixin(ClientLevel clientLevel, double d, double e, double f) {
-		super(clientLevel, d, e, f);
+	protected FallingLeavesParticleMixin(ClientLevel clientLevel, double d, double e, double f, TextureAtlasSprite textureAtlasSprite) {
+		super(clientLevel, d, e, f, textureAtlasSprite);
 	}
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
@@ -69,48 +69,46 @@ public abstract class FallingLeavesParticleMixin extends TextureSheetParticle im
 
 	@Inject(method = "tick", at = @At("HEAD"), cancellable = true)
 	public void particleTweaks$runScaling(CallbackInfo info) {
-		if (this.particleTweaks$usesNewSystem()) {
-			this.particleTweaks$calcScale();
+		if (!this.particleTweaks$usesNewSystem()) return;
 
-			Vec3 currentPos = new Vec3(this.x, this.y, this.z);
-			Vec3 currentMovement = new Vec3(this.xd, this.yd, this.zd);
-			Vec3 fluidMovement = FlowingFluidParticleUtil.handleFluidInteraction(
-				this.level,
-				currentPos,
-				currentMovement,
-				this,
-				!this.particleTweaks$canBurn(),
-				this.particleTweaks$slowsInFluid(),
-				this.particleTweaks$movesWithFluid(),
-				this.particleTweaks$getFluidMovementScale()
-			);
+		this.particleTweaks$calcScale();
 
-			if (fluidMovement != null) {
-				this.xd = fluidMovement.x;
-				this.yd = fluidMovement.y;
-				this.zd = fluidMovement.z;
+		final Vec3 currentPos = new Vec3(this.x, this.y, this.z);
+		final Vec3 currentMovement = new Vec3(this.xd, this.yd, this.zd);
+		final Vec3 fluidMovement = FlowingFluidParticleUtil.handleFluidInteraction(
+			this.level,
+			currentPos,
+			currentMovement,
+			this,
+			!this.particleTweaks$canBurn(),
+			this.particleTweaks$slowsInFluid(),
+			this.particleTweaks$movesWithFluid(),
+			this.particleTweaks$getFluidMovementScale()
+		);
 
-				if (this instanceof FallingLeavesParticleInterface fallingLeavesParticleInterface) {
-					boolean inWater = !fluidMovement.equals(currentMovement);
-					fallingLeavesParticleInterface.particleTweaks$setInWater(inWater);
-					if (inWater) {
-						this.windBig = 0F;
-						this.zaFlowScale = 0F;
-						this.xaFlowScale = 0F;
-						BlockPos blockPos = BlockPos.containing(currentPos);
-						BlockState blockState = this.level.getBlockState(blockPos);
-						FluidState fluidState = blockState.getFluidState();
-						float fluidHeight = fluidState.getHeight(this.level, blockPos);
-						float worldFluidHeight = fluidHeight + (float) blockPos.getY();
-						boolean isFluidHighEnough = !fluidState.isEmpty() && worldFluidHeight >= this.y;
-						if (isFluidHighEnough) {
-							this.yd += 0.01D;
-						}
-					}
+		if (fluidMovement != null) {
+			this.xd = fluidMovement.x;
+			this.yd = fluidMovement.y;
+			this.zd = fluidMovement.z;
+
+			if (this instanceof FallingLeavesParticleInterface fallingLeavesParticleInterface) {
+				final boolean inWater = !fluidMovement.equals(currentMovement);
+				fallingLeavesParticleInterface.particleTweaks$setInWater(inWater);
+				if (inWater) {
+					this.windBig = 0F;
+					this.zaFlowScale = 0F;
+					this.xaFlowScale = 0F;
+					final BlockPos blockPos = BlockPos.containing(currentPos);
+					final BlockState blockState = this.level.getBlockState(blockPos);
+					final FluidState fluidState = blockState.getFluidState();
+					final float fluidHeight = fluidState.getHeight(this.level, blockPos);
+					final float worldFluidHeight = fluidHeight + (float) blockPos.getY();
+					final boolean isFluidHighEnough = !fluidState.isEmpty() && worldFluidHeight >= this.y;
+					if (isFluidHighEnough) this.yd += 0.01D;
 				}
-			} else {
-				info.cancel();
 			}
+		} else {
+			info.cancel();
 		}
 	}
 
@@ -186,9 +184,9 @@ public abstract class FallingLeavesParticleMixin extends TextureSheetParticle im
 		return false;
 	}
 
-	@Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
-	public void particleTweaks$getRenderType(CallbackInfoReturnable<ParticleRenderType> info) {
-		info.setReturnValue(ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT);
+	@Inject(method = "getLayer", at = @At("HEAD"), cancellable = true)
+	public void particleTweaks$getRenderType(CallbackInfoReturnable<Layer> info) {
+		info.setReturnValue(Layer.TRANSLUCENT);
 	}
 
 }

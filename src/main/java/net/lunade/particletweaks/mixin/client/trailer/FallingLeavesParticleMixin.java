@@ -1,21 +1,20 @@
 package net.lunade.particletweaks.mixin.client.trailer;
 
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import java.util.function.Consumer;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lunade.particletweaks.config.ParticleTweaksConfigGetter;
+import net.lunade.particletweaks.config.ParticleTweaksConfig;
 import net.lunade.particletweaks.impl.FallingLeavesParticleInterface;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.FallingLeavesParticle;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.client.renderer.state.QuadParticleRenderState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
-import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -27,20 +26,24 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Environment(EnvType.CLIENT)
 @Mixin(value = FallingLeavesParticle.class, priority = 1002)
-public abstract class FallingLeavesParticleMixin extends TextureSheetParticle implements FallingLeavesParticleInterface {
+public abstract class FallingLeavesParticleMixin extends SingleQuadParticle implements FallingLeavesParticleInterface {
 
-	@Shadow
 	@Final
-	private float particleRandom;
-
 	@Shadow
+	@Mutable
 	private double xaFlowScale;
+	@Final
 	@Shadow
+	@Mutable
 	private double zaFlowScale;
 	@Mutable
 	@Shadow
 	@Final
 	private float windBig;
+
+	@Shadow
+	public abstract Layer getLayer();
+
 	@Unique
 	private float particleTweaks$yRotPerTick;
 	@Unique
@@ -60,35 +63,35 @@ public abstract class FallingLeavesParticleMixin extends TextureSheetParticle im
 	@Unique
 	private boolean particleTweaks$wasEverInWater;
 
-	protected FallingLeavesParticleMixin(ClientLevel world, double d, double e, double f) {
-		super(world, d, e, f);
+	protected FallingLeavesParticleMixin(ClientLevel clientLevel, double d, double e, double f, TextureAtlasSprite textureAtlasSprite) {
+		super(clientLevel, d, e, f, textureAtlasSprite);
 	}
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
-	private void particleTweaks$init(CallbackInfo info) {
-		if (ParticleTweaksConfigGetter.trailerLeaves()) {
-			RandomSource random = RandomSource.createNewThreadLocalInstance();
-			this.particleTweaks$yRotPerTick = ((random.nextFloat() * this.particleRandom)) * 0.05F * (random.nextBoolean() ? -1F : 1F);
-			this.particleTweaks$yRot = ((random.nextFloat())) * (random.nextBoolean() ? -0.5F : 0.5F) * Mth.TWO_PI;
-			this.particleTweaks$prevYRot = this.particleTweaks$yRot;
+	private void particleTweaks$init(
+		CallbackInfo info,
+		@Local(ordinal = 5) float particleRandom
+	) {
+		if (!ParticleTweaksConfig.TRAILER_LEAVES) return;
+		this.particleTweaks$yRotPerTick = ((this.random.nextFloat() * particleRandom)) * 0.05F * (this.random.nextBoolean() ? -1F : 1F);
+		this.particleTweaks$yRot = ((this.random.nextFloat())) * (random.nextBoolean() ? -0.5F : 0.5F) * Mth.TWO_PI;
+		this.particleTweaks$prevYRot = this.particleTweaks$yRot;
 
-			this.particleTweaks$xRotPerTick = ((random.nextFloat() * this.particleRandom)) * 0.005F * -random.nextFloat() * (random.nextBoolean() ? -1F : 1F);
-			this.particleTweaks$xRot = ((random.nextFloat())) * (random.nextBoolean() ? -1F : 1F);
-			this.particleTweaks$prevXRot = this.particleTweaks$xRot;
-		}
+		this.particleTweaks$xRotPerTick = ((this.random.nextFloat() * particleRandom)) * 0.005F * -this.random.nextFloat() * (this.random.nextBoolean() ? -1F : 1F);
+		this.particleTweaks$xRot = ((this.random.nextFloat())) * (this.random.nextBoolean() ? -1F : 1F);
+		this.particleTweaks$prevXRot = this.particleTweaks$xRot;
 	}
 
 	@Inject(method = "tick", at = @At("HEAD"))
 	public void particleTweaks$tick(CallbackInfo info) {
-		if (ParticleTweaksConfigGetter.trailerLeaves()) {
-			this.oRoll = this.roll;
+		if (!ParticleTweaksConfig.TRAILER_LEAVES) return;
+		this.oRoll = this.roll;
 
-			this.particleTweaks$prevYRot = this.particleTweaks$yRot;
-			this.particleTweaks$yRot += this.particleTweaks$yRotPerTick;
+		this.particleTweaks$prevYRot = this.particleTweaks$yRot;
+		this.particleTweaks$yRot += this.particleTweaks$yRotPerTick;
 
-			this.particleTweaks$prevXRot = this.particleTweaks$xRot;
-			this.particleTweaks$xRot += this.particleTweaks$xRotPerTick;
-		}
+		this.particleTweaks$prevXRot = this.particleTweaks$xRot;
+		this.particleTweaks$xRot += this.particleTweaks$xRotPerTick;
 	}
 
 	@Unique
@@ -113,84 +116,58 @@ public abstract class FallingLeavesParticleMixin extends TextureSheetParticle im
 	}
 
 	@Override
-	public void render(VertexConsumer buffer, @NotNull Camera camera, float partialTicks) {
-		if (ParticleTweaksConfigGetter.trailerLeaves()) {
-			float roll = Mth.lerp(partialTicks, this.oRoll, this.roll);
-			float xRot = (Mth.lerp(partialTicks, this.particleTweaks$prevXRot, this.particleTweaks$xRot)) + Mth.HALF_PI;
-			float yRot = Mth.lerp(partialTicks, this.particleTweaks$prevYRot, this.particleTweaks$yRot);
-
-			this.trailierTales$render3DParticle(
-				buffer, camera, partialTicks, false, transforms -> transforms.rotateY(yRot)
-					.rotateZ(roll)
-					.rotateX(xRot)
-			);
-			this.trailierTales$render3DParticle(
-				buffer, camera, partialTicks, true, transforms -> transforms.rotateY((float) -Math.PI + yRot)
-					.rotateZ(-roll)
-					.rotateX(-xRot)
-			);
-		} else {
-			super.render(buffer, camera, partialTicks);
+	public void extract(QuadParticleRenderState quadParticleRenderState, Camera camera, float partialTick) {
+		if (!ParticleTweaksConfig.TRAILER_LEAVES) {
+			super.extract(quadParticleRenderState, camera, partialTick);
+			return;
 		}
+
+		float roll = Mth.lerp(partialTick, this.oRoll, this.roll);
+		float xRot = (Mth.lerp(partialTick, this.particleTweaks$prevXRot, this.particleTweaks$xRot)) + Mth.HALF_PI;
+		float yRot = Mth.lerp(partialTick, this.particleTweaks$prevYRot, this.particleTweaks$yRot);
+		final Quaternionf rotation = new Quaternionf()
+			.rotateY(yRot)
+			.rotateZ(roll)
+			.rotateX(xRot);
+
+		this.extractRotatedQuad(quadParticleRenderState, camera, rotation, partialTick);
 	}
 
-	@Unique
-	private static final Vector3f TRAILIERTALES$NORMALIZED_QUAT_VECTOR = new Vector3f(0.5F, 0.5F, 0.5F).normalize();
-
-	@Unique
-	private void trailierTales$render3DParticle(
-		VertexConsumer buffer,
-		@NotNull Camera renderInfo,
-		float partialTicks,
-		boolean flipped,
-		@NotNull Consumer<Quaternionf> quaternionConsumer
+	@Override
+	protected void extractRotatedQuad(
+		@NotNull QuadParticleRenderState quadParticleRenderState,
+		@NotNull Quaternionf quaternionf,
+		float x, float y, float z,
+		float partialTick
 	) {
-		Vec3 vec3 = renderInfo.getPosition();
-		float f = (float)(Mth.lerp(partialTicks, this.xo, this.x) - vec3.x());
-		float g = (float)(Mth.lerp(partialTicks, this.yo, this.y) - vec3.y());
-		float h = (float)(Mth.lerp(partialTicks, this.zo, this.z) - vec3.z());
-		Quaternionf quaternionf = new Quaternionf().setAngleAxis(
-			0F,
-			TRAILIERTALES$NORMALIZED_QUAT_VECTOR.x(),
-			TRAILIERTALES$NORMALIZED_QUAT_VECTOR.y(),
-			TRAILIERTALES$NORMALIZED_QUAT_VECTOR.z()
+		final Layer layer = this.getLayer();
+		final float quadSize = this.getQuadSize(partialTick);
+		final float UA = this.getU0();
+		final float UB = this.getU1();
+		final float V0 = this.getV0();
+		final float V1 = this.getV1();
+		final int color = ARGB.colorFromFloat(this.alpha, this.rCol, this.gCol, this.bCol);
+		final int lightColor = this.getLightColor(partialTick);
+
+		quadParticleRenderState.add(
+			layer,
+			x, y, z,
+			quaternionf.x, quaternionf.y, quaternionf.z, quaternionf.w,
+			quadSize,
+			UA, UB, V0, V1,
+			color,
+			lightColor
 		);
-		quaternionConsumer.accept(quaternionf);
-		Vector3f[] vector3fs = new Vector3f[]{
-			new Vector3f(-1F, -1F, 0F),
-			new Vector3f(-1F, 1F, 0F),
-			new Vector3f(1F, 1F, 0F),
-			new Vector3f(1F, -1F, 0F)
-		};
-		float i = this.getQuadSize(partialTicks);
 
-		for (int j = 0; j < 4; ++j) {
-			Vector3f vector3f2 = vector3fs[j];
-			vector3f2.rotate(quaternionf);
-			vector3f2.mul(i);
-			vector3f2.add(f, g, h);
-		}
-
-		float k = !flipped ? this.getU0() : this.getU1();
-		float l = !flipped ? this.getU1() : this.getU0();
-		float m = this.getV0();
-		float n = this.getV1();
-		int light = this.getLightColor(partialTicks);
-		buffer.addVertex(vector3fs[0].x(), vector3fs[0].y(), vector3fs[0].z())
-			.setUv(l, n)
-			.setColor(this.rCol, this.gCol, this.bCol, this.alpha)
-			.setLight(light);
-		buffer.addVertex(vector3fs[1].x(), vector3fs[1].y(), vector3fs[1].z())
-			.setUv(l, m)
-			.setColor(this.rCol, this.gCol, this.bCol, this.alpha)
-			.setLight(light);
-		buffer.addVertex(vector3fs[2].x(), vector3fs[2].y(), vector3fs[2].z())
-			.setUv(k, m)
-			.setColor(this.rCol, this.gCol, this.bCol, this.alpha)
-			.setLight(light);
-		buffer.addVertex(vector3fs[3].x(), vector3fs[3].y(), vector3fs[3].z())
-			.setUv(k, n)
-			.setColor(this.rCol, this.gCol, this.bCol, this.alpha)
-			.setLight(light);
+		final Quaternionf oppositeRot = quaternionf.conjugate().rotateY(-Mth.PI);
+		quadParticleRenderState.add(
+			layer,
+			x, y, z,
+			oppositeRot.x, oppositeRot.y, oppositeRot.z, oppositeRot.w,
+			quadSize,
+			UB, UA, V0, V1,
+			color,
+			lightColor
+		);
 	}
 }

@@ -23,13 +23,12 @@ public class MesogleaHangParticleMixin {
 
 	@Inject(method = "createParticle*", at = @At("TAIL"))
 	public void particleTweaks$mesogleaHanging(CallbackInfoReturnable<Particle> info) {
-		if (info.getReturnValue() instanceof ParticleTweakInterface particleTweakInterface) {
-			particleTweakInterface.particleTweaks$setNewSystem(true);
-			particleTweakInterface.particleTweaks$setScaler(0.15F);
-			particleTweakInterface.particleTweaks$setScalesToZero();
-			particleTweakInterface.particleTweaks$setCanShrink(false);
-			particleTweakInterface.particleTweaks$setCanBurn(true);
-		}
+		if (!(info.getReturnValue() instanceof ParticleTweakInterface particleTweakInterface)) return;
+		particleTweakInterface.particleTweaks$setNewSystem(true);
+		particleTweakInterface.particleTweaks$setScaler(0.15F);
+		particleTweakInterface.particleTweaks$setScalesToZero();
+		particleTweakInterface.particleTweaks$setCanShrink(false);
+		particleTweakInterface.particleTweaks$setCanBurn(true);
 	}
 
 }

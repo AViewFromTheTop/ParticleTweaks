@@ -2,9 +2,9 @@ package net.lunade.particletweaks.mixin.client.tweaks;
 
 import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleRenderType;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.client.particle.TrailParticle;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -12,10 +12,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = TrailParticle.class, priority = 1001)
-public abstract class TrailParticleMixin extends TextureSheetParticle implements ParticleTweakInterface {
+public abstract class TrailParticleMixin extends SingleQuadParticle implements ParticleTweakInterface {
 
-	protected TrailParticleMixin(ClientLevel clientLevel, double d, double e, double f) {
-		super(clientLevel, d, e, f);
+	protected TrailParticleMixin(ClientLevel clientLevel, double d, double e, double f, TextureAtlasSprite textureAtlasSprite) {
+		super(clientLevel, d, e, f, textureAtlasSprite);
 	}
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
@@ -39,9 +39,7 @@ public abstract class TrailParticleMixin extends TextureSheetParticle implements
 		if (this.particleTweaks$usesNewSystem()) {
 			if (this.age >= this.lifetime - 10) {
 				this.particleTweaks$setSwitchedToShrinking(true);
-				if (!this.particleTweaks$canShrink()) {
-					return true;
-				}
+				if (!this.particleTweaks$canShrink()) return true;
 				this.particleTweaks$setTargetScale(0F);
 				if (this.particleTweaks$getPrevScale() <= 0.04F) {
 					this.particleTweaks$setScale(0F);
@@ -54,9 +52,9 @@ public abstract class TrailParticleMixin extends TextureSheetParticle implements
 		return false;
 	}
 
-	@Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
-	public void particleTweaks$getRenderType(CallbackInfoReturnable<ParticleRenderType> info) {
-		info.setReturnValue(ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT);
+	@Inject(method = "getLayer", at = @At("HEAD"), cancellable = true)
+	public void particleTweaks$getRenderType(CallbackInfoReturnable<Layer> info) {
+		info.setReturnValue(Layer.TRANSLUCENT);
 	}
 
 }

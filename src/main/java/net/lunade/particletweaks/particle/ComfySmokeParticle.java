@@ -25,22 +25,26 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.RisingParticle;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
 @Environment(EnvType.CLIENT)
 public class ComfySmokeParticle extends RisingParticle {
-	private final SpriteSet sprites;
+	private final SpriteSet spriteSet;
 
-	ComfySmokeParticle(@NotNull ClientLevel level, @NotNull SpriteSet spriteProvider, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
-		super(level, x, y - 0.125D, z, velocityX, velocityY, velocityZ);
+	ComfySmokeParticle(
+		@NotNull ClientLevel level,
+		double x, double y, double z,
+		double xd, double yd, double zd,
+		SpriteSet spriteSet
+	) {
+		super(level, x, y - 0.125D, z, xd, yd, zd, spriteSet.first());
 		this.setSize(0.01F, 0.02F);
-		this.setSpriteFromAge(spriteProvider);
-		this.sprites = spriteProvider;
+		this.spriteSet = spriteSet;
 		this.hasPhysics = true;
 		this.alpha = 0.7F;
 		this.lifetime = 35;
@@ -62,7 +66,7 @@ public class ComfySmokeParticle extends RisingParticle {
 	@Override
 	public void tick() {
 		super.tick();
-		this.setSpriteFromAge(this.sprites);
+		this.setSpriteFromAge(this.spriteSet);
 
 		Minecraft minecraft = Minecraft.getInstance();
 		Vector3f leftVector = minecraft.gameRenderer.getMainCamera().getLeftVector();
@@ -73,19 +77,24 @@ public class ComfySmokeParticle extends RisingParticle {
 		this.zd = sin * (0.015D * leftVector.z());
 	}
 
+
 	@Override
-	@NotNull
-	public ParticleRenderType getRenderType() {
-		return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+	protected @NotNull Layer getLayer() {
+		return Layer.TRANSLUCENT;
 	}
 
 	@Environment(EnvType.CLIENT)
-	public record Factory(@NotNull SpriteSet spriteProvider) implements ParticleProvider<SimpleParticleType> {
+	public record Factory(@NotNull SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
 		@NotNull
-		public Particle createParticle(@NotNull SimpleParticleType defaultParticleType, @NotNull ClientLevel clientLevel, double x, double y, double z, double g, double h, double i) {
-			ComfySmokeParticle comfySmokeParticle = new ComfySmokeParticle(clientLevel, this.spriteProvider, x, y, z, 0D, 0.075D, 0D);
-			return comfySmokeParticle;
+		public Particle createParticle(
+			@NotNull SimpleParticleType defaultParticleType,
+			@NotNull ClientLevel level,
+			double x, double y, double z,
+			double xd, double yd, double zd,
+			RandomSource random
+		) {
+			return new ComfySmokeParticle(level, x, y, z, 0D, 0.075D, 0D, this.spriteSet);
 		}
 	}
 }

@@ -19,8 +19,8 @@ public class WaveSeedParticle extends NoRenderParticle {
 	private final float width;
 	private final float strength;
 
-	protected WaveSeedParticle(ClientLevel world, double d, double e, double f, double width, double strength) {
-		super(world, d, e, f);
+	protected WaveSeedParticle(ClientLevel world, double x, double y, double z, double width, double strength) {
+		super(world, x, y, z);
 		this.lifetime = 13;
 		this.width = (float) width;
 		this.strength = (float) strength;
@@ -28,9 +28,7 @@ public class WaveSeedParticle extends NoRenderParticle {
 		world.addAlwaysVisibleParticle(
 			ParticleTweaksParticleTypes.WAVE_OUTLINE,
 			true,
-			d,
-			e,
-			f,
+			x, y, z,
 			width + 0.25F,
 			strength,
 			0F
@@ -38,18 +36,14 @@ public class WaveSeedParticle extends NoRenderParticle {
 		world.addAlwaysVisibleParticle(
 			ParticleTweaksParticleTypes.WAVE,
 			true,
-			d,
-			e,
-			f,
+			x, y, z,
 			width + 0.25F,
 			strength,
 			0F
 		);
 		spawnSplashParticles(
 			this.level,
-			this.x,
-			this.y,
-			this.z,
+			this.x, this.y, this.z,
 			this.random,
 			Math.max(5, Math.min(50, (int) (calculateParticleStrength(this.strength, 1F, 0.1F) * this.width * 25))),
 			this.width,
@@ -83,15 +77,12 @@ public class WaveSeedParticle extends NoRenderParticle {
 
 	@Override
 	public void tick() {
-		if (this.age++ >= this.lifetime) {
-			this.remove();
-		}
+		if (this.age++ >= this.lifetime) this.remove();
+
 		if (this.age == 9 && this.strength > 0.15D) {
 			spawnSplashParticles(
 				this.level,
-				this.x,
-				this.y,
-				this.z,
+				this.x, this.y, this.z,
 				this.random,
 				Math.max(5, Math.min(50, (int) (calculateParticleStrength(this.strength, 1F, 0.1F) * this.width * 30))),
 				this.width * 0.75F,
@@ -101,9 +92,7 @@ public class WaveSeedParticle extends NoRenderParticle {
 			this.level.addAlwaysVisibleParticle(
 				ParticleTweaksParticleTypes.WAVE_OUTLINE,
 				true,
-				this.x,
-				this.y,
-				this.z,
+				this.x, this.y, this.z,
 				this.width,
 				this.strength,
 				0F
@@ -111,9 +100,7 @@ public class WaveSeedParticle extends NoRenderParticle {
 			this.level.addAlwaysVisibleParticle(
 				ParticleTweaksParticleTypes.WAVE,
 				true,
-				this.x,
-				this.y,
-				this.z,
+				this.x, this.y, this.z,
 				this.width,
 				this.strength,
 				0F
@@ -122,11 +109,17 @@ public class WaveSeedParticle extends NoRenderParticle {
 	}
 
 	@Environment(EnvType.CLIENT)
-	public record Factory(@NotNull SpriteSet spriteProvider) implements ParticleProvider<SimpleParticleType> {
+	public record Factory(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
 		@NotNull
-		public Particle createParticle(@NotNull SimpleParticleType defaultParticleType, @NotNull ClientLevel clientLevel, double x, double y, double z, double g, double h, double i) {
-			return new WaveSeedParticle(clientLevel, x, y, z, g, h);
+		public Particle createParticle(
+			@NotNull SimpleParticleType defaultParticleType,
+			@NotNull ClientLevel level,
+			double x, double y, double z,
+			double xd, double yd, double zd,
+			RandomSource random
+		) {
+			return new WaveSeedParticle(level, x, y, z, xd, yd);
 		}
 	}
 }

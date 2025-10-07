@@ -1,7 +1,7 @@
-package net.lunade.particletweaks.mixin.client.tweaks;
+package net.lunade.particletweaks.mixin.client.tweaks.suspended_particle;
 
 import net.lunade.particletweaks.impl.ParticleTweakInterface;
-import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.client.particle.SuspendedParticle;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,8 +21,8 @@ public abstract class SuspendedParticleMixin implements ParticleTweakInterface {
 		this.particleTweaks$setCanBurn(true);
 	}
 
-	@Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
-	public void particleTweaks$getRenderType(CallbackInfoReturnable<ParticleRenderType> info) {
-		info.setReturnValue(ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT);
+	@Inject(method = "getLayer", at = @At("HEAD"), cancellable = true)
+	public void particleTweaks$getRenderType(CallbackInfoReturnable<SingleQuadParticle.Layer> info) {
+		info.setReturnValue(SingleQuadParticle.Layer.TRANSLUCENT);
 	}
 }

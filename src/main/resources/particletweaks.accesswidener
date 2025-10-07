@@ -2,7 +2,8 @@ accessWidener v2 named
 accessible class net/minecraft/client/particle/DripParticle$DripLandParticle
 accessible class net/minecraft/client/particle/DripParticle$FallAndLandParticle
 accessible field net/minecraft/client/particle/Particle age I
-accessible field net/minecraft/client/particle/Particle roll F
-accessible field net/minecraft/client/particle/Particle oRoll F
+accessible field net/minecraft/client/particle/SingleQuadParticle roll F
+accessible field net/minecraft/client/particle/SingleQuadParticle oRoll F
 accessible field net/minecraft/world/level/block/TorchBlock flameParticle Lnet/minecraft/core/particles/SimpleParticleType;
-accessible method net/minecraft/client/particle/SingleQuadParticle renderVertex (Lcom/mojang/blaze3d/vertex/VertexConsumer;Lorg/joml/Quaternionf;FFFFFFFFI)V
+accessible class net/minecraft/client/particle/DripParticle$CoolingDripHangParticle
+accessible class net/minecraft/client/renderer/state/QuadParticleRenderState$Storage

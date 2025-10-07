@@ -5,7 +5,8 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.frozenblock.wilderwild.particle.FallingParticle;
 import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,10 +15,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Pseudo
 @Mixin(FallingParticle.class)
-public abstract class FallingParticleMixin extends TextureSheetParticle {
+public abstract class FallingParticleMixin extends SingleQuadParticle {
 
-	protected FallingParticleMixin(ClientLevel clientLevel, double d, double e, double f) {
-		super(clientLevel, d, e, f);
+	protected FallingParticleMixin(ClientLevel clientLevel, double d, double e, double f, TextureAtlasSprite textureAtlasSprite) {
+		super(clientLevel, d, e, f, textureAtlasSprite);
 	}
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
@@ -41,14 +42,14 @@ public abstract class FallingParticleMixin extends TextureSheetParticle {
 		)
 	)
 	public void particleTweaks$cancelRemoveOne(FallingParticle instance, Operation<Void> original) {
-		if (instance instanceof ParticleTweakInterface particleTweakInterface) {
-			if (!particleTweakInterface.particleTweaks$usesNewSystem()) {
-				original.call(instance);
-			} else {
-				instance.setLifetime(0);
-				particleTweakInterface.particleTweaks$setScaler(0.75F);
-				this.yd *= 0.0005;
-			}
+		if (!(instance instanceof ParticleTweakInterface particleTweakInterface)) return;
+
+		if (!particleTweakInterface.particleTweaks$usesNewSystem()) {
+			original.call(instance);
+		} else {
+			instance.setLifetime(0);
+			particleTweakInterface.particleTweaks$setScaler(0.75F);
+			this.yd *= 0.0005;
 		}
 	}
 

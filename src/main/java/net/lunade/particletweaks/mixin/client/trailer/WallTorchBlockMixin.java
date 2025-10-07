@@ -5,7 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lunade.particletweaks.config.ParticleTweaksConfigGetter;
+import net.lunade.particletweaks.config.ParticleTweaksConfig;
 import net.lunade.particletweaks.impl.TorchParticleUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -29,10 +29,8 @@ public class WallTorchBlockMixin {
 			ordinal = 0
 		)
 	)
-	public boolean particleTweaks$trailerSmoke(
-		Level instance, ParticleOptions parameters, double x, double y, double z, double velocityX, double velocityY, double velocityZ
-	) {
-		return !ParticleTweaksConfigGetter.trailerTorches();
+	public boolean particleTweaks$trailerSmoke(Level instance, ParticleOptions parameters, double x, double y, double z, double xd, double yd, double zd) {
+		return !ParticleTweaksConfig.TRAILER_TORCHES;
 	}
 
 	@WrapOperation(
@@ -44,10 +42,10 @@ public class WallTorchBlockMixin {
 		)
 	)
 	public void particleTweaks$animateTick(
-		Level instance, ParticleOptions parameters, double x, double y, double z, double velocityX, double velocityY, double velocityZ, Operation<Void> original,
+		Level instance, ParticleOptions parameters, double x, double y, double z, double xd, double yd, double zd, Operation<Void> original,
 		BlockState state, Level world, BlockPos pos
 	) {
-		if (ParticleTweaksConfigGetter.trailerTorches()) {
+		if (ParticleTweaksConfig.TRAILER_TORCHES) {
 			if (instance.random.nextBoolean()) {
 				Minecraft minecraft = Minecraft.getInstance();
 				Vec3 cameraPos = minecraft.gameRenderer.getMainCamera().getPosition();
@@ -55,11 +53,11 @@ public class WallTorchBlockMixin {
 					.subtract(0D, cameraPos.y, 0D)
 					.subtract(new Vec3(x, 0D, z))
 					.normalize().scale(0.0625D);
-				original.call(instance, parameters, x + posDiff.x, y - 0.125D, z + posDiff.z, velocityX, velocityY, velocityZ);
+				original.call(instance, parameters, x + posDiff.x, y - 0.125D, z + posDiff.z, xd, yd, zd);
 			}
 			TorchParticleUtil.onAnimateTick(pos);
 		} else {
-			original.call(instance, parameters, x, y, z, velocityX, velocityY, velocityZ);
+			original.call(instance, parameters, x, y, z, xd, yd, zd);
 		}
 	}
 

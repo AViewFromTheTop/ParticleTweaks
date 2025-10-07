@@ -5,7 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lunade.particletweaks.config.ParticleTweaksConfigGetter;
+import net.lunade.particletweaks.config.ParticleTweaksConfig;
 import net.lunade.particletweaks.impl.TorchParticleUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -32,7 +32,7 @@ public class TorchBlockMixin {
 	public boolean particleTweaks$trailerSmoke(
 		Level instance, ParticleOptions parameters, double x, double y, double z, double velocityX, double velocityY, double velocityZ
 	) {
-		return !ParticleTweaksConfigGetter.trailerTorches();
+		return !ParticleTweaksConfig.TRAILER_TORCHES;
 	}
 
 	@WrapOperation(
@@ -47,7 +47,7 @@ public class TorchBlockMixin {
 		Level instance, ParticleOptions parameters, double x, double y, double z, double velocityX, double velocityY, double velocityZ, Operation<Void> original,
 		BlockState state, Level world, BlockPos pos
 	) {
-		if (ParticleTweaksConfigGetter.trailerTorches()) {
+		if (ParticleTweaksConfig.TRAILER_TORCHES) {
 			if (instance.random.nextBoolean()) {
 				Minecraft minecraft = Minecraft.getInstance();
 				Vec3 cameraPos = minecraft.gameRenderer.getMainCamera().getPosition();

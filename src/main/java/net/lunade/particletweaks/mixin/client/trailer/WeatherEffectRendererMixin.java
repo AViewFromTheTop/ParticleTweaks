@@ -6,7 +6,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lunade.particletweaks.config.ParticleTweaksConfigGetter;
+import net.lunade.particletweaks.config.ParticleTweaksConfig;
 import net.lunade.particletweaks.registry.ParticleTweaksParticleTypes;
 import net.minecraft.client.renderer.WeatherEffectRenderer;
 import net.minecraft.core.BlockPos;
@@ -31,8 +31,8 @@ public class WeatherEffectRendererMixin {
 	public BlockPos particleTweaks$extendRainParticleRange(
 		BlockPos instance, int i, int j, int k, Operation<BlockPos> original,
 		@Local RandomSource random
-		) {
-		if (ParticleTweaksConfigGetter.trailerSplashes()) {
+	) {
+		if (ParticleTweaksConfig.TRAILER_SPLASHES) {
 			i = random.nextIntBetweenInclusive(-30, 30);
 			k = random.nextIntBetweenInclusive(-30, 30);
 		}
@@ -50,9 +50,7 @@ public class WeatherEffectRendererMixin {
 		SimpleParticleType original,
 		@Local FluidState fluidState
 	) {
-		if (ParticleTweaksConfigGetter.trailerSplashes() && fluidState.is(FluidTags.WATER)) {
-			return ParticleTweaksParticleTypes.RIPPLE;
-		}
+		if (ParticleTweaksConfig.TRAILER_SPLASHES && fluidState.is(FluidTags.WATER)) return ParticleTweaksParticleTypes.RIPPLE;
 		return original;
 	}
 }

@@ -25,13 +25,14 @@ import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.RisingParticle;
 import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,18 +41,22 @@ public class SmallBubbleParticle extends RisingParticle {
 	private final Vec3 direction;
 	private final float swaySpeed;
 
-	SmallBubbleParticle(@NotNull ClientLevel level, @NotNull SpriteSet spriteProvider, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
-		super(level, x, y - 0.125D, z, velocityX, velocityY, velocityZ);
+	SmallBubbleParticle(
+		@NotNull ClientLevel level,
+		double x, double y, double z,
+		double xd, double yd, double zd,
+		TextureAtlasSprite sprite
+	) {
+		super(level, x, y - 0.125D, z, xd, yd, zd, sprite);
 		this.setSize(0.01F, 0.01F);
-		this.pickSprite(spriteProvider);
 		this.lifetime *= 2;
-		this.yd = velocityY;
+		this.yd = yd;
 		this.quadSize = this.quadSize * (this.random.nextFloat() * 0.6F + 0.2F);
 		this.lifetime = (int)(16D / (Math.random() * 0.8D + 0.2D));
 		this.friction = 1F;
 		this.hasPhysics = true;
 
-		this.swaySpeed = (0.125F - (float)velocityY) * 80F;
+		this.swaySpeed = (0.125F - (float)yd) * 80F;
 		this.direction = new Vec3(1D, 0D, 0D).yRot((random.nextFloat() * 360F) * Mth.DEG_TO_RAD);
 
 		int waterColor = level.getBiome(BlockPos.containing(x, y, z)).value().getWaterColor();
@@ -73,32 +78,28 @@ public class SmallBubbleParticle extends RisingParticle {
 			this.age = this.lifetime;
 		}
 
-		double sin = Math.sin((this.age * Math.PI) / (this.swaySpeed));
+		final double sin = Math.sin((this.age * Math.PI) / (this.swaySpeed));
 		this.xd = sin * (this.yd * this.direction.x()) * 0.35D;
 		this.zd = sin * (this.yd * this.direction.z()) * 0.35D;
 	}
 
 	@Override
-	@NotNull
-	public ParticleRenderType getRenderType() {
-		return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
+	protected Layer getLayer() {
+		return Layer.OPAQUE;
 	}
 
 	@Environment(EnvType.CLIENT)
-	public record Factory(@NotNull SpriteSet spriteProvider) implements ParticleProvider<SimpleParticleType> {
+	public record Factory(@NotNull SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
 		@NotNull
-		public Particle createParticle(@NotNull SimpleParticleType defaultParticleType, @NotNull ClientLevel clientLevel, double x, double y, double z, double g, double h, double i) {
-			return new SmallBubbleParticle(
-				clientLevel,
-				this.spriteProvider,
-				x,
-				y,
-				z,
-				g,
-				h,
-				i
-			);
+		public Particle createParticle(
+			@NotNull SimpleParticleType defaultParticleType,
+			@NotNull ClientLevel level,
+			double x, double y, double z,
+			double xd, double yd, double zd,
+			RandomSource random
+		) {
+			return new SmallBubbleParticle(level, x, y, z, xd, yd, zd, this.spriteSet.get(random));
 		}
 	}
 }

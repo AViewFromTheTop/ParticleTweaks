@@ -2,12 +2,13 @@ package net.lunade.particletweaks.mixin.client.tweaks;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.lunade.particletweaks.ParticleTweaksConstants;
 import net.lunade.particletweaks.impl.FlowingFluidParticleUtil;
 import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.BubbleParticle;
-import net.minecraft.client.particle.ParticleRenderType;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,68 +19,70 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = BubbleParticle.class, priority = 1001)
-public abstract class BubbleParticleMixin extends TextureSheetParticle implements ParticleTweakInterface {
+public abstract class BubbleParticleMixin extends SingleQuadParticle implements ParticleTweakInterface {
 
 	@Unique
 	private boolean particleTweaks$hasSetMaxLifetime;
 	@Unique
 	private int particleTweaks$maxLifetime;
 
-	protected BubbleParticleMixin(ClientLevel clientLevel, double d, double e, double f) {
-		super(clientLevel, d, e, f);
+	protected BubbleParticleMixin(ClientLevel clientLevel, double d, double e, double f, TextureAtlasSprite textureAtlasSprite) {
+		super(clientLevel, d, e, f, textureAtlasSprite);
 	}
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
 	private void particleTweaks$init(CallbackInfo info) {
-		this.particleTweaks$setNewSystem(true);
+		this.particleTweaks$setNewSystem(!ParticleTweaksConstants.MAKE_BUBBLES_POP_MOD);
 		this.particleTweaks$setScaler(0.35F);
 		this.particleTweaks$setScalesToZero();
 		this.particleTweaks$setMovesWithFluid(true);
 		this.particleTweaks$setCanBurn(true);
 	}
 
-	@Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
-	public void particleTweaks$getRenderType(CallbackInfoReturnable<ParticleRenderType> info) {
-		info.setReturnValue(ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT);
+	@Inject(method = "getLayer", at = @At("HEAD"), cancellable = true)
+	public void particleTweaks$getRenderType(CallbackInfoReturnable<Layer> info) {
+		info.setReturnValue(Layer.TRANSLUCENT);
 	}
 
 	@Inject(method = "tick", at = @At("HEAD"), cancellable = true)
 	public void particleTweaks$runScaling(CallbackInfo info) {
-		if (this.particleTweaks$usesNewSystem()) {
-			if (!this.particleTweaks$hasSetMaxLifetime) {
-				this.particleTweaks$hasSetMaxLifetime = true;
-				this.particleTweaks$maxLifetime = this.lifetime;
-			}
-			this.particleTweaks$calcScale();
+		if (!this.particleTweaks$usesNewSystem()) return;
+
+		if (!this.particleTweaks$hasSetMaxLifetime) {
+			this.particleTweaks$hasSetMaxLifetime = true;
+			this.particleTweaks$maxLifetime = this.lifetime;
+
+		}
+		this.particleTweaks$calcScale();
+		this.lifetime = Math.min(this.lifetime + 1, this.particleTweaks$maxLifetime);
+		if (this.particleTweaks$getScale(0F) < 0.5F && !this.particleTweaks$hasSwitchedToShrinking()) {
 			this.lifetime = Math.min(this.lifetime + 1, this.particleTweaks$maxLifetime);
-			if (this.particleTweaks$getScale(0F) < 0.5F && !this.particleTweaks$hasSwitchedToShrinking()) {
-				this.lifetime = Math.min(this.lifetime + 1, this.particleTweaks$maxLifetime);
-			}
-			if (this.particleTweaks$runScaleRemoval()) {
-				this.level.addParticle(ParticleTypes.BUBBLE_POP, this.x, this.y, this.z, 0, 0, 0);
-				this.remove();
-				info.cancel();
-				return;
-			}
+		}
 
-			Vec3 fluidMovement = FlowingFluidParticleUtil.handleFluidInteraction(
-				this.level,
-				new Vec3(this.x, this.y, this.z),
-				new Vec3(this.xd, this.yd, this.zd),
-				this,
-				!this.particleTweaks$canBurn(),
-				this.particleTweaks$slowsInFluid(),
-				this.particleTweaks$movesWithFluid(),
-				this.particleTweaks$getFluidMovementScale()
-			);
+		if (this.particleTweaks$runScaleRemoval()) {
+			this.level.addParticle(ParticleTypes.BUBBLE_POP, this.x, this.y, this.z, 0, 0, 0);
+			this.remove();
+			info.cancel();
+			return;
+		}
 
-			if (fluidMovement != null) {
-				this.xd = fluidMovement.x;
-				this.yd = fluidMovement.y;
-				this.zd = fluidMovement.z;
-			} else {
-				info.cancel();
-			}
+		Vec3 fluidMovement = FlowingFluidParticleUtil.handleFluidInteraction(
+			this.level,
+			new Vec3(this.x, this.y, this.z),
+			new Vec3(this.xd, this.yd, this.zd),
+			this,
+			!this.particleTweaks$canBurn(),
+			this.particleTweaks$slowsInFluid(),
+			this.particleTweaks$movesWithFluid(),
+			this.particleTweaks$getFluidMovementScale()
+		);
+
+		if (fluidMovement != null) {
+			this.xd = fluidMovement.x;
+			this.yd = fluidMovement.y;
+			this.zd = fluidMovement.z;
+		} else {
+			info.cancel();
 		}
 	}
 
@@ -91,9 +94,7 @@ public abstract class BubbleParticleMixin extends TextureSheetParticle implement
 		)
 	)
 	public void particleTweaks$outOfWater(BubbleParticle instance, Operation<Void> original) {
-		if (this.particleTweaks$usesNewSystem()) {
-			this.lifetime = 0;
-		}
+		if (this.particleTweaks$usesNewSystem()) this.lifetime = 0;
 	}
 
 	@Override

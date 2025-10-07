@@ -5,11 +5,12 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.RisingParticle;
 import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,17 +25,20 @@ public class FlareParticle extends RisingParticle {
 	private float bStart = 1F;
 	private float bEnd = 1F;
 
-	protected FlareParticle(ClientLevel world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, SpriteSet spriteProvider) {
-		super(world, x, y, z, 0D, 0D, 0D);
+	protected FlareParticle(
+		ClientLevel level,
+		double x, double y, double z,
+		double xd, double yd, double zd,
+		TextureAtlasSprite sprite
+	) {
+		super(level, x, y, z, 0D, 0D, 0D, sprite);
 		Vec3 rotation = new Vec3(1D, 0D, 0D).yRot((this.random.nextFloat() * 360F) * Mth.DEG_TO_RAD);
 		this.xDir = (float) rotation.x;
 		this.zDir = (float) rotation.z;
 		this.friction = 0.9F;
-		this.pickSprite(spriteProvider);
 		this.yd = 0.03D;
 		this.quadSize = 0.075F;
 		this.lifetime = (int)(6D / ((double)this.random.nextFloat() * 0.8D + 0.2D)) + 15;
-		this.setSpriteFromAge(spriteProvider);
 		double sin = Math.cos(0D / (this.lifetime - 3));
 		this.xd = sin * (0.1D) * this.xDir;
 		this.zd = sin * (0.1D) * this.zDir;
@@ -44,7 +48,7 @@ public class FlareParticle extends RisingParticle {
 	@Override
 	public void tick() {
 		super.tick();
-		double sin = Math.cos((this.age * Math.PI) / (this.lifetime - 3));
+		final double sin = Math.cos((this.age * Math.PI) / (this.lifetime - 3));
 		this.xd = sin * (0.025D) * this.xDir;
 		this.zd = sin * (0.025D) * this.zDir;
 	}
@@ -65,18 +69,22 @@ public class FlareParticle extends RisingParticle {
 	}
 
 	@Override
-	public @NotNull ParticleRenderType getRenderType() {
-		return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
+	protected @NotNull Layer getLayer() {
+		return Layer.OPAQUE;
 	}
 
 	@Environment(EnvType.CLIENT)
-	public record Factory(@NotNull SpriteSet spriteProvider) implements ParticleProvider<SimpleParticleType> {
+	public record Factory(@NotNull SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
 		@NotNull
 		public Particle createParticle(
-			@NotNull SimpleParticleType defaultParticleType, @NotNull ClientLevel clientLevel, double x, double y, double z, double g, double h, double i
+			@NotNull SimpleParticleType defaultParticleType,
+			@NotNull ClientLevel level,
+			double x, double y, double z,
+			double xd, double yd, double zd,
+			RandomSource random
 		) {
-			FlareParticle flareParticle = new FlareParticle(clientLevel, x, y, z, g, h, i, spriteProvider);
+			FlareParticle flareParticle = new FlareParticle(level, x, y, z, xd, yd, zd, this.spriteSet.get(random));
 			flareParticle.rEnd = 0.5F;
 			flareParticle.bStart = 0F;
 			flareParticle.bEnd = 0F;
@@ -86,13 +94,17 @@ public class FlareParticle extends RisingParticle {
 	}
 
 	@Environment(EnvType.CLIENT)
-	public record SoulFactory(@NotNull SpriteSet spriteProvider) implements ParticleProvider<SimpleParticleType> {
+	public record SoulFactory(@NotNull SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
 		@NotNull
 		public Particle createParticle(
-			@NotNull SimpleParticleType defaultParticleType, @NotNull ClientLevel clientLevel, double x, double y, double z, double g, double h, double i
+			@NotNull SimpleParticleType defaultParticleType,
+			@NotNull ClientLevel level,
+			double x, double y, double z,
+			double xd, double yd, double zd,
+			RandomSource random
 		) {
-			FlareParticle flareParticle = new FlareParticle(clientLevel, x, y, z, g, h, i, spriteProvider);
+			FlareParticle flareParticle = new FlareParticle(level, x, y, z, xd, yd, zd, this.spriteSet.get(random));
 			flareParticle.rStart = 0F;
 			flareParticle.rEnd = 0.55F;
 			flareParticle.bStart = 1F;

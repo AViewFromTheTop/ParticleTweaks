@@ -18,7 +18,7 @@ buildscript {
 }
 
 plugins {
-    id("fabric-loom") version("+")
+    id("fabric-loom") version("1.11-SNAPSHOT")
     id("org.quiltmc.gradle.licenser") version("+")
     id("org.ajoberstar.grgit") version("+")
     id("com.modrinth.minotaur") version("+")
@@ -76,10 +76,6 @@ val datagen by sourceSets.registering {
 
 loom {
     runtimeOnlyLog4j.set(true)
-
-    mixin {
-        defaultRefmapName.set("mixins.$mod_id.refmap.json")
-    }
 
     accessWidenerPath.set(file("src/main/resources/$mod_id.accesswidener"))
     interfaceInjection {
@@ -191,7 +187,7 @@ dependencies {
 
     // Mod Menu
     modImplementation("com.terraformersmc:modmenu:$modmenu_version")
-    modImplementation("maven.modrinth:placeholder-api:2.5.1+1.21.3")
+    modImplementation("maven.modrinth:placeholder-api:2.8.0+1.21.9")
 
     // Cloth Config
     modImplementation("me.shedaniel.cloth:cloth-config-fabric:$cloth_config_version") {
@@ -203,13 +199,13 @@ dependencies {
     modCompileOnly("maven.modrinth:particle-rain:2.1.4")
 
     // Wilder Wild
-    modCompileOnly("maven.modrinth:wilder-wild:$wilderwild_version")
+    modImplementation("maven.modrinth:wilder-wild:$wilderwild_version")
 
     // Trailier Tales
     modCompileOnly("maven.modrinth:trailier-tales:$trailiertales_version")
 
     // FrozenLib
-    modCompileOnly("maven.modrinth:frozenlib:$frozenlib_version")
+    modImplementation("maven.modrinth:frozenlib:$frozenlib_version")
 
     // Sodium
     if (shouldRunSodium)

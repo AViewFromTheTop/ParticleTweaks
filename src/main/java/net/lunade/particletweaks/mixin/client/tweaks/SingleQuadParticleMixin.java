@@ -1,22 +1,26 @@
 package net.lunade.particletweaks.mixin.client.tweaks;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.client.renderer.state.QuadParticleRenderState;
 import net.minecraft.util.Mth;
+import org.joml.Quaternionf;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = SingleQuadParticle.class, priority = 1001)
 public abstract class SingleQuadParticleMixin extends Particle implements ParticleTweakInterface {
 
 	@Shadow
-	public abstract Particle scale(float scale);
+	protected float alpha;
+
+	@Shadow
+	protected abstract void setAlpha(float f);
 
 	@Unique
 	private float particleTweaks$scaler = 0.15F;
@@ -41,16 +45,25 @@ public abstract class SingleQuadParticleMixin extends Particle implements Partic
 		super(clientLevel, d, e, f);
 	}
 
-	@Inject(method = "getQuadSize", at = @At("RETURN"), cancellable = true)
-	public void particleTweaks$getQuadSize(float partialTicks, CallbackInfoReturnable<Float> info) {
-		if (this.particleTweaks$usesNewSystem()) {
-			boolean switched = this.particleTweaks$hasSwitchedToShrinking() && this.particleTweaks$switchesExit();
-			if (!this.particleTweaks$fadeInsteadOfScale() && !switched) {
-				info.setReturnValue(info.getReturnValue() * this.particleTweaks$getScale(partialTicks));
-			} else {
-				this.alpha = this.particleTweaks$getScale(partialTicks) * this.particleTweaks$getMaxAlpha();
-			}
+	@ModifyExpressionValue(
+		method = "extractRotatedQuad(Lnet/minecraft/client/renderer/state/QuadParticleRenderState;Lorg/joml/Quaternionf;FFFF)V",
+		at = @At(
+			value = "INVOKE",
+			target = "Lnet/minecraft/client/particle/SingleQuadParticle;getQuadSize(F)F"
+		)
+	)
+	public float particleTweaks$modifyQuadSize(
+		float original,
+		QuadParticleRenderState quadParticleRenderState, Quaternionf quaternionf, float f, float g, float h, float partialTicks
+	) {
+		if (!this.particleTweaks$usesNewSystem()) return original;
+		final boolean switched = this.particleTweaks$hasSwitchedToShrinking() && this.particleTweaks$switchesExit();
+		if (!this.particleTweaks$fadeInsteadOfScale() && !switched) {
+			return original * this.particleTweaks$getScale(partialTicks);
+		} else {
+			this.setAlpha(this.particleTweaks$getScale(partialTicks) * this.particleTweaks$getMaxAlpha());
 		}
+		return original;
 	}
 
 	@Override
@@ -70,13 +83,9 @@ public abstract class SingleQuadParticleMixin extends Particle implements Partic
 			this.age = Mth.clamp(age + 1, 0, this.lifetime);
 			if (this.age >= this.lifetime) {
 				this.particleTweaks$hasSwitchedToShrinking = true;
-				if (!this.particleTweaks$canShrink) {
-					return true;
-				}
+				if (!this.particleTweaks$canShrink) return true;
 				this.particleTweaks$targetScale = 0F;
-				if (this.particleTweaks$prevScale <= 0.04F) {
-					this.particleTweaks$scale = 0F;
-				}
+				if (this.particleTweaks$prevScale <= 0.04F) this.particleTweaks$scale = 0F;
 				return this.particleTweaks$prevScale == 0F;
 			} else {
 				this.particleTweaks$targetScale = 1F;

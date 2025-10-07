@@ -15,7 +15,7 @@
       "net.lunade.particletweaks.ParticleTweaksClient"
     ],
     "modmenu": [
-      "net.lunade.particletweaks.config.ParticleTweaksModMenu"
+      "net.lunade.particletweaks.config.gui.ModMenuIntegration"
     ]
   },
   "mixins": [
@@ -23,6 +23,7 @@
   ],
   "accessWidener": "particletweaks.accesswidener",
   "depends": {
+    "frozenlib": "*",
     "fabric-api": "*",
     "minecraft": "${minecraft_version}",
     "java": ">=21"

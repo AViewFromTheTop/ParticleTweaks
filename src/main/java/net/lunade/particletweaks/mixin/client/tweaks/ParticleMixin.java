@@ -40,44 +40,41 @@ public abstract class ParticleMixin {
 
 	@Inject(method = "tick", at = @At("HEAD"), cancellable = true)
 	public void particleTweaks$runScaling(CallbackInfo info) {
-		if (Particle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			if (particleTweakInterface.particleTweaks$usesNewSystem()) {
-				particleTweakInterface.particleTweaks$calcScale();
+		if (!(Particle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface)) return;
+		if (particleTweakInterface.particleTweaks$usesNewSystem()) {
+			particleTweakInterface.particleTweaks$calcScale();
+			this.age = Mth.clamp(age - 1, 0, this.lifetime);
+			if (particleTweakInterface.particleTweaks$getScale(0F) <= 0.85F && !particleTweakInterface.particleTweaks$hasSwitchedToShrinking()) {
 				this.age = Mth.clamp(age - 1, 0, this.lifetime);
-				if (particleTweakInterface.particleTweaks$getScale(0F) <= 0.85F && !particleTweakInterface.particleTweaks$hasSwitchedToShrinking()) {
-					this.age = Mth.clamp(age - 1, 0, this.lifetime);
-				}
 			}
+		}
 
-			Vec3 fluidMovement = FlowingFluidParticleUtil.handleFluidInteraction(
-				this.level,
-				new Vec3(this.x, this.y, this.z),
-				new Vec3(this.xd, this.yd, this.zd),
-				Particle.class.cast(this),
-				!particleTweakInterface.particleTweaks$canBurn(),
-				particleTweakInterface.particleTweaks$slowsInFluid(),
-				particleTweakInterface.particleTweaks$movesWithFluid(),
-				particleTweakInterface.particleTweaks$getFluidMovementScale()
-			);
+		final Vec3 fluidMovement = FlowingFluidParticleUtil.handleFluidInteraction(
+			this.level,
+			new Vec3(this.x, this.y, this.z),
+			new Vec3(this.xd, this.yd, this.zd),
+			Particle.class.cast(this),
+			!particleTweakInterface.particleTweaks$canBurn(),
+			particleTweakInterface.particleTweaks$slowsInFluid(),
+			particleTweakInterface.particleTweaks$movesWithFluid(),
+			particleTweakInterface.particleTweaks$getFluidMovementScale()
+		);
 
-			if (fluidMovement != null) {
-				this.xd = fluidMovement.x;
-				this.yd = fluidMovement.y;
-				this.zd = fluidMovement.z;
-			} else {
-				info.cancel();
-			}
+		if (fluidMovement != null) {
+			this.xd = fluidMovement.x;
+			this.yd = fluidMovement.y;
+			this.zd = fluidMovement.z;
+		} else {
+			info.cancel();
 		}
 	}
 
 	@Inject(method = "tick", at = @At("TAIL"), cancellable = true)
 	public void particleTweaks$removeOnceSmall(CallbackInfo info) {
-		if (Particle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface) {
-			if (particleTweakInterface.particleTweaks$usesNewSystem() && particleTweakInterface.particleTweaks$runScaleRemoval()) {
-				this.remove();
-				info.cancel();
-			}
-		}
+		if (!(Particle.class.cast(this) instanceof ParticleTweakInterface particleTweakInterface)) return;
+		if (!(particleTweakInterface.particleTweaks$usesNewSystem() && particleTweakInterface.particleTweaks$runScaleRemoval())) return;
+		this.remove();
+		info.cancel();
 	}
 
 }

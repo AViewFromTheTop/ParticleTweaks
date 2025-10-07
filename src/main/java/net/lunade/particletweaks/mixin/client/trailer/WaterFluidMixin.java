@@ -4,7 +4,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lunade.particletweaks.config.ParticleTweaksConfigGetter;
+import net.lunade.particletweaks.config.ParticleTweaksConfig;
 import net.lunade.particletweaks.impl.FlowingFluidParticleUtil;
 import net.lunade.particletweaks.registry.ParticleTweaksParticleTypes;
 import net.minecraft.core.BlockPos;
@@ -32,7 +32,7 @@ public class WaterFluidMixin {
 	public void particleTweaks$useSmallBubble(
 		Level instance, ParticleOptions parameters, double x, double y, double z, double velocityX, double velocityY, double velocityZ, Operation<Void> original
 	) {
-		if (ParticleTweaksConfigGetter.trailerAmbientWater()) {
+		if (ParticleTweaksConfig.TRAILER_AMBIENT_WATER) {
 			if (instance.random.nextFloat() <= 0.175F) {
 				original.call(
 					instance,
@@ -50,10 +50,7 @@ public class WaterFluidMixin {
 		}
 	}
 
-	@Inject(
-		method = "animateTick",
-		at = @At("TAIL")
-	)
+	@Inject(method = "animateTick", at = @At("TAIL"))
 	public void particleTweaks$animateTick(Level world, BlockPos pos, FluidState state, RandomSource random, CallbackInfo info) {
 		FlowingFluidParticleUtil.onAnimateTick(
 			world,

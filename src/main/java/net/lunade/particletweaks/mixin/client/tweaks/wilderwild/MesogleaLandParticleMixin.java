@@ -23,14 +23,13 @@ public class MesogleaLandParticleMixin {
 
 	@Inject(method = "createParticle*", at = @At("TAIL"))
 	public void particleTweaks$mesogleaLanding(CallbackInfoReturnable<Particle> info) {
-		if (info.getReturnValue() instanceof ParticleTweakInterface particleTweakInterface) {
-			particleTweakInterface.particleTweaks$setNewSystem(true);
-			particleTweakInterface.particleTweaks$setScaler(0.15F);
-			particleTweakInterface.particleTweaks$setCanShrink(true);
-			particleTweakInterface.particleTweaks$setSlowsInFluid(true);
-			particleTweakInterface.particleTweaks$setFadeInsteadOfScale(true);
-			particleTweakInterface.particleTweaks$setCanBurn(true);
-		}
+		if (!(info.getReturnValue() instanceof ParticleTweakInterface particleTweakInterface)) return;
+		particleTweakInterface.particleTweaks$setNewSystem(true);
+		particleTweakInterface.particleTweaks$setScaler(0.15F);
+		particleTweakInterface.particleTweaks$setCanShrink(true);
+		particleTweakInterface.particleTweaks$setSlowsInFluid(true);
+		particleTweakInterface.particleTweaks$setFadeInsteadOfScale(true);
+		particleTweakInterface.particleTweaks$setCanBurn(true);
 	}
 
 }

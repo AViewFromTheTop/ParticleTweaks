@@ -3,8 +3,8 @@ package net.lunade.particletweaks.mixin.client.tweaks;
 import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.DragonBreathParticle;
-import net.minecraft.client.particle.ParticleRenderType;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Mth;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -13,10 +13,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = DragonBreathParticle.class, priority = 1001)
-public abstract class DragonBreathParticleMixin extends TextureSheetParticle implements ParticleTweakInterface {
+public abstract class DragonBreathParticleMixin extends SingleQuadParticle implements ParticleTweakInterface {
 
-	protected DragonBreathParticleMixin(ClientLevel clientLevel, double d, double e, double f) {
-		super(clientLevel, d, e, f);
+	protected DragonBreathParticleMixin(ClientLevel clientLevel, double d, double e, double f, TextureAtlasSprite textureAtlasSprite) {
+		super(clientLevel, d, e, f, textureAtlasSprite);
 	}
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
@@ -29,40 +29,25 @@ public abstract class DragonBreathParticleMixin extends TextureSheetParticle imp
 
 	@Inject(method = "tick", at = @At("HEAD"))
 	public void particleTweaks$runScaling(CallbackInfo info) {
-		if (this.particleTweaks$usesNewSystem()) {
-			this.particleTweaks$calcScale();
+		if (!this.particleTweaks$usesNewSystem()) return;
+		this.particleTweaks$calcScale();
+		this.age = Mth.clamp(age - 1, 0, this.lifetime);
+		if (this.particleTweaks$getScale(0F) <= 0.85F && !this.particleTweaks$hasSwitchedToShrinking()) {
 			this.age = Mth.clamp(age - 1, 0, this.lifetime);
-			if (this.particleTweaks$getScale(0F) <= 0.85F && !this.particleTweaks$hasSwitchedToShrinking()) {
-				this.age = Mth.clamp(age - 1, 0, this.lifetime);
-			}
 		}
 	}
 
 	@Inject(method = "tick", at = @At("TAIL"), cancellable = true)
 	public void particleTweaks$removeOnceSmall(CallbackInfo info) {
-		if (this.particleTweaks$usesNewSystem()) {
-			if (this.particleTweaks$runScaleRemoval()) {
-				this.remove();
-				info.cancel();
-			}
-		}
+		if (!this.particleTweaks$usesNewSystem()) return;
+		if (!this.particleTweaks$runScaleRemoval()) return;
+		this.remove();
+		info.cancel();
 	}
 
-	@Inject(method = "getQuadSize", at = @At("RETURN"), cancellable = true)
-	public void particleTweaks$getQuadSize(float partialTicks, CallbackInfoReturnable<Float> info) {
-		if (this.particleTweaks$usesNewSystem()) {
-			boolean switched = this.particleTweaks$hasSwitchedToShrinking() && this.particleTweaks$switchesExit();
-			if (!this.particleTweaks$fadeInsteadOfScale() && !switched) {
-				info.setReturnValue(info.getReturnValue() * this.particleTweaks$getScale(partialTicks));
-			} else {
-				this.alpha = this.particleTweaks$getScale(partialTicks) * this.particleTweaks$getMaxAlpha();
-			}
-		}
-	}
-
-	@Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
-	public void particleTweaks$getRenderType(CallbackInfoReturnable<ParticleRenderType> info) {
-		info.setReturnValue(ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT);
+	@Inject(method = "getLayer", at = @At("HEAD"), cancellable = true)
+	public void particleTweaks$getRenderType(CallbackInfoReturnable<Layer> info) {
+		info.setReturnValue(Layer.TRANSLUCENT);
 	}
 
 }

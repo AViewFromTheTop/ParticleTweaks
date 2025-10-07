@@ -2,7 +2,7 @@ package net.lunade.particletweaks.mixin.client.tweaks;
 
 import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.minecraft.client.particle.ExplodeParticle;
-import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SingleQuadParticle;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,9 +20,9 @@ public abstract class ExplodeParticleMixin implements ParticleTweakInterface {
 		this.particleTweaks$setScalesToZero();
 	}
 
-	@Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
-	public void particleTweaks$getRenderType(CallbackInfoReturnable<ParticleRenderType> info) {
-		info.setReturnValue(ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT);
+	@Inject(method = "getLayer", at = @At("HEAD"), cancellable = true)
+	public void particleTweaks$getRenderType(CallbackInfoReturnable<SingleQuadParticle.Layer> info) {
+		info.setReturnValue(SingleQuadParticle.Layer.TRANSLUCENT);
 	}
 
 }

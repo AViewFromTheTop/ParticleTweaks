@@ -24,19 +24,24 @@ import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.RisingParticle;
 import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.NotNull;
 
 @Environment(EnvType.CLIENT)
 public class CampfireFlareParticle extends RisingParticle {
 
-	CampfireFlareParticle(@NotNull ClientLevel level, @NotNull SpriteSet spriteProvider, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
-		super(level, x, y - 0.125D, z, velocityX, velocityY, velocityZ);
+	CampfireFlareParticle(
+		@NotNull ClientLevel level,
+		double x, double y, double z,
+		double xd, double yd, double zd,
+		TextureAtlasSprite sprite
+	) {
+		super(level, x, y - 0.125D, z, xd, yd, zd, sprite);
 		this.setSize(0.01F, 0.02F);
-		this.pickSprite(spriteProvider);
 		this.hasPhysics = true;
 		this.quadSize = 0.125F;
 		this.friction = 1F;
@@ -51,9 +56,7 @@ public class CampfireFlareParticle extends RisingParticle {
 	@Override
 	public void tick() {
 		super.tick();
-		if (this.y == this.yo || this.onGround) {
-			this.age = this.lifetime;
-		}
+		if (this.y == this.yo || this.onGround) this.age = this.lifetime;
 	}
 
 	@Override
@@ -62,28 +65,40 @@ public class CampfireFlareParticle extends RisingParticle {
 	}
 
 	@Override
-	@NotNull
-	public ParticleRenderType getRenderType() {
-		return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+	protected @NotNull Layer getLayer() {
+		return Layer.TRANSLUCENT;
 	}
 
+
 	@Environment(EnvType.CLIENT)
-	public record Factory(@NotNull SpriteSet spriteProvider) implements ParticleProvider<SimpleParticleType> {
+	public record Factory(@NotNull SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
 		@NotNull
-		public Particle createParticle(@NotNull SimpleParticleType defaultParticleType, @NotNull ClientLevel clientLevel, double x, double y, double z, double g, double h, double i) {
-			CampfireFlareParticle campfireFlareParticle = new CampfireFlareParticle(clientLevel, this.spriteProvider, x, y, z, 0D, 0.02D, 0D);
+		public Particle createParticle(
+			@NotNull SimpleParticleType defaultParticleType,
+			@NotNull ClientLevel level,
+			double x, double y, double z,
+			double xd, double yd, double zd,
+			RandomSource random
+		) {
+			CampfireFlareParticle campfireFlareParticle = new CampfireFlareParticle(level, x, y, z, 0D, 0.02D, 0D, this.spriteSet.get(random));
 			campfireFlareParticle.setColor(1F, 0.75F, 0F);
 			return campfireFlareParticle;
 		}
 	}
 
 	@Environment(EnvType.CLIENT)
-	public record SoulFactory(@NotNull SpriteSet spriteProvider) implements ParticleProvider<SimpleParticleType> {
+	public record SoulFactory(@NotNull SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
 		@NotNull
-		public Particle createParticle(@NotNull SimpleParticleType defaultParticleType, @NotNull ClientLevel clientLevel, double x, double y, double z, double g, double h, double i) {
-			CampfireFlareParticle campfireFlareParticle = new CampfireFlareParticle(clientLevel, this.spriteProvider, x, y, z, 0D, 0.02D, 0D);
+		public Particle createParticle(
+			@NotNull SimpleParticleType defaultParticleType,
+			@NotNull ClientLevel level,
+			double x, double y, double z,
+			double xd, double yd, double zd,
+			RandomSource random
+		) {
+			CampfireFlareParticle campfireFlareParticle = new CampfireFlareParticle(level, x, y, z, 0D, 0.02D, 0D, this.spriteSet.get(random));
 			campfireFlareParticle.setColor(0F, 1F, 1F);
 			return campfireFlareParticle;
 		}

@@ -1,4 +1,4 @@
-package net.lunade.particletweaks.mixin.client.tweaks;
+package net.lunade.particletweaks.mixin.client.tweaks.suspended_particle;
 
 import net.lunade.particletweaks.impl.ParticleTweakInterface;
 import net.minecraft.client.particle.Particle;
@@ -13,9 +13,7 @@ public class WarpedSporeProviderMixin {
 
 	@Inject(method = "createParticle*", at = @At("RETURN"))
 	public void particleTweaks$createParticle(CallbackInfoReturnable<Particle> info) {
-		if (info.getReturnValue() instanceof ParticleTweakInterface particleTweakInterface) {
-			particleTweakInterface.particleTweaks$setCanBurn(false);
-		}
+		if (info.getReturnValue() instanceof ParticleTweakInterface particleTweakInterface) particleTweakInterface.particleTweaks$setCanBurn(false);
 	}
 
 }
