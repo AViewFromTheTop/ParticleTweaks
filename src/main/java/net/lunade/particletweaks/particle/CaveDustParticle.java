@@ -20,7 +20,10 @@ package net.lunade.particletweaks.particle;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lunade.particletweaks.impl.ParticleTweakInterface;
+import net.lunade.particletweaks.movement.impl.ParticleFluidMovementInterface;
+import net.lunade.particletweaks.scale.api.ParticleScaleHandler;
+import net.lunade.particletweaks.scale.api.ParticleScaler;
+import net.lunade.particletweaks.scale.impl.ParticleScaleInterface;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
@@ -30,9 +33,10 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @Environment(EnvType.CLIENT)
-public class CaveDustParticle extends RisingParticle {
+public class CaveDustParticle extends RisingParticle implements ParticleScaleInterface, ParticleFluidMovementInterface {
 
 	CaveDustParticle(
 		@NotNull ClientLevel level,
@@ -44,23 +48,40 @@ public class CaveDustParticle extends RisingParticle {
 		this.setSize(0.01F, 0.02F);
 		this.hasPhysics = true;
 		this.alpha = 0.2F;
+	}
 
-		if (this instanceof ParticleTweakInterface particleTweakInterface) {
-			particleTweakInterface.particleTweaks$setNewSystem(true);
-			particleTweakInterface.particleTweaks$setScalesToZero();
-			particleTweakInterface.particleTweaks$setSlowsInFluid(true);
-			particleTweakInterface.particleTweaks$setMovesWithFluid(true);
-			particleTweakInterface.particleTweaks$setCanBurn(true);
-			particleTweakInterface.particleTweaks$setMaxAlpha(0.2F);
-		}
+	@Override
+	public @Nullable ParticleScaleHandler particleTweaks$createScaleHandler() {
+		final ParticleScaler entrance = new ParticleScaler(ParticleScaler.ScaleMethod.SIZE, 0.15F);
+		entrance.setToZero();
+		final ParticleScaler exit = new ParticleScaler(ParticleScaler.ScaleMethod.SIZE, 0.1F);
+		return new ParticleScaleHandler(false, entrance, exit);
+	}
+
+	@Override
+	public boolean particleTweaks$canBurn() {
+		return true;
+	}
+
+	@Override
+	public boolean particleTweaks$spawnsSmokeOnBurn() {
+		return false;
+	}
+
+	@Override
+	public boolean particleTweaks$slowsInFluid() {
+		return true;
+	}
+
+	@Override
+	public boolean particleTweaks$movesWithFluid() {
+		return true;
 	}
 
 	@Override
 	public void tick() {
 		super.tick();
-		if (this.y == this.yo || this.onGround) {
-			this.age = this.lifetime;
-		}
+		if (this.y == this.yo || this.onGround) this.age = this.lifetime;
 	}
 
 	@Override

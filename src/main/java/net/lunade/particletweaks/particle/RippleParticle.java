@@ -20,7 +20,9 @@ package net.lunade.particletweaks.particle;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lunade.particletweaks.impl.ParticleTweakInterface;
+import net.lunade.particletweaks.scale.api.ParticleScaleHandler;
+import net.lunade.particletweaks.scale.api.ParticleScaler;
+import net.lunade.particletweaks.scale.impl.ParticleScaleInterface;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
@@ -32,11 +34,12 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 @Environment(EnvType.CLIENT)
-public class RippleParticle extends SingleQuadParticle {
+public class RippleParticle extends SingleQuadParticle implements ParticleScaleInterface {
 	private static final Vector3f NORMALIZED_QUAT_VECTOR = new Vector3f(0.5F, 0.5F, 0.5F).normalize();
 	private static final Quaternionf ROTATION = new Quaternionf()
 		.setAngleAxis(0F, NORMALIZED_QUAT_VECTOR.x(), NORMALIZED_QUAT_VECTOR.y(), NORMALIZED_QUAT_VECTOR.z())
@@ -53,13 +56,14 @@ public class RippleParticle extends SingleQuadParticle {
 		this.lifetime = 5;
 		this.quadSize = 0.35F;
 		this.gravity = 0F;
+	}
 
-		if (this instanceof ParticleTweakInterface particleTweakInterface) {
-			particleTweakInterface.particleTweaks$setNewSystem(true);
-			particleTweakInterface.particleTweaks$setScalesToZero();
-			particleTweakInterface.particleTweaks$setScaler(0.45F);
-			particleTweakInterface.particleTweaks$setSwitchesExit(true);
-		}
+	@Override
+	public @Nullable ParticleScaleHandler particleTweaks$createScaleHandler() {
+		final ParticleScaler entrance = new ParticleScaler(ParticleScaler.ScaleMethod.SIZE, 0.45F);
+		entrance.setToZero();
+		final ParticleScaler exit = new ParticleScaler(ParticleScaler.ScaleMethod.FADE, 0.45F);
+		return new ParticleScaleHandler(false, entrance, exit);
 	}
 
 	@Override

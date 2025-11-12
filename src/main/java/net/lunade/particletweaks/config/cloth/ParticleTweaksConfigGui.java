@@ -90,10 +90,28 @@ public final class ParticleTweaksConfigGui {
 		);
 
 		category.addEntry(
+			entryBuilder.startBooleanToggle(ParticleTweaksConstants.text("trailer_waves"), config.trailerWaves)
+				.setDefaultValue(false)
+				.setSaveConsumer(newValue -> config.trailerWaves = newValue)
+				.setTooltip(ParticleTweaksConstants.tooltip("trailer_waves"))
+				.setYesNoTextSupplier(value -> ParticleTweaksConstants.text(value ? "true" : "false"))
+				.build()
+		);
+
+		category.addEntry(
 			entryBuilder.startBooleanToggle(ParticleTweaksConstants.text("trailer_splashes"), config.trailerSplashes)
 				.setDefaultValue(false)
 				.setSaveConsumer(newValue -> config.trailerSplashes = newValue)
 				.setTooltip(ParticleTweaksConstants.tooltip("trailer_splashes"))
+				.setYesNoTextSupplier(value -> ParticleTweaksConstants.text(value ? "true" : "false"))
+				.build()
+		);
+
+		category.addEntry(
+			entryBuilder.startBooleanToggle(ParticleTweaksConstants.text("trailer_ripples"), config.trailerRipples)
+				.setDefaultValue(false)
+				.setSaveConsumer(newValue -> config.trailerRipples = newValue)
+				.setTooltip(ParticleTweaksConstants.tooltip("trailer_ripples"))
 				.setYesNoTextSupplier(value -> ParticleTweaksConstants.text(value ? "true" : "false"))
 				.build()
 		);
@@ -121,6 +139,15 @@ public final class ParticleTweaksConfigGui {
 				.setDefaultValue(false)
 				.setSaveConsumer(newValue -> config.trailerPoof = newValue)
 				.setTooltip(ParticleTweaksConstants.tooltip("trailer_poof"))
+				.setYesNoTextSupplier(value -> ParticleTweaksConstants.text(value ? "true" : "false"))
+				.build()
+		);
+
+		category.addEntry(
+			entryBuilder.startBooleanToggle(ParticleTweaksConstants.text("trailer_bubble_poof"), config.trailerBubblePoof)
+				.setDefaultValue(false)
+				.setSaveConsumer(newValue -> config.trailerBubblePoof = newValue)
+				.setTooltip(ParticleTweaksConstants.tooltip("trailer_bubble_poof"))
 				.setYesNoTextSupplier(value -> ParticleTweaksConstants.text(value ? "true" : "false"))
 				.build()
 		);

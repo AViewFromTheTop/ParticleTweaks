@@ -20,7 +20,9 @@ package net.lunade.particletweaks.particle;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lunade.particletweaks.impl.ParticleTweakInterface;
+import net.lunade.particletweaks.scale.api.ParticleScaleHandler;
+import net.lunade.particletweaks.scale.api.ParticleScaler;
+import net.lunade.particletweaks.scale.impl.ParticleScaleInterface;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
@@ -30,9 +32,10 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @Environment(EnvType.CLIENT)
-public class CampfireFlareParticle extends RisingParticle {
+public class CampfireFlareParticle extends RisingParticle implements ParticleScaleInterface {
 
 	CampfireFlareParticle(
 		@NotNull ClientLevel level,
@@ -45,12 +48,14 @@ public class CampfireFlareParticle extends RisingParticle {
 		this.hasPhysics = true;
 		this.quadSize = 0.125F;
 		this.friction = 1F;
+	}
 
-		if (this instanceof ParticleTweakInterface particleTweakInterface) {
-			particleTweakInterface.particleTweaks$setNewSystem(true);
-			particleTweakInterface.particleTweaks$setScalesToZero();
-			particleTweakInterface.particleTweaks$setSwitchesExit(true);
-		}
+	@Override
+	public @Nullable ParticleScaleHandler particleTweaks$createScaleHandler() {
+		final ParticleScaler entrance = new ParticleScaler(ParticleScaler.ScaleMethod.SIZE, 0.15F);
+		entrance.setToZero();
+		final ParticleScaler exit = new ParticleScaler(ParticleScaler.ScaleMethod.SIZE, 0.15F);
+		return new ParticleScaleHandler(false, entrance, exit);
 	}
 
 	@Override
@@ -100,6 +105,23 @@ public class CampfireFlareParticle extends RisingParticle {
 		) {
 			CampfireFlareParticle campfireFlareParticle = new CampfireFlareParticle(level, x, y, z, 0D, 0.02D, 0D, this.spriteSet.get(random));
 			campfireFlareParticle.setColor(0F, 1F, 1F);
+			return campfireFlareParticle;
+		}
+	}
+
+	@Environment(EnvType.CLIENT)
+	public record CopperFactory(@NotNull SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
+		@Override
+		@NotNull
+		public Particle createParticle(
+			@NotNull SimpleParticleType defaultParticleType,
+			@NotNull ClientLevel level,
+			double x, double y, double z,
+			double xd, double yd, double zd,
+			RandomSource random
+		) {
+			CampfireFlareParticle campfireFlareParticle = new CampfireFlareParticle(level, x, y, z, 0D, 0.02D, 0D, this.spriteSet.get(random));
+			campfireFlareParticle.setColor(0F, 1F, 0.2F);
 			return campfireFlareParticle;
 		}
 	}

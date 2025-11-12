@@ -20,8 +20,10 @@ package net.lunade.particletweaks.particle;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lunade.particletweaks.impl.FlowingFluidParticleUtil;
-import net.lunade.particletweaks.impl.ParticleTweakInterface;
+import net.lunade.particletweaks.scale.api.ParticleScaleHandler;
+import net.lunade.particletweaks.scale.api.ParticleScaler;
+import net.lunade.particletweaks.scale.impl.ParticleScaleInterface;
+import net.lunade.particletweaks.trailer.api.TrailerFluidParticleSpawner;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
@@ -35,9 +37,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @Environment(EnvType.CLIENT)
-public class SmallBubbleParticle extends RisingParticle {
+public class SmallBubbleParticle extends RisingParticle implements ParticleScaleInterface {
 	private final Vec3 direction;
 	private final float swaySpeed;
 
@@ -63,18 +66,20 @@ public class SmallBubbleParticle extends RisingParticle {
 		this.rCol = Math.clamp(((ARGB.red(waterColor) / 255F) * (float)level.random.triangle(1.3D, 0.3D)), 0F, 1F);
 		this.bCol = Math.clamp(((ARGB.blue(waterColor) / 255F) * (float)level.random.triangle(1.3D, 0.3D)), 0F, 1F);
 		this.gCol = Math.clamp(((ARGB.green(waterColor) / 255F) * (float)level.random.triangle(1.3D, 0.3D)), 0F, 1F);
+	}
 
-		if (this instanceof ParticleTweakInterface particleTweakInterface) {
-			particleTweakInterface.particleTweaks$setNewSystem(true);
-			particleTweakInterface.particleTweaks$setScalesToZero();
-			particleTweakInterface.particleTweaks$setScaler(0.4F);
-		}
+	@Override
+	public @Nullable ParticleScaleHandler particleTweaks$createScaleHandler() {
+		final ParticleScaler entrance = new ParticleScaler(ParticleScaler.ScaleMethod.SIZE, 0.4F);
+		entrance.setToZero();
+		final ParticleScaler exit = new ParticleScaler(ParticleScaler.ScaleMethod.SIZE, 0.35F);
+		return new ParticleScaleHandler(false, entrance, exit);
 	}
 
 	@Override
 	public void tick() {
 		super.tick();
-		if (this.onGround || !FlowingFluidParticleUtil.isUnderFluid(this.level, this.x, this.y + 0.5D, this.z)) {
+		if (this.onGround || !TrailerFluidParticleSpawner.isUnderFluid(this.level, this.x, this.y + 0.5D, this.z)) {
 			this.age = this.lifetime;
 		}
 

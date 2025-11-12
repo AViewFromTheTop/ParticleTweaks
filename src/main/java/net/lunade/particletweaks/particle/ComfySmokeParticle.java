@@ -20,7 +20,9 @@ package net.lunade.particletweaks.particle;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.lunade.particletweaks.impl.ParticleTweakInterface;
+import net.lunade.particletweaks.scale.api.ParticleScaleHandler;
+import net.lunade.particletweaks.scale.api.ParticleScaler;
+import net.lunade.particletweaks.scale.impl.ParticleScaleInterface;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
@@ -30,10 +32,11 @@ import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 @Environment(EnvType.CLIENT)
-public class ComfySmokeParticle extends RisingParticle {
+public class ComfySmokeParticle extends RisingParticle implements ParticleScaleInterface {
 	private final SpriteSet spriteSet;
 
 	ComfySmokeParticle(
@@ -53,14 +56,14 @@ public class ComfySmokeParticle extends RisingParticle {
 		this.rCol = 129F / 255F;
 		this.gCol = 124F / 255F;
 		this.bCol = 118F / 255F;
+	}
 
-		if (this instanceof ParticleTweakInterface particleTweakInterface) {
-			particleTweakInterface.particleTweaks$setNewSystem(true);
-			particleTweakInterface.particleTweaks$setScalesToZero();
-			particleTweakInterface.particleTweaks$setSwitchesExit(true);
-			particleTweakInterface.particleTweaks$setScaler(0.25F);
-			particleTweakInterface.particleTweaks$setMaxAlpha(0.7F);
-		}
+	@Override
+	public @Nullable ParticleScaleHandler particleTweaks$createScaleHandler() {
+		final ParticleScaler entrance = new ParticleScaler(ParticleScaler.ScaleMethod.SIZE, 0.25F);
+		entrance.setToZero();
+		final ParticleScaler exit = new ParticleScaler(ParticleScaler.ScaleMethod.FADE, 0.2F);
+		return new ParticleScaleHandler(false, entrance, exit);
 	}
 
 	@Override

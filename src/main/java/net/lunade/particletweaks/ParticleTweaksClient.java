@@ -8,9 +8,10 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
-import net.lunade.particletweaks.impl.CaveDustSpawner;
-import net.lunade.particletweaks.impl.FlowingFluidParticleUtil;
-import net.lunade.particletweaks.impl.TorchParticleUtil;
+import net.lunade.particletweaks.config.ParticleTweaksConfig;
+import net.lunade.particletweaks.trailer.api.TrailerCaveDustSpawner;
+import net.lunade.particletweaks.trailer.api.TrailerFluidParticleSpawner;
+import net.lunade.particletweaks.trailer.api.TrailerTorchParticleSpawner;
 import net.lunade.particletweaks.particle.CampfireFlareParticle;
 import net.lunade.particletweaks.particle.CaveDustParticle;
 import net.lunade.particletweaks.particle.ComfySmokeParticle;
@@ -25,27 +26,26 @@ import net.lunade.particletweaks.registry.ParticleTweaksParticleTypes;
 
 @Environment(EnvType.CLIENT)
 public class ParticleTweaksClient implements ClientModInitializer {
-	public static boolean areConfigsInit = false;
 
 	@Override
 	public void onInitializeClient() {
 		ClientChunkEvents.CHUNK_UNLOAD.register((clientLevel, levelChunk) -> {
-			FlowingFluidParticleUtil.clearCascadesInChunk(levelChunk.getPos());
-			TorchParticleUtil.clearTorchesInChunk(levelChunk.getPos());
+			TrailerFluidParticleSpawner.clearCascadesInChunk(levelChunk.getPos());
+			TrailerTorchParticleSpawner.clearTorchesInChunk(levelChunk.getPos());
 		});
 		ClientLifecycleEvents.CLIENT_STOPPING.register((clientLevel) -> {
-			FlowingFluidParticleUtil.clearCascades();
-			TorchParticleUtil.clearTorches();
+			TrailerFluidParticleSpawner.clearCascades();
+			TrailerTorchParticleSpawner.clearTorches();
 		});
 		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
-			FlowingFluidParticleUtil.clearCascades();
-			TorchParticleUtil.clearTorches();
+			TrailerFluidParticleSpawner.clearCascades();
+			TrailerTorchParticleSpawner.clearTorches();
 		});
 
 		ClientTickEvents.START_WORLD_TICK.register((clientLevel) -> {
-			FlowingFluidParticleUtil.tickCascades(clientLevel);
-			TorchParticleUtil.tickTorches(clientLevel);
-			CaveDustSpawner.tick(clientLevel);
+			TrailerFluidParticleSpawner.tickCascades(clientLevel);
+			TrailerTorchParticleSpawner.tickTorches(clientLevel);
+			TrailerCaveDustSpawner.tick(clientLevel);
 		});
 
 		ParticleTweaksParticleTypes.init();
@@ -66,9 +66,13 @@ public class ParticleTweaksClient implements ClientModInitializer {
 		particleRegistry.register(ParticleTweaksParticleTypes.POOF, PoofParticle.Factory::new);
 		particleRegistry.register(ParticleTweaksParticleTypes.FLARE, FlareParticle.Factory::new);
 		particleRegistry.register(ParticleTweaksParticleTypes.SOUL_FLARE, FlareParticle.SoulFactory::new);
+		particleRegistry.register(ParticleTweaksParticleTypes.COPPER_FLARE, FlareParticle.CopperFactory::new);
 		particleRegistry.register(ParticleTweaksParticleTypes.CAMPFIRE_FLARE, CampfireFlareParticle.Factory::new);
 		particleRegistry.register(ParticleTweaksParticleTypes.SOUL_CAMPFIRE_FLARE, CampfireFlareParticle.SoulFactory::new);
+		particleRegistry.register(ParticleTweaksParticleTypes.COPPER_CAMPFIRE_FLARE, CampfireFlareParticle.CopperFactory::new);
 		particleRegistry.register(ParticleTweaksParticleTypes.COMFY_SMOKE_A, ComfySmokeParticle.Factory::new);
 		particleRegistry.register(ParticleTweaksParticleTypes.COMFY_SMOKE_B, ComfySmokeParticle.Factory::new);
+
+		ParticleTweaksConfig.get();
 	}
 }

@@ -33,8 +33,10 @@ public class ParticleTweaksParticleTypes {
 	public static final SimpleParticleType POOF = register("poof");
 	public static final SimpleParticleType FLARE = register("flare");
 	public static final SimpleParticleType SOUL_FLARE = register("soul_flare");
+	public static final SimpleParticleType COPPER_FLARE = register("copper_flare");
 	public static final SimpleParticleType CAMPFIRE_FLARE = register("campfire_flare");
 	public static final SimpleParticleType SOUL_CAMPFIRE_FLARE = register("soul_campfire_flare");
+	public static final SimpleParticleType COPPER_CAMPFIRE_FLARE = register("copper_campfire_flare");
 	public static final SimpleParticleType COMFY_SMOKE_A = register("comfy_smoke_a");
 	public static final SimpleParticleType COMFY_SMOKE_B = register("comfy_smoke_b");
 

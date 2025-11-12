@@ -6,13 +6,15 @@ import net.frozenblock.lib.config.api.instance.json.JsonType;
 import net.frozenblock.lib.config.api.registry.ConfigRegistry;
 import net.frozenblock.lib.config.api.sync.SyncBehavior;
 import net.frozenblock.lib.config.api.sync.annotation.EntrySyncData;
-import net.lunade.particletweaks.ParticleTweaksConstants;
+import net.frozenblock.lib.config.api.sync.annotation.UnsyncableConfig;
+import net.lunade.particletweaks.ParticleTweaksPreLoadConstants;
 
+@UnsyncableConfig
 public class ParticleTweaksConfig {
 
 	public static final Config<ParticleTweaksConfig> INSTANCE = ConfigRegistry.register(
 		new JsonConfig<>(
-			ParticleTweaksConstants.MOD_ID,
+			ParticleTweaksPreLoadConstants.MOD_ID,
 			ParticleTweaksConfig.class,
 			JsonType.JSON5_UNQUOTED_KEYS,
 			true
@@ -32,10 +34,13 @@ public class ParticleTweaksConfig {
 				TRAILER_BUBBLES = config.trailerBubbles;
 				TRAILER_WATER_MOVEMENT = config.trailerWaterMovement;
 				TRAILER_AMBIENT_WATER = config.trailerAmbientWater;
+				TRAILER_WAVES = config.trailerWaves;
 				TRAILER_SPLASHES = config.trailerSplashes;
+				TRAILER_RIPPLES = config.trailerRipples;
 				TRAILER_FLOWING_FLUIDS = config.trailerFlowingFluids;
 				TRAILER_CASCADES = config.trailerCascades;
 				TRAILER_POOF = config.trailerPoof;
+				TRAILER_BUBBLE_POOF = config.trailerBubblePoof;
 				TRAILER_SPELL = config.trailerSpell;
 				TRAILER_LEAVES = config.trailerLeaves;
 			}
@@ -48,10 +53,13 @@ public class ParticleTweaksConfig {
 	public static volatile boolean TRAILER_BUBBLES = false;
 	public static volatile boolean TRAILER_WATER_MOVEMENT = false;
 	public static volatile boolean TRAILER_AMBIENT_WATER = false;
+	public static volatile boolean TRAILER_WAVES = false;
 	public static volatile boolean TRAILER_SPLASHES = false;
+	public static volatile boolean TRAILER_RIPPLES = false;
 	public static volatile boolean TRAILER_FLOWING_FLUIDS = false;
 	public static volatile boolean TRAILER_CASCADES = false;
 	public static volatile boolean TRAILER_POOF = false;
+	public static volatile boolean TRAILER_BUBBLE_POOF = false;
 	public static volatile boolean TRAILER_SPELL = false;
 	public static volatile boolean TRAILER_LEAVES = false;
 
@@ -69,8 +77,12 @@ public class ParticleTweaksConfig {
 	public boolean trailerWaterMovement;
 	@EntrySyncData(value = "trailerAmbientWater", behavior = SyncBehavior.UNSYNCABLE)
 	public boolean trailerAmbientWater;
+	@EntrySyncData(value = "trailerWaves", behavior = SyncBehavior.UNSYNCABLE)
+	public boolean trailerWaves;
 	@EntrySyncData(value = "trailerSplashes", behavior = SyncBehavior.UNSYNCABLE)
 	public boolean trailerSplashes;
+	@EntrySyncData(value = "trailerRipples", behavior = SyncBehavior.UNSYNCABLE)
+	public boolean trailerRipples;
 
 	@EntrySyncData(value = "trailerFlowingFluids", behavior = SyncBehavior.UNSYNCABLE)
 	public boolean trailerFlowingFluids;
@@ -79,6 +91,8 @@ public class ParticleTweaksConfig {
 
 	@EntrySyncData(value = "trailerPoof", behavior = SyncBehavior.UNSYNCABLE)
 	public boolean trailerPoof;
+	@EntrySyncData(value = "trailerBubblePoof", behavior = SyncBehavior.UNSYNCABLE)
+	public boolean trailerBubblePoof;
 	@EntrySyncData(value = "trailerSpell", behavior = SyncBehavior.UNSYNCABLE)
 	public boolean trailerSpell;
 

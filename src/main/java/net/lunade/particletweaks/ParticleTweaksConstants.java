@@ -12,7 +12,6 @@ public class ParticleTweaksConstants {
 	public static final Logger LOGGER = ParticleTweaksPreLoadConstants.LOGGER;
 
 	public static final boolean MAKE_BUBBLES_POP_MOD = FabricLoader.getInstance().isModLoaded("make_bubbles_pop");
-	public static final boolean CLOTH_CONFIG = FabricLoader.getInstance().isModLoaded("cloth-config") || FabricLoader.getInstance().isModLoaded("cloth_config");
 
 	/**
 	 * Used for features that may be unstable and crash in public builds.
@@ -23,33 +22,23 @@ public class ParticleTweaksConstants {
 
 	// LOGGING
 	public static void log(String message, boolean shouldLog) {
-		if (shouldLog) {
-			LOGGER.info(message);
-		}
+		if (shouldLog) LOGGER.info(message);
 	}
 
 	public static void logWithModId(String message, boolean shouldLog) {
-		if (shouldLog) {
-			LOGGER.info(message + " " + MOD_ID);
-		}
+		if (shouldLog) LOGGER.info(message + " " + MOD_ID);
 	}
 
 	public static void warn(String message, boolean shouldLog) {
-		if (shouldLog) {
-			LOGGER.warn(message);
-		}
+		if (shouldLog) LOGGER.warn(message);
 	}
 
 	public static void error(String message, boolean shouldLog) {
-		if (shouldLog) {
-			LOGGER.error(message);
-		}
+		if (shouldLog) LOGGER.error(message);
 	}
 
 	public static void printStackTrace(String message, boolean shouldPrint) {
-		if (shouldPrint) {
-			LOGGER.error(message, new Throwable(message).fillInStackTrace());
-		}
+		if (shouldPrint) LOGGER.error(message, new Throwable(message).fillInStackTrace());
 	}
 
 	@NotNull

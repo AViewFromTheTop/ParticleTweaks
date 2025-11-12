@@ -1,0 +1,43 @@
+{
+  "required": true,
+  "minVersion": "0.8.5",
+  "package": "net.lunade.particletweaks.movement.mixin",
+  "plugin": "net.lunade.particletweaks.ParticleTweaksMixinPlugin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "collision.ParticleMixin",
+    "fluid.base.ParticleMixin",
+    "fluid.tweak.BaseAshSmokeParticleMixin",
+    "fluid.tweak.BreakingItemParticleMixin",
+    "fluid.tweak.BubbleColumnUpParticleMixin",
+    "fluid.tweak.BubbleParticleMixin",
+    "fluid.tweak.DustParticleBaseMixin",
+    "fluid.tweak.FallAndLandParticleMixin",
+    "fluid.tweak.FallingDustParticleMixin",
+    "fluid.tweak.FallingLeavesParticleMixin",
+    "fluid.tweak.PlayerCloudParticleMixin",
+    "fluid.tweak.SquidInkParticleMixin",
+    "fluid.tweak.TerrainParticleMixin",
+    "fluid.tweak.WakeParticleMixin",
+    "fluid.tweak.WaterCurrentDownParticleMixin",
+    "fluid.tweak.WaterDropParticleMixin",
+    "fluid.tweak.drip_particle.DripParticleMixin",
+    "fluid.tweak.drip_particle.LavaLandProviderMixin",
+    "fluid.tweak.drip_particle.NectarFallProviderMixin",
+    "fluid.tweak.drip_particle.ObsidianTearLandProviderMixin",
+    "fluid.tweak.drip_particle.SporeBlossomFallProviderMixin",
+    "fluid.tweak.drip_particle.WaterHangProviderMixin",
+    "fluid.tweak.suspended_particle.CrimsonSporeProviderMixin",
+    "fluid.tweak.suspended_particle.SuspendedParticleMixin",
+    "fluid.tweak.suspended_particle.UnderwaterProviderMixin",
+    "fluid.tweak.suspended_particle.WarpedSporeProviderMixin",
+    "fluid.tweak.wilderwild.FallingParticleMixin",
+    "fluid.tweak.wilderwild.mesoglea.MesogleaBubbleColumnUpParticleMixin",
+    "fluid.tweak.wilderwild.mesoglea.MesogleaBubbleParticleMixin",
+    "fluid.tweak.wilderwild.mesoglea.MesogleaCurrentDownParticleMixin",
+    "fluid.tweak.wilderwild.mesoglea.MesogleaDripParticleMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

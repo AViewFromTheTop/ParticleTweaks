@@ -19,8 +19,12 @@
   "tooltip.particletweaks.trailer_water_movement": "Water particles will follow entities as they move through water, similarly to the Caves & Cliffs, Wild Update, and Trails & Tales trailers.",
   "option.particletweaks.trailer_ambient_water": "Trailer Ambient Water",
   "tooltip.particletweaks.trailer_ambient_water": "Ambient water particles will look and act similarly to the Wild Update trailer.",
+  "option.particletweaks.trailer_waves": "Trailer Big Splashes/Waves",
+  "tooltip.particletweaks.trailer_waves": "Big Splash/Wave particles can be spawned, similar to the Caves & Cliffs trailer.",
   "option.particletweaks.trailer_splashes": "Trailer Splashes",
-  "tooltip.particletweaks.trailer_splashes": "Splash and ripple particles can be spawned, similar to the Caves & Cliffs trailer.",
+  "tooltip.particletweaks.trailer_splashes": "Splash particles can be spawned, similar to the Caves & Cliffs trailer.",
+  "option.particletweaks.trailer_ripples": "Trailer Ripples",
+  "tooltip.particletweaks.trailer_ripples": "Ripple particles can be spawned, similar to the Caves & Cliffs trailer.",
 
   "option.particletweaks.trailer_flowing_fluids": "Trailer Flowing Fluids",
   "tooltip.particletweaks.trailer_flowing_fluids": "Particles will spawn in flowing fluids, similarly to the Wild Update and Trails & Tales trailers.",
@@ -29,6 +33,10 @@
 
   "option.particletweaks.trailer_poof": "Trailer Poofs",
   "tooltip.particletweaks.trailer_poof": "Poof particles will act and look similarly to the Trails & Tales and Tricky Trials trailers.\nPoof particles are created upon a mob dying, or spawning via spawner.",
+
+  "option.particletweaks.trailer_bubble_poof": "Trailer Bubble Poofs",
+  "tooltip.particletweaks.trailer_bubble_poof": "Poof particles will be replaced with Bubble particles underwater.\nPoof particles are created upon a mob dying, or spawning via spawner.",
+
 
   "option.particletweaks.trailer_spell": "Trailer Potions",
   "tooltip.particletweaks.trailer_spell": "Potion particles will act similarly to the Tricky Trials trailer.",

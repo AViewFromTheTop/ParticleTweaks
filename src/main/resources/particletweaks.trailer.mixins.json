@@ -1,0 +1,27 @@
+{
+  "required": true,
+  "minVersion": "0.8.5",
+  "package": "net.lunade.particletweaks.trailer.mixin",
+  "plugin": "net.lunade.particletweaks.ParticleTweaksMixinPlugin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "ambient_water.WaterFluidMixin",
+    "big_splash.EntityMixin",
+    "bubble.BubbleParticleMixin",
+    "campfire.CampfireBlockMixin",
+    "falling_leaves.FallingLeavesParticleMixin",
+    "flow.LavaFluidMixin",
+    "flow.WaterFluidMixin",
+    "poof.ClientLevelMixin",
+    "poof.LivingEntityMixin",
+    "ripple.WeatherEffectRendererMixin",
+    "spell.SpellParticleMixin",
+    "splash.EntityMixin",
+    "torch.TorchBlockMixin",
+    "torch.WallTorchBlockMixin",
+    "water_movement.EntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -19,6 +19,7 @@
 package net.lunade.particletweaks;
 
 import java.nio.file.Path;
+import net.fabricmc.loader.api.FabricLoader;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -31,6 +32,8 @@ public final class ParticleTweaksPreLoadConstants {
 	public static final String PROJECT_ID = "Particle Tweaks";
 	public static final String MOD_ID = "particletweaks";
 	public static final Logger LOGGER = LoggerFactory.getLogger(PROJECT_ID);
+	public static final boolean HAS_WILDERWILD = FabricLoader.getInstance().isModLoaded("wilderwild");
+	public static final boolean HAS_THECOPPERIERAGE = FabricLoader.getInstance().isModLoaded("thecopperierage");
 
 	@Contract(pure = true)
 	public static @NotNull Path configPath(String name, boolean json5) {

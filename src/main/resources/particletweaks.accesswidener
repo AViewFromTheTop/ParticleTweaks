@@ -1,9 +1,42 @@
 accessWidener v2 named
-accessible class net/minecraft/client/particle/DripParticle$DripLandParticle
-accessible class net/minecraft/client/particle/DripParticle$FallAndLandParticle
+accessible field net/minecraft/client/particle/Particle level Lnet/minecraft/client/multiplayer/ClientLevel;
+accessible field net/minecraft/client/particle/Particle xo D
+accessible field net/minecraft/client/particle/Particle yo D
+accessible field net/minecraft/client/particle/Particle zo D
+accessible field net/minecraft/client/particle/Particle x D
+accessible field net/minecraft/client/particle/Particle y D
+accessible field net/minecraft/client/particle/Particle z D
+accessible field net/minecraft/client/particle/Particle xd D
+accessible field net/minecraft/client/particle/Particle yd D
+accessible field net/minecraft/client/particle/Particle zd D
+accessible field net/minecraft/client/particle/Particle bb Lnet/minecraft/world/phys/AABB;
+accessible field net/minecraft/client/particle/Particle onGround Z
+accessible field net/minecraft/client/particle/Particle hasPhysics Z
+accessible field net/minecraft/client/particle/Particle stoppedByCollision Z
+accessible field net/minecraft/client/particle/Particle removed Z
+accessible field net/minecraft/client/particle/Particle bbWidth F
+accessible field net/minecraft/client/particle/Particle bbHeight F
+accessible field net/minecraft/client/particle/Particle random Lnet/minecraft/util/RandomSource;
 accessible field net/minecraft/client/particle/Particle age I
+accessible field net/minecraft/client/particle/Particle lifetime I
+accessible field net/minecraft/client/particle/Particle gravity F
+accessible field net/minecraft/client/particle/Particle friction F
+accessible field net/minecraft/client/particle/Particle speedUpWhenYMotionIsBlocked Z
+
+accessible field net/minecraft/client/particle/SingleQuadParticle quadSize F
+accessible field net/minecraft/client/particle/SingleQuadParticle rCol F
+accessible field net/minecraft/client/particle/SingleQuadParticle gCol F
+accessible field net/minecraft/client/particle/SingleQuadParticle bCol F
+accessible field net/minecraft/client/particle/SingleQuadParticle alpha F
 accessible field net/minecraft/client/particle/SingleQuadParticle roll F
 accessible field net/minecraft/client/particle/SingleQuadParticle oRoll F
+accessible field net/minecraft/client/particle/SingleQuadParticle sprite Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;
+
 accessible field net/minecraft/world/level/block/TorchBlock flameParticle Lnet/minecraft/core/particles/SimpleParticleType;
+accessible class net/minecraft/client/particle/DripParticle$DripLandParticle
+accessible class net/minecraft/client/particle/DripParticle$FallAndLandParticle
 accessible class net/minecraft/client/particle/DripParticle$CoolingDripHangParticle
+
 accessible class net/minecraft/client/renderer/state/QuadParticleRenderState$Storage
+
+accessible class net/frozenblock/wilderwild/particle/MesogleaDripParticle$DripLandParticle
