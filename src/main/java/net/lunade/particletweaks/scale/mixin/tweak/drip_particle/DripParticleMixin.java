@@ -23,8 +23,8 @@ public abstract class DripParticleMixin extends SingleQuadParticle implements Pa
 	@Shadow
 	protected abstract void preMoveUpdate();
 
-	protected DripParticleMixin(ClientLevel clientLevel, double d, double e, double f, TextureAtlasSprite textureAtlasSprite) {
-		super(clientLevel, d, e, f, textureAtlasSprite);
+	protected DripParticleMixin(ClientLevel level, double d, double e, double f, TextureAtlasSprite sprite) {
+		super(level, d, e, f, sprite);
 	}
 
 	@Inject(method = "tick", at = @At("HEAD"), cancellable = true)

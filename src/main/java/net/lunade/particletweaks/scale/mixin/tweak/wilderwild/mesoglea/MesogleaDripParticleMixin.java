@@ -25,8 +25,8 @@ public abstract class MesogleaDripParticleMixin extends SingleQuadParticle imple
 	@Shadow
 	protected abstract void preMoveUpdate();
 
-	protected MesogleaDripParticleMixin(ClientLevel clientLevel, double d, double e, double f, TextureAtlasSprite textureAtlasSprite) {
-		super(clientLevel, d, e, f, textureAtlasSprite);
+	protected MesogleaDripParticleMixin(ClientLevel level, double d, double e, double f, TextureAtlasSprite sprite) {
+		super(level, d, e, f, sprite);
 	}
 
 	@Inject(method = "tick", at = @At("HEAD"), cancellable = true)

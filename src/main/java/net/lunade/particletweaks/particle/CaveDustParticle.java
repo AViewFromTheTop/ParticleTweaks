@@ -32,14 +32,12 @@ import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 @Environment(EnvType.CLIENT)
 public class CaveDustParticle extends RisingParticle implements ParticleScaleInterface, ParticleFluidMovementInterface {
 
 	CaveDustParticle(
-		@NotNull ClientLevel level,
+		ClientLevel level,
 		double x, double y, double z,
 		double xd, double yd, double zd,
 		TextureAtlasSprite sprite
@@ -51,7 +49,7 @@ public class CaveDustParticle extends RisingParticle implements ParticleScaleInt
 	}
 
 	@Override
-	public @Nullable ParticleScaleHandler particleTweaks$createScaleHandler() {
+	public ParticleScaleHandler particleTweaks$createScaleHandler() {
 		final ParticleScaler entrance = new ParticleScaler(ParticleScaler.ScaleMethod.SIZE, 0.15F);
 		entrance.setToZero();
 		final ParticleScaler exit = new ParticleScaler(ParticleScaler.ScaleMethod.SIZE, 0.1F);
@@ -85,18 +83,15 @@ public class CaveDustParticle extends RisingParticle implements ParticleScaleInt
 	}
 
 	@Override
-	protected @NotNull Layer getLayer() {
+	protected Layer getLayer() {
 		return Layer.TRANSLUCENT;
 	}
 
-
-	@Environment(EnvType.CLIENT)
-	public record Factory(@NotNull SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
+	public record Factory(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
-		@NotNull
 		public Particle createParticle(
-			@NotNull SimpleParticleType defaultParticleType,
-			@NotNull ClientLevel level,
+			SimpleParticleType options,
+			ClientLevel level,
 			double x, double y, double z,
 			double xd, double yd, double zd,
 			RandomSource random

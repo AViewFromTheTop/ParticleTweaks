@@ -9,7 +9,6 @@ import net.minecraft.client.particle.SpellParticle;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -35,8 +34,8 @@ public abstract class SpellParticleMixin extends SingleQuadParticle {
 	@Unique
 	private float particleTweaks$zRotPerTick;
 
-	protected SpellParticleMixin(ClientLevel clientLevel, double d, double e, double f, TextureAtlasSprite textureAtlasSprite) {
-		super(clientLevel, d, e, f, textureAtlasSprite);
+	protected SpellParticleMixin(ClientLevel level, double d, double e, double f, TextureAtlasSprite sprite) {
+		super(level, d, e, f, sprite);
 	}
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
@@ -57,7 +56,7 @@ public abstract class SpellParticleMixin extends SingleQuadParticle {
 	}
 
 	@Override
-	public @NotNull FacingCameraMode getFacingCameraMode() {
+	public FacingCameraMode getFacingCameraMode() {
 		if (!ParticleTweaksConfig.TRAILER_CAMPFIRES) return super.getFacingCameraMode();
 		return (rotation, camera, partialTick) -> {
 			rotation.set(camera.rotation());

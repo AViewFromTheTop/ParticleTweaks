@@ -7,7 +7,6 @@ import net.lunade.particletweaks.scale.api.ParticleScaleHandler;
 import net.lunade.particletweaks.scale.api.ParticleScaler;
 import net.lunade.particletweaks.scale.impl.ParticleScaleInterface;
 import net.minecraft.client.particle.FlameParticle;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
@@ -18,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 public class FlameParticleMixin implements ParticleScaleInterface {
 
 	@Override
-	public @Nullable ParticleScaleHandler particleTweaks$createScaleHandler() {
+	public ParticleScaleHandler particleTweaks$createScaleHandler() {
 		final ParticleScaler entrance = new ParticleScaler(ParticleScaler.ScaleMethod.SIZE, 0.15F);
 		entrance.setToZero();
 		return new ParticleScaleHandler(false, entrance, null);

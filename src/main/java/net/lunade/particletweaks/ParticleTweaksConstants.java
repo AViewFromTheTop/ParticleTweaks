@@ -2,8 +2,7 @@ package net.lunade.particletweaks;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 
 public class ParticleTweaksConstants {
@@ -41,18 +40,15 @@ public class ParticleTweaksConstants {
 		if (shouldPrint) LOGGER.error(message, new Throwable(message).fillInStackTrace());
 	}
 
-	@NotNull
-	public static ResourceLocation id(@NotNull String path) {
-		return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+	public static Identifier id(String path) {
+		return Identifier.fromNamespaceAndPath(MOD_ID, path);
 	}
 
-	@NotNull
-	public static ResourceLocation vanillaId(@NotNull String path) {
-		return ResourceLocation.withDefaultNamespace(path);
+	public static Identifier vanillaId(String path) {
+		return Identifier.withDefaultNamespace(path);
 	}
 
-	@NotNull
-	public static String string(@NotNull String path) {
+	public static String string(String path) {
 		return id(path).toString();
 	}
 

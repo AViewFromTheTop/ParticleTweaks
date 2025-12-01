@@ -61,8 +61,8 @@ public abstract class FallingLeavesParticleMixin extends SingleQuadParticle impl
 	@Unique
 	private boolean particleTweaks$wasEverInFluid = false;
 
-	protected FallingLeavesParticleMixin(ClientLevel clientLevel, double d, double e, double f, TextureAtlasSprite textureAtlasSprite) {
-		super(clientLevel, d, e, f, textureAtlasSprite);
+	protected FallingLeavesParticleMixin(ClientLevel level, double d, double e, double f, TextureAtlasSprite sprite) {
+		super(level, d, e, f, sprite);
 	}
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
@@ -110,7 +110,7 @@ public abstract class FallingLeavesParticleMixin extends SingleQuadParticle impl
 			return;
 		}
 
-		final Vec3 pos = camera.getPosition();
+		final Vec3 pos = camera.position();
 		final float x = (float)(Mth.lerp(partialTick, this.xo, this.x) - pos.x());
 		final float y = (float)(Mth.lerp(partialTick, this.yo, this.y) - pos.y());
 		final float z = (float)(Mth.lerp(partialTick, this.zo, this.z) - pos.z());

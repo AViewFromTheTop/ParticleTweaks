@@ -18,11 +18,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.TorchBlock;
 import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 
 public class TrailerTorchParticleSpawner {
 
-	public static void onAnimateTick(@NotNull BlockPos pos) {
+	public static void onAnimateTick(BlockPos pos) {
 		final BlockPos immutablePos = pos.immutable();
 		if (!TORCH_TICKS.containsKey(immutablePos)) TORCH_TICKS.put(immutablePos, 0);
 	}
@@ -49,7 +48,7 @@ public class TrailerTorchParticleSpawner {
 		}
 
 		final Minecraft minecraft = Minecraft.getInstance();
-		final BlockPos cameraPos = minecraft.gameRenderer.getMainCamera().getBlockPosition();
+		final BlockPos cameraPos = minecraft.gameRenderer.getMainCamera().blockPosition();
 
 		final List<BlockPos> posesToRemove = new ArrayList<>();
 		TORCH_TICKS.forEach((blockPos, tickCount) -> {
@@ -65,9 +64,9 @@ public class TrailerTorchParticleSpawner {
 	}
 
 	public static boolean onTorchTick(
-		@NotNull Level level,
+		Level level,
 		BlockPos pos,
-		@NotNull BlockState state,
+		BlockState state,
 		RandomSource random,
 		int tickCount,
 		BlockPos cameraPos

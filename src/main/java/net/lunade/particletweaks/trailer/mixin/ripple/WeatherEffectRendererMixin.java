@@ -29,14 +29,14 @@ public class WeatherEffectRendererMixin {
 		)
 	)
 	public BlockPos particleTweaks$extendRainParticleRange(
-		BlockPos instance, int i, int j, int k, Operation<BlockPos> original,
+		BlockPos instance, int x, int y, int z, Operation<BlockPos> original,
 		@Local RandomSource random
 	) {
 		if (ParticleTweaksConfig.TRAILER_RIPPLES) {
-			i = random.nextIntBetweenInclusive(-30, 30);
-			k = random.nextIntBetweenInclusive(-30, 30);
+			x = random.nextIntBetweenInclusive(-30, 30);
+			z = random.nextIntBetweenInclusive(-30, 30);
 		}
-		return original.call(instance, i, j, k);
+		return original.call(instance, x, y, z);
 	}
 
 	@ModifyExpressionValue(

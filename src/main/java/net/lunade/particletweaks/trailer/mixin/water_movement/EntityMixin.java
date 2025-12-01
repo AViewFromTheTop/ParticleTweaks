@@ -45,34 +45,30 @@ public abstract class EntityMixin {
 		final double movementLength = deltaMovement.length();
 		if (movementLength == 0D) return;
 
-		if (ParticleTweaksConfig.TRAILER_BUBBLES && entity.getRandom().nextFloat() < movementLength * 0.655D) {
+		trailerBubbles:{
+			if (!ParticleTweaksConfig.TRAILER_BUBBLES || entity.getRandom().nextFloat() >= movementLength * 0.655D) break trailerBubbles;
+
 			final Vec3 randomPosInside = new Vec3(entity.getRandomX(1D), entity.getRandomY(), entity.getRandomZ(1D));
-			if (TrailerFluidParticleSpawner.isUnderFluid(entity.level(), randomPosInside.x, randomPosInside.y, randomPosInside.z)) {
-				entity.level().addParticle(
-					ParticleTypes.BUBBLE,
-					randomPosInside.x,
-					randomPosInside.y,
-					randomPosInside.z,
-					deltaMovement.x * 1.15D,
-					deltaMovement.y,
-					deltaMovement.z * 1.15D
-				);
-			}
+			if (!TrailerFluidParticleSpawner.isUnderFluid(entity.level(), randomPosInside.x, randomPosInside.y, randomPosInside.z)) break trailerBubbles;
+
+			entity.level().addParticle(
+				ParticleTypes.BUBBLE,
+				randomPosInside.x, randomPosInside.y, randomPosInside.z,
+				deltaMovement.x * 1.15D, deltaMovement.y, deltaMovement.z * 1.15D
+			);
 		}
 
-		if (entity.getRandom().nextFloat() < movementLength * 2D) {
+		trailerWaterMovement:{
+			if (entity.getRandom().nextFloat() >= movementLength * 2D) break trailerWaterMovement;
+
 			final Vec3 randomPosInside = new Vec3(entity.getRandomX(1D), entity.getRandomY(), entity.getRandomZ(1D));
-			if (TrailerFluidParticleSpawner.isUnderFluid(entity.level(), randomPosInside.x, randomPosInside.y, randomPosInside.z)) {
-				entity.level().addParticle(
-					ParticleTweaksParticleTypes.SMALL_BUBBLE,
-					randomPosInside.x,
-					randomPosInside.y,
-					randomPosInside.z,
-					deltaMovement.x * 1.5D,
-					Math.clamp(deltaMovement.y, -0.025D, 0.05D),
-					deltaMovement.z * 1.5D
-				);
-			}
+			if (!TrailerFluidParticleSpawner.isUnderFluid(entity.level(), randomPosInside.x, randomPosInside.y, randomPosInside.z)) break trailerWaterMovement;
+
+			entity.level().addParticle(
+				ParticleTweaksParticleTypes.SMALL_BUBBLE,
+				randomPosInside.x, randomPosInside.y, randomPosInside.z,
+				deltaMovement.x * 1.5D, Math.clamp(deltaMovement.y, -0.025D, 0.05D), deltaMovement.z * 1.5D
+			);
 		}
 	}
 }

@@ -1,7 +1,5 @@
 package net.lunade.particletweaks.particle;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.lunade.particletweaks.registry.ParticleTweaksParticleTypes;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.NoRenderParticle;
@@ -13,19 +11,18 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
 
 public class WaveSeedParticle extends NoRenderParticle {
 	private final float width;
 	private final float strength;
 
-	protected WaveSeedParticle(ClientLevel world, double x, double y, double z, double width, double strength) {
-		super(world, x, y, z);
+	protected WaveSeedParticle(ClientLevel level, double x, double y, double z, double width, double strength) {
+		super(level, x, y, z);
 		this.lifetime = 13;
 		this.width = (float) width;
 		this.strength = (float) strength;
 
-		world.addAlwaysVisibleParticle(
+		level.addAlwaysVisibleParticle(
 			ParticleTweaksParticleTypes.WAVE_OUTLINE,
 			true,
 			x, y, z,
@@ -33,7 +30,7 @@ public class WaveSeedParticle extends NoRenderParticle {
 			strength,
 			0F
 		);
-		world.addAlwaysVisibleParticle(
+		level.addAlwaysVisibleParticle(
 			ParticleTweaksParticleTypes.WAVE,
 			true,
 			x, y, z,
@@ -108,13 +105,11 @@ public class WaveSeedParticle extends NoRenderParticle {
 		}
 	}
 
-	@Environment(EnvType.CLIENT)
 	public record Factory(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
-		@NotNull
 		public Particle createParticle(
-			@NotNull SimpleParticleType defaultParticleType,
-			@NotNull ClientLevel level,
+			SimpleParticleType options,
+			ClientLevel level,
 			double x, double y, double z,
 			double xd, double yd, double zd,
 			RandomSource random

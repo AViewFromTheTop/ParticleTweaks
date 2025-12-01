@@ -29,7 +29,7 @@ public class CampfireBlockMixin {
 			target = "Lnet/minecraft/world/level/Level;addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V"
 		)
 	)
-	public boolean particleTweaks$removeLava(Level instance, ParticleOptions parameters, double x, double y, double z, double xd, double yd, double zd) {
+	public boolean particleTweaks$removeLava(Level instance, ParticleOptions options, double x, double y, double z, double xd, double yd, double zd) {
 		return !ParticleTweaksConfig.TRAILER_CAMPFIRES;
 	}
 
@@ -49,7 +49,7 @@ public class CampfireBlockMixin {
 		if (!state.is(Blocks.CAMPFIRE)) {
 			if (state.is(Blocks.SOUL_CAMPFIRE)) {
 				particle = ParticleTweaksParticleTypes.SOUL_CAMPFIRE_FLARE;
-			} else if (ParticleTweaksPreLoadConstants.HAS_THECOPPERIERAGE && state.getBlock().builtInRegistryHolder().key().location().getNamespace().equals("thecopperierage")) {
+			} else if (ParticleTweaksPreLoadConstants.HAS_THECOPPERIERAGE && state.getBlock().builtInRegistryHolder().key().identifier().getNamespace().equals("thecopperierage")) {
 				particle = ParticleTweaksParticleTypes.COPPER_CAMPFIRE_FLARE;
 			}
 		}

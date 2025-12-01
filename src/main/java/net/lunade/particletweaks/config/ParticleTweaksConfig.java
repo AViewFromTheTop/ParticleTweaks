@@ -11,7 +11,6 @@ import net.lunade.particletweaks.ParticleTweaksPreLoadConstants;
 
 @UnsyncableConfig
 public class ParticleTweaksConfig {
-
 	public static final Config<ParticleTweaksConfig> INSTANCE = ConfigRegistry.register(
 		new JsonConfig<>(
 			ParticleTweaksPreLoadConstants.MOD_ID,

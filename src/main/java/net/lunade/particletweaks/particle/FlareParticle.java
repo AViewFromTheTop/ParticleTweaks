@@ -12,7 +12,6 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
 
 @Environment(EnvType.CLIENT)
 public class FlareParticle extends RisingParticle {
@@ -55,13 +54,13 @@ public class FlareParticle extends RisingParticle {
 
 	@Override
 	public int getLightColor(float tickDelta) {
-		float percentageLived = ((float)this.age + tickDelta) / (float)this.lifetime;
+		final float percentageLived = ((float)this.age + tickDelta) / (float)this.lifetime;
 		return (int) Math.max(240F * (1F - percentageLived), super.getLightColor(tickDelta));
 	}
 
 	@Override
 	public float getQuadSize(float tickDelta) {
-		float percentageLived = ((float)this.age + tickDelta) / (float)this.lifetime;
+		final float percentageLived = ((float)this.age + tickDelta) / (float)this.lifetime;
 		this.rCol = Mth.lerp(percentageLived, this.rStart, this.rEnd);
 		this.gCol = Mth.lerp(percentageLived, this.gStart, this.gEnd);
 		this.bCol = Mth.lerp(percentageLived, this.bStart, this.bEnd);
@@ -69,17 +68,15 @@ public class FlareParticle extends RisingParticle {
 	}
 
 	@Override
-	protected @NotNull Layer getLayer() {
+	protected Layer getLayer() {
 		return Layer.OPAQUE;
 	}
 
-	@Environment(EnvType.CLIENT)
-	public record Factory(@NotNull SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
+	public record Factory(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
-		@NotNull
 		public Particle createParticle(
-			@NotNull SimpleParticleType defaultParticleType,
-			@NotNull ClientLevel level,
+			SimpleParticleType options,
+			ClientLevel level,
 			double x, double y, double z,
 			double xd, double yd, double zd,
 			RandomSource random
@@ -93,13 +90,11 @@ public class FlareParticle extends RisingParticle {
 		}
 	}
 
-	@Environment(EnvType.CLIENT)
-	public record SoulFactory(@NotNull SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
+	public record SoulFactory(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
-		@NotNull
 		public Particle createParticle(
-			@NotNull SimpleParticleType defaultParticleType,
-			@NotNull ClientLevel level,
+			SimpleParticleType options,
+			ClientLevel level,
 			double x, double y, double z,
 			double xd, double yd, double zd,
 			RandomSource random
@@ -115,13 +110,11 @@ public class FlareParticle extends RisingParticle {
 		}
 	}
 
-	@Environment(EnvType.CLIENT)
-	public record CopperFactory(@NotNull SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
+	public record CopperFactory(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
-		@NotNull
 		public Particle createParticle(
-			@NotNull SimpleParticleType defaultParticleType,
-			@NotNull ClientLevel level,
+			SimpleParticleType options,
+			ClientLevel level,
 			double x, double y, double z,
 			double xd, double yd, double zd,
 			RandomSource random

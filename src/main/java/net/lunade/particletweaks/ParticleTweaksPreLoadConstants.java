@@ -21,7 +21,6 @@ package net.lunade.particletweaks;
 import java.nio.file.Path;
 import net.fabricmc.loader.api.FabricLoader;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +35,7 @@ public final class ParticleTweaksPreLoadConstants {
 	public static final boolean HAS_THECOPPERIERAGE = FabricLoader.getInstance().isModLoaded("thecopperierage");
 
 	@Contract(pure = true)
-	public static @NotNull Path configPath(String name, boolean json5) {
+	public static Path configPath(String name, boolean json5) {
 		return Path.of("./config/" + MOD_ID + "/" + name + "." + (json5 ? "json5" : "json"));
 	}
 }

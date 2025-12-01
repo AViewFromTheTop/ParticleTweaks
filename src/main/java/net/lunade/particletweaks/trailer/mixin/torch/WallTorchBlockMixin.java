@@ -29,9 +29,7 @@ public class WallTorchBlockMixin {
 			ordinal = 0
 		)
 	)
-	public boolean particleTweaks$trailerSmoke(
-		Level instance, ParticleOptions parameters, double x, double y, double z, double xd, double yd, double zd
-	) {
+	public boolean particleTweaks$trailerSmoke(Level instance, ParticleOptions options, double x, double y, double z, double xd, double yd, double zd) {
 		return !ParticleTweaksConfig.TRAILER_TORCHES;
 	}
 
@@ -44,11 +42,11 @@ public class WallTorchBlockMixin {
 		)
 	)
 	public void particleTweaks$animateTick(
-		Level instance, ParticleOptions parameters, double x, double y, double z, double xd, double yd, double zd, Operation<Void> original,
+		Level instance, ParticleOptions options, double x, double y, double z, double xd, double yd, double zd, Operation<Void> original,
 		BlockState state, Level world, BlockPos pos
 	) {
 		if (!ParticleTweaksConfig.TRAILER_TORCHES) {
-			original.call(instance, parameters, x, y, z, xd, yd, zd);
+			original.call(instance, options, x, y, z, xd, yd, zd);
 			return;
 		}
 
@@ -56,12 +54,12 @@ public class WallTorchBlockMixin {
 		if (instance.random.nextBoolean()) return;
 
 		final Minecraft minecraft = Minecraft.getInstance();
-		final Vec3 cameraPos = minecraft.gameRenderer.getMainCamera().getPosition();
+		final Vec3 cameraPos = minecraft.gameRenderer.getMainCamera().position();
 		final Vec3 posDiff = cameraPos
 			.subtract(0D, cameraPos.y, 0D)
 			.subtract(new Vec3(x, 0D, z))
 			.normalize().scale(0.0625D);
-		original.call(instance, parameters, x + posDiff.x, y - 0.125D, z + posDiff.z, xd, yd, zd);
+		original.call(instance, options, x + posDiff.x, y - 0.125D, z + posDiff.z, xd, yd, zd);
 	}
 
 }

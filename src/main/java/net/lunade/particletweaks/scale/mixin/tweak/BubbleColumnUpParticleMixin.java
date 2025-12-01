@@ -13,7 +13,6 @@ import net.minecraft.client.particle.BubbleColumnUpParticle;
 import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.particles.ParticleTypes;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -21,12 +20,12 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(BubbleColumnUpParticle.class)
 public abstract class BubbleColumnUpParticleMixin extends SingleQuadParticle implements ParticleScaleInterface {
 
-	protected BubbleColumnUpParticleMixin(ClientLevel clientLevel, double d, double e, double f, TextureAtlasSprite textureAtlasSprite) {
-		super(clientLevel, d, e, f, textureAtlasSprite);
+	protected BubbleColumnUpParticleMixin(ClientLevel level, double d, double e, double f, TextureAtlasSprite sprite) {
+		super(level, d, e, f, sprite);
 	}
 
 	@Override
-	public @Nullable ParticleScaleHandler particleTweaks$createScaleHandler() {
+	public ParticleScaleHandler particleTweaks$createScaleHandler() {
 		if (ParticleTweaksConstants.MAKE_BUBBLES_POP_MOD) return null;
 		final ParticleScaler entrance = new ParticleScaler(ParticleScaler.ScaleMethod.SIZE, 0.2F);
 		entrance.setToZero();

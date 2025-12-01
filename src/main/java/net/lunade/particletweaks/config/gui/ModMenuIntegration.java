@@ -8,14 +8,13 @@ import net.frozenblock.lib.FrozenBools;
 import net.lunade.particletweaks.config.cloth.ParticleTweaksConfigGui;
 import net.minecraft.client.gui.screens.Screen;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 @Environment(EnvType.CLIENT)
 public final class ModMenuIntegration implements ModMenuApi {
 
     @Contract(pure = true)
     @Override
-    public @NotNull ConfigScreenFactory<Screen> getModConfigScreenFactory() {
+    public ConfigScreenFactory<Screen> getModConfigScreenFactory() {
 		if (FrozenBools.HAS_CLOTH_CONFIG) return ParticleTweaksConfigGui::buildScreen;
         return screen -> null;
     }

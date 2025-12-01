@@ -27,16 +27,15 @@ import net.lunade.particletweaks.config.ParticleTweaksConfig;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 @Environment(EnvType.CLIENT)
 public final class ParticleTweaksConfigGui {
 
-	private static void setupEntries(@NotNull ConfigCategory category, @NotNull ConfigEntryBuilder entryBuilder) {
-		var config = ParticleTweaksConfig.get(true);
+	private static void setupEntries(ConfigCategory category, ConfigEntryBuilder builder) {
+		final var config = ParticleTweaksConfig.get(true);
 
 		category.addEntry(
-			entryBuilder.startBooleanToggle(ParticleTweaksConstants.text("trailer_cave_dust"), config.trailerCaveDust)
+			builder.startBooleanToggle(ParticleTweaksConstants.text("trailer_cave_dust"), config.trailerCaveDust)
 				.setDefaultValue(false)
 				.setSaveConsumer(newValue -> config.trailerCaveDust = newValue)
 				.setTooltip(ParticleTweaksConstants.tooltip("trailer_cave_dust"))
@@ -45,7 +44,7 @@ public final class ParticleTweaksConfigGui {
 		);
 
 		category.addEntry(
-			entryBuilder.startBooleanToggle(ParticleTweaksConstants.text("trailer_torches"), config.trailerTorches)
+			builder.startBooleanToggle(ParticleTweaksConstants.text("trailer_torches"), config.trailerTorches)
 				.setDefaultValue(false)
 				.setSaveConsumer(newValue -> config.trailerTorches = newValue)
 				.setTooltip(ParticleTweaksConstants.tooltip("trailer_torches"))
@@ -54,7 +53,7 @@ public final class ParticleTweaksConfigGui {
 		);
 
 		category.addEntry(
-			entryBuilder.startBooleanToggle(ParticleTweaksConstants.text("trailer_campfires"), config.trailerCampfires)
+			builder.startBooleanToggle(ParticleTweaksConstants.text("trailer_campfires"), config.trailerCampfires)
 				.setDefaultValue(false)
 				.setSaveConsumer(newValue -> config.trailerCampfires = newValue)
 				.setTooltip(ParticleTweaksConstants.tooltip("trailer_campfires"))
@@ -63,7 +62,7 @@ public final class ParticleTweaksConfigGui {
 		);
 
 		category.addEntry(
-			entryBuilder.startBooleanToggle(ParticleTweaksConstants.text("trailer_bubbles"), config.trailerBubbles)
+			builder.startBooleanToggle(ParticleTweaksConstants.text("trailer_bubbles"), config.trailerBubbles)
 				.setDefaultValue(false)
 				.setSaveConsumer(newValue -> config.trailerBubbles = newValue)
 				.setTooltip(ParticleTweaksConstants.tooltip("trailer_bubbles"))
@@ -72,7 +71,7 @@ public final class ParticleTweaksConfigGui {
 		);
 
 		category.addEntry(
-			entryBuilder.startBooleanToggle(ParticleTweaksConstants.text("trailer_water_movement"), config.trailerWaterMovement)
+			builder.startBooleanToggle(ParticleTweaksConstants.text("trailer_water_movement"), config.trailerWaterMovement)
 				.setDefaultValue(false)
 				.setSaveConsumer(newValue -> config.trailerWaterMovement = newValue)
 				.setTooltip(ParticleTweaksConstants.tooltip("trailer_water_movement"))
@@ -81,7 +80,7 @@ public final class ParticleTweaksConfigGui {
 		);
 
 		category.addEntry(
-			entryBuilder.startBooleanToggle(ParticleTweaksConstants.text("trailer_ambient_water"), config.trailerAmbientWater)
+			builder.startBooleanToggle(ParticleTweaksConstants.text("trailer_ambient_water"), config.trailerAmbientWater)
 				.setDefaultValue(false)
 				.setSaveConsumer(newValue -> config.trailerAmbientWater = newValue)
 				.setTooltip(ParticleTweaksConstants.tooltip("trailer_ambient_water"))
@@ -90,7 +89,7 @@ public final class ParticleTweaksConfigGui {
 		);
 
 		category.addEntry(
-			entryBuilder.startBooleanToggle(ParticleTweaksConstants.text("trailer_waves"), config.trailerWaves)
+			builder.startBooleanToggle(ParticleTweaksConstants.text("trailer_waves"), config.trailerWaves)
 				.setDefaultValue(false)
 				.setSaveConsumer(newValue -> config.trailerWaves = newValue)
 				.setTooltip(ParticleTweaksConstants.tooltip("trailer_waves"))
@@ -99,7 +98,7 @@ public final class ParticleTweaksConfigGui {
 		);
 
 		category.addEntry(
-			entryBuilder.startBooleanToggle(ParticleTweaksConstants.text("trailer_splashes"), config.trailerSplashes)
+			builder.startBooleanToggle(ParticleTweaksConstants.text("trailer_splashes"), config.trailerSplashes)
 				.setDefaultValue(false)
 				.setSaveConsumer(newValue -> config.trailerSplashes = newValue)
 				.setTooltip(ParticleTweaksConstants.tooltip("trailer_splashes"))
@@ -108,7 +107,7 @@ public final class ParticleTweaksConfigGui {
 		);
 
 		category.addEntry(
-			entryBuilder.startBooleanToggle(ParticleTweaksConstants.text("trailer_ripples"), config.trailerRipples)
+			builder.startBooleanToggle(ParticleTweaksConstants.text("trailer_ripples"), config.trailerRipples)
 				.setDefaultValue(false)
 				.setSaveConsumer(newValue -> config.trailerRipples = newValue)
 				.setTooltip(ParticleTweaksConstants.tooltip("trailer_ripples"))
@@ -117,7 +116,7 @@ public final class ParticleTweaksConfigGui {
 		);
 
 		category.addEntry(
-			entryBuilder.startBooleanToggle(ParticleTweaksConstants.text("trailer_flowing_fluids"), config.trailerFlowingFluids)
+			builder.startBooleanToggle(ParticleTweaksConstants.text("trailer_flowing_fluids"), config.trailerFlowingFluids)
 				.setDefaultValue(false)
 				.setSaveConsumer(newValue -> config.trailerFlowingFluids = newValue)
 				.setTooltip(ParticleTweaksConstants.tooltip("trailer_flowing_fluids"))
@@ -126,7 +125,7 @@ public final class ParticleTweaksConfigGui {
 		);
 
 		category.addEntry(
-			entryBuilder.startBooleanToggle(ParticleTweaksConstants.text("trailer_cascades"), config.trailerCascades)
+			builder.startBooleanToggle(ParticleTweaksConstants.text("trailer_cascades"), config.trailerCascades)
 				.setDefaultValue(false)
 				.setSaveConsumer(newValue -> config.trailerCascades = newValue)
 				.setTooltip(ParticleTweaksConstants.tooltip("trailer_cascades"))
@@ -135,7 +134,7 @@ public final class ParticleTweaksConfigGui {
 		);
 
 		category.addEntry(
-			entryBuilder.startBooleanToggle(ParticleTweaksConstants.text("trailer_poof"), config.trailerPoof)
+			builder.startBooleanToggle(ParticleTweaksConstants.text("trailer_poof"), config.trailerPoof)
 				.setDefaultValue(false)
 				.setSaveConsumer(newValue -> config.trailerPoof = newValue)
 				.setTooltip(ParticleTweaksConstants.tooltip("trailer_poof"))
@@ -144,7 +143,7 @@ public final class ParticleTweaksConfigGui {
 		);
 
 		category.addEntry(
-			entryBuilder.startBooleanToggle(ParticleTweaksConstants.text("trailer_bubble_poof"), config.trailerBubblePoof)
+			builder.startBooleanToggle(ParticleTweaksConstants.text("trailer_bubble_poof"), config.trailerBubblePoof)
 				.setDefaultValue(false)
 				.setSaveConsumer(newValue -> config.trailerBubblePoof = newValue)
 				.setTooltip(ParticleTweaksConstants.tooltip("trailer_bubble_poof"))
@@ -153,7 +152,7 @@ public final class ParticleTweaksConfigGui {
 		);
 
 		category.addEntry(
-			entryBuilder.startBooleanToggle(ParticleTweaksConstants.text("trailer_spell"), config.trailerSpell)
+			builder.startBooleanToggle(ParticleTweaksConstants.text("trailer_spell"), config.trailerSpell)
 				.setDefaultValue(false)
 				.setSaveConsumer(newValue -> config.trailerSpell = newValue)
 				.setTooltip(ParticleTweaksConstants.tooltip("trailer_spell"))
@@ -162,7 +161,7 @@ public final class ParticleTweaksConfigGui {
 		);
 
 		category.addEntry(
-			entryBuilder.startBooleanToggle(ParticleTweaksConstants.text("trailer_leaves"), config.trailerLeaves)
+			builder.startBooleanToggle(ParticleTweaksConstants.text("trailer_leaves"), config.trailerLeaves)
 				.setDefaultValue(false)
 				.setSaveConsumer(newValue -> config.trailerLeaves = newValue)
 				.setTooltip(ParticleTweaksConstants.tooltip("trailer_leaves"))
@@ -172,26 +171,26 @@ public final class ParticleTweaksConfigGui {
 	}
 
 	public static Screen buildScreen(Screen parent) {
-		var configBuilder = ConfigBuilder.create().setParentScreen(parent).setTitle(text("component.title"));
+		final var configBuilder = ConfigBuilder.create().setParentScreen(parent).setTitle(text("component.title"));
 		configBuilder.setSavingRunnable(ParticleTweaksConfig.INSTANCE::save);
-		var config = configBuilder.getOrCreateCategory(text("config"));
+		final var config = configBuilder.getOrCreateCategory(text("config"));
 		ConfigEntryBuilder entryBuilder = configBuilder.entryBuilder();
 		setupEntries(config, entryBuilder);
 		return configBuilder.build();
 	}
 
 	@Contract(value = "_ -> new", pure = true)
-	public static @NotNull Component text(String key) {
+	public static Component text(String key) {
 		return Component.translatable("option." + ParticleTweaksConstants.MOD_ID + "." + key);
 	}
 
 	@Contract(value = "_ -> new", pure = true)
-	public static @NotNull Component tooltip(String key) {
+	public static Component tooltip(String key) {
 		return Component.translatable("tooltip." + ParticleTweaksConstants.MOD_ID + "." + key);
 	}
 
 	@Contract(value = "_ -> new", pure = true)
-	public static @NotNull Component enumNameProvider(String key) {
+	public static Component enumNameProvider(String key) {
 		return Component.translatable("enum." + ParticleTweaksConstants.MOD_ID + "." + key);
 	}
 }

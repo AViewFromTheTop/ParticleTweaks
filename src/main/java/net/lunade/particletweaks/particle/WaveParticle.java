@@ -16,9 +16,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.RandomSource;
-import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 @Environment(EnvType.CLIENT)
 public class WaveParticle extends SingleQuadParticle {
@@ -29,10 +29,10 @@ public class WaveParticle extends SingleQuadParticle {
 	private final float strength;
 
 	WaveParticle(
-		@NotNull ClientLevel level,
+		ClientLevel level,
 		double x, double y, double z,
 		float width, float strength,
-		@NotNull SpriteSet spriteSet
+		SpriteSet spriteSet
 	) {
 		super(level, x, y + 1D - (0.0625D * 2.5D), z, 0D, 0D, 0D, spriteSet.first()); // Places half a pixel down from Y
 		this.setSize(width, 1F);
@@ -51,7 +51,7 @@ public class WaveParticle extends SingleQuadParticle {
 		this.setSpriteFromAge(this.spriteSet);
 
 		final Minecraft minecraft = Minecraft.getInstance();
-		Vector3f leftVector = minecraft.gameRenderer.getMainCamera().getLeftVector();
+		Vector3fc leftVector = minecraft.gameRenderer.getMainCamera().leftVector();
 		leftVector = new Vector3f(leftVector.x(), 0F, leftVector.z()).normalize();
 
 		final double sin = Math.sin((this.age * Math.PI) / 19D);
@@ -111,17 +111,15 @@ public class WaveParticle extends SingleQuadParticle {
 	}
 
 	@Override
-	protected @NotNull Layer getLayer() {
+	protected Layer getLayer() {
 		return WAVE;
 	}
 
-	@Environment(EnvType.CLIENT)
-	public record OutlineFactory(@NotNull SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
+	public record OutlineFactory(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
-		@NotNull
 		public Particle createParticle(
-			@NotNull SimpleParticleType defaultParticleType,
-			@NotNull ClientLevel level,
+			SimpleParticleType options,
+			ClientLevel level,
 			double x, double y, double z,
 			double xd, double yd, double zd,
 			RandomSource random
@@ -130,18 +128,16 @@ public class WaveParticle extends SingleQuadParticle {
 		}
 	}
 
-	@Environment(EnvType.CLIENT)
-	public record Factory(@NotNull SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
+	public record Factory(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
-		@NotNull
 		public Particle createParticle(
-			@NotNull SimpleParticleType defaultParticleType,
-			@NotNull ClientLevel level,
+			SimpleParticleType options,
+			ClientLevel level,
 			double x, double y, double z,
 			double xd, double yd, double zd,
 			RandomSource random
 		) {
-			WaveParticle waveParticle = new WaveParticle(level, x, y, z, (float) xd, (float) yd, this.spriteSet);
+			final WaveParticle waveParticle = new WaveParticle(level, x, y, z, (float) xd, (float) yd, this.spriteSet);
 
 			int waterColor = level.getBiome(BlockPos.containing(x, y, z)).value().getWaterColor();
 			waveParticle.rCol = ARGB.red(waterColor) / 255F;

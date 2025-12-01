@@ -48,7 +48,8 @@ public abstract class ParticleMixin implements ParticleScaleInterface {
 	}
 
 	@Override
-	public @Nullable ParticleScaleHandler particleTweaks$getScaleHandler() {
+	@Nullable
+	public ParticleScaleHandler particleTweaks$getScaleHandler() {
 		return this.particleTweaks$scaleHandler;
 	}
 

@@ -19,7 +19,6 @@ import net.minecraft.util.ARGB;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.FluidState;
-import org.jetbrains.annotations.NotNull;
 
 @Environment(EnvType.CLIENT)
 public class FluidFlowParticle extends SingleQuadParticle implements ParticleScaleInterface, ParticleFluidMovementInterface, MutableParticleFluidMovementInterface {
@@ -96,7 +95,7 @@ public class FluidFlowParticle extends SingleQuadParticle implements ParticleSca
 	}
 
 	@Override
-	protected @NotNull Layer getLayer() {
+	protected Layer getLayer() {
 		return Layer.TRANSLUCENT;
 	}
 
@@ -134,13 +133,11 @@ public class FluidFlowParticle extends SingleQuadParticle implements ParticleSca
 		return true;
 	}
 
-	@Environment(EnvType.CLIENT)
 	public record LavaFactory(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
-		@NotNull
 		public Particle createParticle(
-			@NotNull SimpleParticleType defaultParticleType,
-			@NotNull ClientLevel level,
+			SimpleParticleType options,
+			ClientLevel level,
 			double x, double y, double z,
 			double xd, double yd, double zd,
 			RandomSource random
@@ -169,13 +166,11 @@ public class FluidFlowParticle extends SingleQuadParticle implements ParticleSca
 		}
 	}
 
-	@Environment(EnvType.CLIENT)
 	public record WaterFactory(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
-		@NotNull
 		public Particle createParticle(
-			@NotNull SimpleParticleType defaultParticleType,
-			@NotNull ClientLevel level,
+			SimpleParticleType options,
+			ClientLevel level,
 			double x, double y, double z,
 			double xd, double yd, double zd,
 			RandomSource random
@@ -205,13 +200,11 @@ public class FluidFlowParticle extends SingleQuadParticle implements ParticleSca
 		}
 	}
 
-	@Environment(EnvType.CLIENT)
 	public record SplashFactory(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
-		@NotNull
 		public Particle createParticle(
-			@NotNull SimpleParticleType defaultParticleType,
-			@NotNull ClientLevel level,
+			SimpleParticleType options,
+			ClientLevel level,
 			double x, double y, double z,
 			double xd, double yd, double zd,
 			RandomSource random
@@ -236,13 +229,11 @@ public class FluidFlowParticle extends SingleQuadParticle implements ParticleSca
 		}
 	}
 
-	@Environment(EnvType.CLIENT)
 	public record SmallCascadeFactory(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
-		@NotNull
 		public Particle createParticle(
-			@NotNull SimpleParticleType defaultParticleType,
-			@NotNull ClientLevel level,
+			SimpleParticleType options,
+			ClientLevel level,
 			double x, double y, double z,
 			double xd, double yd, double zd,
 			RandomSource random
@@ -270,13 +261,11 @@ public class FluidFlowParticle extends SingleQuadParticle implements ParticleSca
 		}
 	}
 
-	@Environment(EnvType.CLIENT)
 	public record CascadeFactory(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
-		@NotNull
 		public Particle createParticle(
-			@NotNull SimpleParticleType defaultParticleType,
-			@NotNull ClientLevel level,
+			SimpleParticleType options,
+			ClientLevel level,
 			double x, double y, double z,
 			double xd, double yd, double zd,
 			RandomSource random

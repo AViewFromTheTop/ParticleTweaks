@@ -2,7 +2,6 @@ package net.lunade.particletweaks;
 
 import java.util.List;
 import java.util.Set;
-import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -19,14 +18,13 @@ public class ParticleTweaksMixinPlugin implements IMixinConfigPlugin {
 	}
 
 	@Override
-	public boolean shouldApplyMixin(String targetClassName, @NotNull String mixinClassName) {
+	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
 		if (mixinClassName.contains("wilderwild.")) return ParticleTweaksPreLoadConstants.HAS_WILDERWILD;
 		return true;
 	}
 
 	@Override
 	public void acceptTargets(Set<String> myTargets, Set<String> otherTargets) {
-
 	}
 
 	@Override

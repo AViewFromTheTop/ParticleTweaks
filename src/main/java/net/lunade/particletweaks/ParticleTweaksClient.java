@@ -9,9 +9,6 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.lunade.particletweaks.config.ParticleTweaksConfig;
-import net.lunade.particletweaks.trailer.api.TrailerCaveDustSpawner;
-import net.lunade.particletweaks.trailer.api.TrailerFluidParticleSpawner;
-import net.lunade.particletweaks.trailer.api.TrailerTorchParticleSpawner;
 import net.lunade.particletweaks.particle.CampfireFlareParticle;
 import net.lunade.particletweaks.particle.CaveDustParticle;
 import net.lunade.particletweaks.particle.ComfySmokeParticle;
@@ -23,34 +20,37 @@ import net.lunade.particletweaks.particle.SmallBubbleParticle;
 import net.lunade.particletweaks.particle.WaveParticle;
 import net.lunade.particletweaks.particle.WaveSeedParticle;
 import net.lunade.particletweaks.registry.ParticleTweaksParticleTypes;
+import net.lunade.particletweaks.trailer.api.TrailerCaveDustSpawner;
+import net.lunade.particletweaks.trailer.api.TrailerFluidParticleSpawner;
+import net.lunade.particletweaks.trailer.api.TrailerTorchParticleSpawner;
 
 @Environment(EnvType.CLIENT)
 public class ParticleTweaksClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-		ClientChunkEvents.CHUNK_UNLOAD.register((clientLevel, levelChunk) -> {
-			TrailerFluidParticleSpawner.clearCascadesInChunk(levelChunk.getPos());
-			TrailerTorchParticleSpawner.clearTorchesInChunk(levelChunk.getPos());
+		ClientChunkEvents.CHUNK_UNLOAD.register((level, chunk) -> {
+			TrailerFluidParticleSpawner.clearCascadesInChunk(chunk.getPos());
+			TrailerTorchParticleSpawner.clearTorchesInChunk(chunk.getPos());
 		});
-		ClientLifecycleEvents.CLIENT_STOPPING.register((clientLevel) -> {
+		ClientLifecycleEvents.CLIENT_STOPPING.register((minecraft) -> {
 			TrailerFluidParticleSpawner.clearCascades();
 			TrailerTorchParticleSpawner.clearTorches();
 		});
-		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
+		ClientPlayConnectionEvents.DISCONNECT.register((handler, minecraft) -> {
 			TrailerFluidParticleSpawner.clearCascades();
 			TrailerTorchParticleSpawner.clearTorches();
 		});
 
-		ClientTickEvents.START_WORLD_TICK.register((clientLevel) -> {
-			TrailerFluidParticleSpawner.tickCascades(clientLevel);
-			TrailerTorchParticleSpawner.tickTorches(clientLevel);
-			TrailerCaveDustSpawner.tick(clientLevel);
+		ClientTickEvents.START_WORLD_TICK.register((level) -> {
+			TrailerFluidParticleSpawner.tickCascades(level);
+			TrailerTorchParticleSpawner.tickTorches(level);
+			TrailerCaveDustSpawner.tick(level);
 		});
 
 		ParticleTweaksParticleTypes.init();
 
-		ParticleFactoryRegistry particleRegistry = ParticleFactoryRegistry.getInstance();
+		final ParticleFactoryRegistry particleRegistry = ParticleFactoryRegistry.getInstance();
 		particleRegistry.register(ParticleTweaksParticleTypes.FLOWING_LAVA, FluidFlowParticle.LavaFactory::new);
 		particleRegistry.register(ParticleTweaksParticleTypes.FLOWING_WATER, FluidFlowParticle.WaterFactory::new);
 		particleRegistry.register(ParticleTweaksParticleTypes.SMALL_BUBBLE, SmallBubbleParticle.Factory::new);

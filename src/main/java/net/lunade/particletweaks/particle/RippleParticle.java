@@ -33,8 +33,6 @@ import net.minecraft.client.renderer.state.QuadParticleRenderState;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -46,7 +44,7 @@ public class RippleParticle extends SingleQuadParticle implements ParticleScaleI
 		.rotateX(-90F * Mth.DEG_TO_RAD);
 	private final SpriteSet spriteSet;
 
-	RippleParticle(@NotNull ClientLevel level, double x, double y, double z, SpriteSet spriteSet) {
+	RippleParticle(ClientLevel level, double x, double y, double z, SpriteSet spriteSet) {
 		super(level, x, y, z, 0D, 0D, 0D, spriteSet.first());
 		this.xd = 0D;
 		this.yd = 0D;
@@ -59,7 +57,7 @@ public class RippleParticle extends SingleQuadParticle implements ParticleScaleI
 	}
 
 	@Override
-	public @Nullable ParticleScaleHandler particleTweaks$createScaleHandler() {
+	public ParticleScaleHandler particleTweaks$createScaleHandler() {
 		final ParticleScaler entrance = new ParticleScaler(ParticleScaler.ScaleMethod.SIZE, 0.45F);
 		entrance.setToZero();
 		final ParticleScaler exit = new ParticleScaler(ParticleScaler.ScaleMethod.FADE, 0.45F);
@@ -78,17 +76,15 @@ public class RippleParticle extends SingleQuadParticle implements ParticleScaleI
 	}
 
 	@Override
-	protected @NotNull Layer getLayer() {
+	protected Layer getLayer() {
 		return Layer.TRANSLUCENT;
 	}
 
-	@Environment(EnvType.CLIENT)
-	public record Factory(@NotNull SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
+	public record Factory(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
-		@NotNull
 		public Particle createParticle(
-			@NotNull SimpleParticleType defaultParticleType,
-			@NotNull ClientLevel level,
+			SimpleParticleType options,
+			ClientLevel level,
 			double x, double y, double z,
 			double xd, double yd, double zd,
 			RandomSource random

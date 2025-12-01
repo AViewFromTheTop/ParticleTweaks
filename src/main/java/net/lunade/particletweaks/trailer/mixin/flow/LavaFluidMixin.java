@@ -19,11 +19,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class LavaFluidMixin {
 
 	@Inject(method = "animateTick", at = @At("TAIL"))
-	public void particleTweaks$animateTick(Level level, BlockPos pos, FluidState state, RandomSource random, CallbackInfo info) {
+	public void particleTweaks$animateTick(Level level, BlockPos pos, FluidState fluidState, RandomSource random, CallbackInfo info) {
 		TrailerFluidParticleSpawner.onAnimateTick(
 			level,
 			pos,
-			state,
+			fluidState,
 			random,
 			1,
 			0,

@@ -22,8 +22,6 @@ public class LivingEntityMixin {
 		)
 	)
 	public SimpleParticleType particleTweaks$useBubblePoofUnderwater(SimpleParticleType original) {
-		return ParticleTweaksConfig.TRAILER_BUBBLE_POOF
-			&& LivingEntity.class.cast(this).isUnderWater()
-			? ParticleTypes.BUBBLE : original;
+		return ParticleTweaksConfig.TRAILER_BUBBLE_POOF && LivingEntity.class.cast(this).isUnderWater() ? ParticleTypes.BUBBLE : original;
 	}
 }

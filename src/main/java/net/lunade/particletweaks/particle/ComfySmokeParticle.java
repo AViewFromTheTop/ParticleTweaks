@@ -31,16 +31,15 @@ import net.minecraft.client.particle.RisingParticle;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 @Environment(EnvType.CLIENT)
 public class ComfySmokeParticle extends RisingParticle implements ParticleScaleInterface {
 	private final SpriteSet spriteSet;
 
 	ComfySmokeParticle(
-		@NotNull ClientLevel level,
+		ClientLevel level,
 		double x, double y, double z,
 		double xd, double yd, double zd,
 		SpriteSet spriteSet
@@ -59,7 +58,7 @@ public class ComfySmokeParticle extends RisingParticle implements ParticleScaleI
 	}
 
 	@Override
-	public @Nullable ParticleScaleHandler particleTweaks$createScaleHandler() {
+	public ParticleScaleHandler particleTweaks$createScaleHandler() {
 		final ParticleScaler entrance = new ParticleScaler(ParticleScaler.ScaleMethod.SIZE, 0.25F);
 		entrance.setToZero();
 		final ParticleScaler exit = new ParticleScaler(ParticleScaler.ScaleMethod.FADE, 0.2F);
@@ -71,8 +70,8 @@ public class ComfySmokeParticle extends RisingParticle implements ParticleScaleI
 		super.tick();
 		this.setSpriteFromAge(this.spriteSet);
 
-		Minecraft minecraft = Minecraft.getInstance();
-		Vector3f leftVector = minecraft.gameRenderer.getMainCamera().getLeftVector();
+		final Minecraft minecraft = Minecraft.getInstance();
+		Vector3fc leftVector = minecraft.gameRenderer.getMainCamera().leftVector();
 		leftVector = new Vector3f(leftVector.x(), 0F, leftVector.z()).normalize();
 
 		double sin = Math.sin((this.age * Math.PI) / 19D);
@@ -82,17 +81,15 @@ public class ComfySmokeParticle extends RisingParticle implements ParticleScaleI
 
 
 	@Override
-	protected @NotNull Layer getLayer() {
+	protected Layer getLayer() {
 		return Layer.TRANSLUCENT;
 	}
 
-	@Environment(EnvType.CLIENT)
-	public record Factory(@NotNull SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
+	public record Factory(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
-		@NotNull
 		public Particle createParticle(
-			@NotNull SimpleParticleType defaultParticleType,
-			@NotNull ClientLevel level,
+			SimpleParticleType options,
+			ClientLevel level,
 			double x, double y, double z,
 			double xd, double yd, double zd,
 			RandomSource random

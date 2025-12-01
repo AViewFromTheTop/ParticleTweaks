@@ -23,11 +23,9 @@ public class WaterFluidMixin {
 			target = "Lnet/minecraft/world/level/Level;addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V"
 		)
 	)
-	public void particleTweaks$useSmallBubble(
-		Level instance, ParticleOptions parameters, double x, double y, double z, double xd, double yd, double zd, Operation<Void> original
-	) {
+	public void particleTweaks$useSmallBubble(Level instance, ParticleOptions options, double x, double y, double z, double xd, double yd, double zd, Operation<Void> original) {
 		if (!ParticleTweaksConfig.TRAILER_AMBIENT_WATER) {
-			original.call(instance, parameters, x, y, z, xd, yd, zd);
+			original.call(instance, options, x, y, z, xd, yd, zd);
 			return;
 		}
 
