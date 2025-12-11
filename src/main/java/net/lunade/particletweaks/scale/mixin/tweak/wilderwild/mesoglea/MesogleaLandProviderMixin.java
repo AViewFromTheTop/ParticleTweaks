@@ -14,15 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Pseudo
 @Environment(EnvType.CLIENT)
-@Mixin({
-	MesogleaDripParticle.BMesogleaLandProvider.class,
-	MesogleaDripParticle.BPMesogleaLandProvider.class,
-	MesogleaDripParticle.LMesogleaLandProvider.class,
-	MesogleaDripParticle.PMesogleaLandProvider.class,
-	MesogleaDripParticle.PPMesogleaLandProvider.class,
-	MesogleaDripParticle.RMesogleaLandProvider.class,
-	MesogleaDripParticle.YMesogleaLandProvider.class,
-})
+@Mixin(MesogleaDripParticle.LandProvider.class)
 public class MesogleaLandProviderMixin {
 
 	@ModifyReturnValue(

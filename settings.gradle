@@ -12,7 +12,7 @@ pluginManagement {
             setName("Fabric")
             setUrl("https://maven.fabricmc.net/")
         }
-        jcenter()
+        mavenCentral()
         maven {
             setName("Forge")
             setUrl("https://files.minecraftforge.net/maven/")

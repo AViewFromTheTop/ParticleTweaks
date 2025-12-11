@@ -120,11 +120,11 @@ public class FlareParticle extends RisingParticle {
 			RandomSource random
 		) {
 			final FlareParticle flareParticle = new FlareParticle(level, x, y, z, xd, yd, zd, this.spriteSet.get(random));
-			flareParticle.rStart = 0F;
-			flareParticle.rEnd = 0.1F;
-			flareParticle.bStart = 0.2F;
-			flareParticle.bEnd = 0F;
-			flareParticle.gStart = 1F;
+			flareParticle.rStart = 0.6F;
+			flareParticle.rEnd = 0.2F;
+			flareParticle.bStart = 0.6F;
+			flareParticle.bEnd = 0.3F;
+			flareParticle.gStart = 0.922F;
 			flareParticle.gEnd = 0.5F;
 			return flareParticle;
 		}

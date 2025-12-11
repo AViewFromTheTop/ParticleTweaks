@@ -15,20 +15,17 @@ import org.spongepowered.asm.mixin.injection.At;
 @Pseudo
 @Environment(EnvType.CLIENT)
 @Mixin({
-	MesogleaDripParticle.BMesogleaHangProvider.class,
-	MesogleaDripParticle.BPMesogleaHangProvider.class,
-	MesogleaDripParticle.LMesogleaHangProvider.class,
-	MesogleaDripParticle.PMesogleaHangProvider.class,
-	MesogleaDripParticle.PPMesogleaHangProvider.class,
-	MesogleaDripParticle.RMesogleaHangProvider.class,
-	MesogleaDripParticle.YMesogleaHangProvider.class,
+	MesogleaDripParticle.PearlescentBlueHangProvider.class,
+	MesogleaDripParticle.PearlescentPurpleHangProvider.class,
+	MesogleaDripParticle.BlueHangProvider.class,
+	MesogleaDripParticle.YellowHangProvider.class,
+	MesogleaDripParticle.LimeHangProvider.class,
+	MesogleaDripParticle.RedHangProvider.class,
+	MesogleaDripParticle.PinkHangProvider.class,
 })
 public class MesogleaHangProviderMixin {
 
-	@ModifyReturnValue(
-		method = "createParticle*",
-		at = @At("RETURN")
-	)
+	@ModifyReturnValue(method = "createParticle*", at = @At("RETURN"))
 	public Particle particleTweaks$createScaleHandler(Particle original) {
 		if (!(original instanceof ParticleScaleInterface scaleInterface)) return original;
 
