@@ -7,6 +7,8 @@
   "client": [
     "ambient_water.WaterFluidMixin",
     "big_splash.EntityMixin",
+    "big_splash.QuadParticleRenderStateMixin",
+    "big_splash.SingleQuadParticleLayerMixin",
     "bubble.BubbleParticleMixin",
     "campfire.CampfireBlockMixin",
     "falling_leaves.FallingLeavesParticleMixin",
