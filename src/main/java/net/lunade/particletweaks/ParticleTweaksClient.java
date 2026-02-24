@@ -7,7 +7,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientChunkEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry;
 import net.lunade.particletweaks.config.ParticleTweaksConfig;
 import net.lunade.particletweaks.particle.CampfireFlareParticle;
 import net.lunade.particletweaks.particle.CaveDustParticle;
@@ -42,7 +42,7 @@ public class ParticleTweaksClient implements ClientModInitializer {
 			TrailerTorchParticleSpawner.clearTorches();
 		});
 
-		ClientTickEvents.START_WORLD_TICK.register((level) -> {
+		ClientTickEvents.START_LEVEL_TICK.register((level) -> {
 			TrailerFluidParticleSpawner.tickCascades(level);
 			TrailerTorchParticleSpawner.tickTorches(level);
 			TrailerCaveDustSpawner.tick(level);
@@ -50,7 +50,7 @@ public class ParticleTweaksClient implements ClientModInitializer {
 
 		ParticleTweaksParticleTypes.init();
 
-		final ParticleFactoryRegistry particleRegistry = ParticleFactoryRegistry.getInstance();
+		final ParticleProviderRegistry particleRegistry = ParticleProviderRegistry.getInstance();
 		particleRegistry.register(ParticleTweaksParticleTypes.FLOWING_LAVA, FluidFlowParticle.LavaFactory::new);
 		particleRegistry.register(ParticleTweaksParticleTypes.FLOWING_WATER, FluidFlowParticle.WaterFactory::new);
 		particleRegistry.register(ParticleTweaksParticleTypes.SMALL_BUBBLE, SmallBubbleParticle.Factory::new);

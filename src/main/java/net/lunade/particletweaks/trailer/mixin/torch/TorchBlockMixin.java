@@ -51,7 +51,7 @@ public class TorchBlockMixin {
 		}
 
 		TrailerTorchParticleSpawner.onAnimateTick(pos);
-		if (instance.random.nextBoolean()) return;
+		if (instance.getRandom().nextBoolean()) return;
 
 		final Minecraft minecraft = Minecraft.getInstance();
 		final Vec3 cameraPos = minecraft.gameRenderer.getMainCamera().position();

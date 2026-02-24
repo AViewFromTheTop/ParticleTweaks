@@ -134,7 +134,7 @@ public abstract class FallingLeavesParticleMixin extends SingleQuadParticle impl
 		final float V0 = this.getV0();
 		final float V1 = this.getV1();
 		final int color = ARGB.colorFromFloat(this.alpha, this.rCol, this.gCol, this.bCol);
-		final int lightColor = this.getLightColor(partialTick);
+		final int lightColor = this.getLightCoords(partialTick);
 
 		quadParticleRenderState.add(
 			layer,

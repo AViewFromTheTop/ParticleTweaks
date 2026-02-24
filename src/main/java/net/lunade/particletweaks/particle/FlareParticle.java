@@ -53,9 +53,9 @@ public class FlareParticle extends RisingParticle {
 	}
 
 	@Override
-	public int getLightColor(float tickDelta) {
+	public int getLightCoords(float tickDelta) {
 		final float percentageLived = ((float)this.age + tickDelta) / (float)this.lifetime;
-		return (int) Math.max(240F * (1F - percentageLived), super.getLightColor(tickDelta));
+		return (int) Math.max(240F * (1F - percentageLived), super.getLightCoords(tickDelta));
 	}
 
 	@Override

@@ -22,7 +22,7 @@ public class TrailerCaveDustSpawner {
 	}
 
 	private static void animateTick(ClientLevel level, int posX, int posY, int posZ) {
-		final RandomSource random = level.random;
+		final RandomSource random = level.getRandom();
 		final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 		for (int i = 0; i < 20; ++i) {
 			spawnCaveDustParticles(level, posX, posY, posZ, 32, random, mutable);

@@ -61,9 +61,9 @@ public class SmallBubbleParticle extends RisingParticle implements ParticleScale
 		this.direction = new Vec3(1D, 0D, 0D).yRot((random.nextFloat() * 360F) * Mth.DEG_TO_RAD);
 
 		int waterColor = level.getBiome(BlockPos.containing(x, y, z)).value().getWaterColor();
-		this.rCol = Math.clamp(((ARGB.red(waterColor) / 255F) * (float)level.random.triangle(1.3D, 0.3D)), 0F, 1F);
-		this.bCol = Math.clamp(((ARGB.blue(waterColor) / 255F) * (float)level.random.triangle(1.3D, 0.3D)), 0F, 1F);
-		this.gCol = Math.clamp(((ARGB.green(waterColor) / 255F) * (float)level.random.triangle(1.3D, 0.3D)), 0F, 1F);
+		this.rCol = Math.clamp(((ARGB.red(waterColor) / 255F) * (float) level.getRandom().triangle(1.3D, 0.3D)), 0F, 1F);
+		this.bCol = Math.clamp(((ARGB.blue(waterColor) / 255F) * (float) level.getRandom().triangle(1.3D, 0.3D)), 0F, 1F);
+		this.gCol = Math.clamp(((ARGB.green(waterColor) / 255F) * (float) level.getRandom().triangle(1.3D, 0.3D)), 0F, 1F);
 	}
 
 	@Override

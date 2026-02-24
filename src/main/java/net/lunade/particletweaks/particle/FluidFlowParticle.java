@@ -90,8 +90,8 @@ public class FluidFlowParticle extends SingleQuadParticle implements ParticleSca
 	}
 
 	@Override
-	protected int getLightColor(float tint) {
-		return this.isLava ? 240 : super.getLightColor(tint);
+	protected int getLightCoords(float tint) {
+		return this.isLava ? 240 : super.getLightCoords(tint);
 	}
 
 	@Override

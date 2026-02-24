@@ -35,7 +35,7 @@ public class TrailerTorchParticleSpawner {
 	public static void clearTorchesInChunk(ChunkPos chunkPos) {
 		final List<BlockPos> posesToRemove = new ArrayList<>();
 		TORCH_TICKS.forEach((blockPos, integer) -> {
-			if (new ChunkPos(blockPos).equals(chunkPos)) posesToRemove.add(blockPos);
+			if (ChunkPos.containing(blockPos).equals(chunkPos)) posesToRemove.add(blockPos);
 		});
 
 		posesToRemove.forEach(TORCH_TICKS::remove);
@@ -52,7 +52,7 @@ public class TrailerTorchParticleSpawner {
 
 		final List<BlockPos> posesToRemove = new ArrayList<>();
 		TORCH_TICKS.forEach((blockPos, tickCount) -> {
-			if (!onTorchTick(level, blockPos, level.getBlockState(blockPos), level.random, tickCount, cameraPos)) posesToRemove.add(blockPos);
+			if (!onTorchTick(level, blockPos, level.getBlockState(blockPos), level.getRandom(), tickCount, cameraPos)) posesToRemove.add(blockPos);
 		});
 
 		posesToRemove.forEach(TORCH_TICKS::remove);

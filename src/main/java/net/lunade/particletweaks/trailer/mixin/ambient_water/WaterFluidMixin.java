@@ -29,13 +29,13 @@ public class WaterFluidMixin {
 			return;
 		}
 
-		if (instance.random.nextFloat() >= 0.175F) return;
+		if (instance.getRandom().nextFloat() >= 0.175F) return;
 		original.call(
 			instance,
 			ParticleTweaksParticleTypes.SMALL_BUBBLE,
 			x, y, z,
 			xd,
-			instance.random.nextDouble() * (instance.random.nextFloat() <= 0.1F ? 0.05D : 0.0125D),
+			instance.getRandom().nextDouble() * (instance.getRandom().nextFloat() <= 0.1F ? 0.05D : 0.0125D),
 			zd
 		);
 	}

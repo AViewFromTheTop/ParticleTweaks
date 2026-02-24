@@ -23,8 +23,9 @@ public class FlameParticleMixin implements ParticleScaleInterface {
 		return new ParticleScaleHandler(false, entrance, null);
 	}
 
+	// todo 26.1
 	@ModifyExpressionValue(
-		method = "getLightColor",
+		method = "getLightCoords",
 		at = @At(
 			value = "INVOKE",
 			target = "Lnet/minecraft/util/Mth;clamp(FFF)F"

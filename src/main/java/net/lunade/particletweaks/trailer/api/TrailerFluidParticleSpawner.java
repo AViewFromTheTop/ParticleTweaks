@@ -162,7 +162,7 @@ public class TrailerFluidParticleSpawner {
 	}
 
 	public static void clearCascadesInChunk(ChunkPos chunkPos) {
-		CASCADES.removeIf(blockPos -> (new ChunkPos(blockPos).equals(chunkPos)));
+		CASCADES.removeIf(blockPos -> (ChunkPos.containing(blockPos).equals(chunkPos)));
 	}
 
 	public static void tickCascades(ClientLevel level) {
@@ -178,7 +178,7 @@ public class TrailerFluidParticleSpawner {
 				level,
 				blockPos,
 				level.getFluidState(blockPos),
-				level.random,
+				level.getRandom(),
 				cameraPos
 			)
 		);

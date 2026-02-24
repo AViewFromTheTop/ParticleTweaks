@@ -5,12 +5,10 @@ import net.frozenblock.lib.config.api.instance.json.JsonConfig;
 import net.frozenblock.lib.config.api.instance.json.JsonType;
 import net.frozenblock.lib.config.api.registry.ConfigRegistry;
 import net.frozenblock.lib.config.api.sync.SyncBehavior;
-import net.frozenblock.lib.config.api.sync.annotation.EntrySyncData;
-import net.frozenblock.lib.config.api.sync.annotation.UnsyncableConfig;
 import net.lunade.particletweaks.ParticleTweaksPreLoadConstants;
 
-@UnsyncableConfig
-public class ParticleTweaksConfig {
+// UNSYNCABLE
+public final class ParticleTweaksConfig {
 	public static final Config<ParticleTweaksConfig> INSTANCE = ConfigRegistry.register(
 		new JsonConfig<>(
 			ParticleTweaksPreLoadConstants.MOD_ID,
@@ -24,8 +22,8 @@ public class ParticleTweaksConfig {
 				this.onSync(null);
 			}
 
-			@Override
-			public void onSync(ParticleTweaksConfig syncInstance) {
+			// doesn't actually sync
+			private void onSync(ParticleTweaksConfig syncInstance) {
 				var config = this.config();
 				TRAILER_CAVE_DUST = config.trailerCaveDust;
 				TRAILER_TORCHES = config.trailerTorches;
@@ -62,40 +60,25 @@ public class ParticleTweaksConfig {
 	public static volatile boolean TRAILER_SPELL = false;
 	public static volatile boolean TRAILER_LEAVES = false;
 
-	@EntrySyncData(value = "trailerCaveDust", behavior = SyncBehavior.UNSYNCABLE)
 	public boolean trailerCaveDust;
 
-	@EntrySyncData(value = "trailerTorches", behavior = SyncBehavior.UNSYNCABLE)
 	public boolean trailerTorches;
-	@EntrySyncData(value = "trailerCampfires", behavior = SyncBehavior.UNSYNCABLE)
 	public boolean trailerCampfires;
 
-	@EntrySyncData(value = "trailerBubbles", behavior = SyncBehavior.UNSYNCABLE)
 	public boolean trailerBubbles;
-	@EntrySyncData(value = "trailerWaterMovement", behavior = SyncBehavior.UNSYNCABLE)
 	public boolean trailerWaterMovement;
-	@EntrySyncData(value = "trailerAmbientWater", behavior = SyncBehavior.UNSYNCABLE)
 	public boolean trailerAmbientWater;
-	@EntrySyncData(value = "trailerWaves", behavior = SyncBehavior.UNSYNCABLE)
 	public boolean trailerWaves;
-	@EntrySyncData(value = "trailerSplashes", behavior = SyncBehavior.UNSYNCABLE)
 	public boolean trailerSplashes;
-	@EntrySyncData(value = "trailerRipples", behavior = SyncBehavior.UNSYNCABLE)
 	public boolean trailerRipples;
 
-	@EntrySyncData(value = "trailerFlowingFluids", behavior = SyncBehavior.UNSYNCABLE)
 	public boolean trailerFlowingFluids;
-	@EntrySyncData(value = "trailerCascades", behavior = SyncBehavior.UNSYNCABLE)
 	public boolean trailerCascades;
 
-	@EntrySyncData(value = "trailerPoof", behavior = SyncBehavior.UNSYNCABLE)
 	public boolean trailerPoof;
-	@EntrySyncData(value = "trailerBubblePoof", behavior = SyncBehavior.UNSYNCABLE)
 	public boolean trailerBubblePoof;
-	@EntrySyncData(value = "trailerSpell", behavior = SyncBehavior.UNSYNCABLE)
 	public boolean trailerSpell;
 
-	@EntrySyncData(value = "trailerLeaves", behavior = SyncBehavior.UNSYNCABLE)
 	public boolean trailerLeaves;
 
 	public static ParticleTweaksConfig get(boolean real) {
@@ -105,9 +88,5 @@ public class ParticleTweaksConfig {
 
 	public static ParticleTweaksConfig get() {
 		return get(false);
-	}
-
-	public static ParticleTweaksConfig getWithSync() {
-		return INSTANCE.configWithSync();
 	}
 }
