@@ -11,7 +11,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.lunade.particletweaks.particle.WaveParticle;
 import net.minecraft.client.particle.SingleQuadParticle;
-import net.minecraft.client.renderer.state.QuadParticleRenderState;
+import net.minecraft.client.renderer.state.level.QuadParticleRenderState;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import org.joml.Quaternionf;
@@ -35,13 +35,13 @@ public abstract class QuadParticleRenderStateMixin {
 		method = "prepare",
 		at = @At(
 			value = "INVOKE",
-			target = "Lnet/minecraft/client/renderer/state/QuadParticleRenderState$Storage;forEachParticle(Lnet/minecraft/client/renderer/state/QuadParticleRenderState$ParticleConsumer;)V"
+			target = "Lnet/minecraft/client/renderer/state/level/QuadParticleRenderState$Storage;forEachParticle(Lnet/minecraft/client/renderer/state/level/QuadParticleRenderState$ParticleConsumer;)V"
 		)
 	)
 	public void particleTweaks$renderWaveParticles(
 		QuadParticleRenderState.Storage instance, QuadParticleRenderState.ParticleConsumer particleConsumer, Operation<Void> original,
-		@Local Map.Entry<SingleQuadParticle.Layer, QuadParticleRenderState.Storage> entry,
-		@Local BufferBuilder bufferBuilder
+		@Local(name = "entry") Map.Entry<SingleQuadParticle.Layer, QuadParticleRenderState.Storage> entry,
+		@Local(name = "bufferBuilder") BufferBuilder bufferBuilder
 	) {
 		if (entry.getKey() != WaveParticle.WAVE) {
 			original.call(instance, particleConsumer);

@@ -23,7 +23,7 @@
     "particletweaks.scale.mixins.json",
     "particletweaks.trailer.mixins.json"
   ],
-  "accessWidener": "particletweaks.accesswidener",
+  "accessWidener": "particletweaks.classtweaker",
   "depends": {
     "frozenlib": "*",
     "fabric-api": "*",

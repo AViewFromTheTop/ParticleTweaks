@@ -10,8 +10,9 @@ import net.lunade.particletweaks.scale.api.ParticleScaleHandler;
 import net.lunade.particletweaks.scale.api.ParticleScaler;
 import net.lunade.particletweaks.scale.impl.ParticleScaleInterface;
 import net.minecraft.client.particle.SingleQuadParticle;
-import net.minecraft.client.renderer.state.QuadParticleRenderState;
+import net.minecraft.client.renderer.state.level.QuadParticleRenderState;
 import org.joml.Quaternionf;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -22,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class SingleQuadParticleMixin {
 
 	@Inject(
-		method = "extractRotatedQuad(Lnet/minecraft/client/renderer/state/QuadParticleRenderState;Lorg/joml/Quaternionf;FFFF)V",
+		method = "extractRotatedQuad(Lnet/minecraft/client/renderer/state/level/QuadParticleRenderState;Lorg/joml/Quaternionf;FFFF)V",
 		at = @At("HEAD")
 	)
 	public void particleTweaks$captureEntranceAndExit(
@@ -39,7 +40,7 @@ public class SingleQuadParticleMixin {
 	}
 
 	@ModifyExpressionValue(
-		method = "extractRotatedQuad(Lnet/minecraft/client/renderer/state/QuadParticleRenderState;Lorg/joml/Quaternionf;FFFF)V",
+		method = "extractRotatedQuad(Lnet/minecraft/client/renderer/state/level/QuadParticleRenderState;Lorg/joml/Quaternionf;FFFF)V",
 		at = @At(
 			value = "INVOKE",
 			target = "Lnet/minecraft/client/particle/SingleQuadParticle;getLayer()Lnet/minecraft/client/particle/SingleQuadParticle$Layer;"
@@ -47,23 +48,26 @@ public class SingleQuadParticleMixin {
 	)
 	public SingleQuadParticle.Layer particleTweaks$modifyLayer(
 		SingleQuadParticle.Layer original,
-		@Local(argsOnly = true, ordinal = 3) float partialTick,
 		@Share("particleTweaks$entrance") LocalRef<ParticleScaler> entranceRef,
 		@Share("particleTweaks$exit") LocalRef<ParticleScaler> exitRef
 	) {
-		if (original != SingleQuadParticle.Layer.OPAQUE) return original;
+		if (!(original == SingleQuadParticle.Layer.OPAQUE || original == SingleQuadParticle.Layer.OPAQUE_TERRAIN)) return original;
 
 		final ParticleScaler entrance = entranceRef.get();
-		if (entrance != null && entrance.isFade()) return SingleQuadParticle.Layer.TRANSLUCENT;
+		if (entrance != null && entrance.isFade()) return original == SingleQuadParticle.Layer.OPAQUE_TERRAIN
+			? SingleQuadParticle.Layer.TRANSLUCENT_TERRAIN
+			: SingleQuadParticle.Layer.TRANSLUCENT;
 
 		final ParticleScaler exit = exitRef.get();
-		if (exit != null && exit.isFade()) return SingleQuadParticle.Layer.TRANSLUCENT;
+		if (exit != null && exit.isFade()) return original == SingleQuadParticle.Layer.OPAQUE_TERRAIN
+			? SingleQuadParticle.Layer.TRANSLUCENT_TERRAIN
+			: SingleQuadParticle.Layer.TRANSLUCENT;
 
 		return original;
 	}
 
 	@ModifyExpressionValue(
-		method = "extractRotatedQuad(Lnet/minecraft/client/renderer/state/QuadParticleRenderState;Lorg/joml/Quaternionf;FFFF)V",
+		method = "extractRotatedQuad(Lnet/minecraft/client/renderer/state/level/QuadParticleRenderState;Lorg/joml/Quaternionf;FFFF)V",
 		at = @At(
 			value = "INVOKE",
 			target = "Lnet/minecraft/client/particle/SingleQuadParticle;getQuadSize(F)F"
@@ -71,37 +75,38 @@ public class SingleQuadParticleMixin {
 	)
 	public float particleTweaks$modifyQuadSize(
 		float original,
-		@Local(argsOnly = true, ordinal = 3) float partialTick,
+		@Local(argsOnly = true, ordinal = 3) float partialTicks,
 		@Share("particleTweaks$entrance") LocalRef<ParticleScaler> entranceRef,
 		@Share("particleTweaks$exit") LocalRef<ParticleScaler> exitRef
 	) {
 		final ParticleScaler entrance = entranceRef.get();
-		if (entrance != null && entrance.isSize()) original *= entrance.getScale(partialTick);
+		if (entrance != null && entrance.isSize()) original *= entrance.getScale(partialTicks);
 
 		final ParticleScaler exit = exitRef.get();
-		if (exit != null && exit.isSize()) original *= exit.getScale(partialTick);
+		if (exit != null && exit.isSize()) original *= exit.getScale(partialTicks);
 
 		return original;
 	}
 
 	@ModifyExpressionValue(
-		method = "extractRotatedQuad(Lnet/minecraft/client/renderer/state/QuadParticleRenderState;Lorg/joml/Quaternionf;FFFF)V",
+		method = "extractRotatedQuad(Lnet/minecraft/client/renderer/state/level/QuadParticleRenderState;Lorg/joml/Quaternionf;FFFF)V",
 		at = @At(
 			value = "FIELD",
-			target = "Lnet/minecraft/client/particle/SingleQuadParticle;alpha:F"
+			target = "Lnet/minecraft/client/particle/SingleQuadParticle;alpha:F",
+			opcode = Opcodes.GETFIELD
 		)
 	)
 	public float particleTweaks$modifyAlpha(
 		float original,
-		@Local(argsOnly = true, ordinal = 3) float partialTick,
+		@Local(argsOnly = true, ordinal = 3) float partialTicks,
 		@Share("particleTweaks$entrance") LocalRef<ParticleScaler> entranceRef,
 		@Share("particleTweaks$exit") LocalRef<ParticleScaler> exitRef
 	) {
 		final ParticleScaler entrance = entranceRef.get();
-		if (entrance != null && entrance.isFade()) original *= entrance.getScale(partialTick);
+		if (entrance != null && entrance.isFade()) original *= entrance.getScale(partialTicks);
 
 		final ParticleScaler exit = exitRef.get();
-		if (exit != null && exit.isFade()) original *= exit.getScale(partialTick);
+		if (exit != null && exit.isFade()) original *= exit.getScale(partialTicks);
 
 		return original;
 	}

@@ -1,6 +1,7 @@
 package net.lunade.particletweaks.scale.mixin.tweak;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.lunade.particletweaks.scale.api.ParticleScaleHandler;
@@ -23,30 +24,29 @@ public class FlameParticleMixin implements ParticleScaleInterface {
 		return new ParticleScaleHandler(false, entrance, null);
 	}
 
-	// todo 26.1
-	@ModifyExpressionValue(
+	@WrapOperation(
 		method = "getLightCoords",
 		at = @At(
 			value = "INVOKE",
-			target = "Lnet/minecraft/util/Mth;clamp(FFF)F"
+			target = "Lnet/minecraft/util/LightCoordsUtil;addSmoothBlockEmission(IF)I"
 		)
 	)
-	public float particleTweaks$fixLight(
-		float original,
-		float partialTick
+	public int particleTweaks$fixLight(
+		int lightCoords, float blockLightEmission, Operation<Integer> original,
+		float partialTicks
 	) {
 		final ParticleScaleHandler scaleHandler = particleTweaks$getScaleHandler();
-		if (scaleHandler == null) return original;
+		if (scaleHandler == null) return original.call(lightCoords, blockLightEmission);
 
 		float scale = 1F;
 
 		final ParticleScaler entrance = scaleHandler.entrance();
-		if (entrance != null) scale *= entrance.getScale(partialTick);
+		if (entrance != null) scale *= entrance.getScale(partialTicks);
 
 		final ParticleScaler exit = scaleHandler.exit();
-		if (exit != null) scale *= exit.getScale(partialTick);
+		if (exit != null) scale *= exit.getScale(partialTicks);
 
-		return scale;
+		return original.call(lightCoords, Math.clamp(scale, 0F, 1F));
 	}
 
 	@ModifyConstant(

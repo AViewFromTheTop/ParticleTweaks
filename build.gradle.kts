@@ -54,11 +54,6 @@ val makebubblespop_version: String by project
 val sodium_version: String by project
 val run_sodium: String by project
 val shouldRunSodium = run_sodium == "true"
-val indium_version: String by project
-val run_indium: String by project
-val shouldRunIndium = (run_sodium == "true") && shouldRunSodium
-
-val continuity_version: String by project
 
 base {
     archivesName = archives_base_name
@@ -77,7 +72,7 @@ val datagen by sourceSets.registering {
 loom {
     runtimeOnlyLog4j.set(true)
 
-    accessWidenerPath.set(file("src/main/resources/$mod_id.accesswidener"))
+    accessWidenerPath.set(file("src/main/resources/$mod_id.classtweaker"))
     interfaceInjection {
         // When enabled, injected interfaces from dependencies will be applied.
         enableDependencyInterfaceInjection.set(false)
@@ -177,11 +172,11 @@ dependencies {
     implementation("net.fabricmc.fabric-api:fabric-api:$fabric_api_version")
 
     // Mod Menu
-    implementation("com.terraformersmc:modmenu:$modmenu_version")
-    implementation("maven.modrinth:placeholder-api:3.0.0-beta.1+26.1")
+    compileOnly("com.terraformersmc:modmenu:$modmenu_version")
+    compileOnly("maven.modrinth:placeholder-api:3.0.0-beta.1+26.1")
 
     // Cloth Config
-    implementation("me.shedaniel.cloth:cloth-config-fabric:$cloth_config_version") {
+    compileOnly("me.shedaniel.cloth:cloth-config-fabric:$cloth_config_version") {
         exclude(group = "net.fabricmc.fabric-api")
         exclude(group = "com.terraformersmc")
     }
@@ -203,12 +198,6 @@ dependencies {
         implementation("maven.modrinth:sodium:${sodium_version}")
     else
         compileOnly("maven.modrinth:sodium:${sodium_version}")
-
-    // Indium
-    if (shouldRunSodium && shouldRunIndium)
-        implementation("maven.modrinth:indium:${indium_version}")
-    else
-        compileOnly("maven.modrinth:indium:${indium_version}")
 
     // FallingLeaves
     compileOnly("maven.modrinth:fallingleaves:${fallingleaves_version}")
@@ -238,6 +227,7 @@ tasks {
                 "**/lang/*.json",
                 "**/.cache/*",
                 "**/*.accesswidener",
+                "**/*.classtweaker",
                 "**/*.nbt",
                 "**/*.png",
                 "**/*.ogg",
