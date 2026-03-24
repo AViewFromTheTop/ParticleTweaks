@@ -33,8 +33,6 @@ val githubActions: Boolean = System.getenv("GITHUB_ACTIONS") == "true"
 val licenseChecks: Boolean = githubActions
 
 val minecraft_version: String by project
-val quilt_mappings: String by project
-val parchment_mappings: String by project
 val loader_version: String by project
 
 val mod_id: String by project
@@ -45,11 +43,9 @@ val archives_base_name: String by project
 val fabric_api_version: String by project
 val modmenu_version: String by project
 val cloth_config_version: String by project
-val fallingleaves_version: String by project
 val wilderwild_version: String by project
 val trailiertales_version: String by project
 val frozenlib_version: String by project
-val makebubblespop_version: String by project
 
 val sodium_version: String by project
 val run_sodium: String by project
@@ -172,17 +168,13 @@ dependencies {
     implementation("net.fabricmc.fabric-api:fabric-api:$fabric_api_version")
 
     // Mod Menu
-    compileOnly("com.terraformersmc:modmenu:$modmenu_version")
-    compileOnly("maven.modrinth:placeholder-api:3.0.0-beta.1+26.1")
+    implementation("com.terraformersmc:modmenu:${modmenu_version}")
 
     // Cloth Config
-    compileOnly("me.shedaniel.cloth:cloth-config-fabric:$cloth_config_version") {
+    implementation("me.shedaniel.cloth:cloth-config-fabric:$cloth_config_version") {
         exclude(group = "net.fabricmc.fabric-api")
         exclude(group = "com.terraformersmc")
     }
-
-    // Particle Rain
-    compileOnly("maven.modrinth:particle-rain:2.1.4")
 
     // Wilder Wild
     implementation("maven.modrinth:wilder-wild:$wilderwild_version")
@@ -198,12 +190,6 @@ dependencies {
         implementation("maven.modrinth:sodium:${sodium_version}")
     else
         compileOnly("maven.modrinth:sodium:${sodium_version}")
-
-    // FallingLeaves
-    compileOnly("maven.modrinth:fallingleaves:${fallingleaves_version}")
-
-    // Make Bubbles Pop
-    compileOnly("maven.modrinth:make_bubbles_pop:${makebubblespop_version}")
 
     "datagenImplementation"(sourceSets.main.get().output)
 }
@@ -449,7 +435,7 @@ modrinth {
         optional.project("cloth-config")
         optional.project("modmenu")
         optional.project("simple-copper-pipes")
-        embedded.project("frozenlib")
+        required.project("frozenlib")
     }
 }
 

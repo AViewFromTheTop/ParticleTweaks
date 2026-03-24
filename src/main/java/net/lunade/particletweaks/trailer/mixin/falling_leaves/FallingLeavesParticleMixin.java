@@ -68,9 +68,9 @@ public abstract class FallingLeavesParticleMixin extends SingleQuadParticle impl
 	@Inject(method = "<init>*", at = @At("TAIL"))
 	private void particleTweaks$init(
 		CallbackInfo info,
-		@Local(ordinal = 5) float particleRandom
+		@Local(name = "particleRandom") float particleRandom
 	) {
-		if (!ParticleTweaksConfig.TRAILER_LEAVES) return;
+		if (!ParticleTweaksConfig.TRAILER_LEAVES.get()) return;
 		this.particleTweaks$yRotPerTick = ((this.random.nextFloat() * particleRandom)) * 0.05F * (this.random.nextBoolean() ? -1F : 1F);
 		this.particleTweaks$yRot = ((this.random.nextFloat())) * (this.random.nextBoolean() ? -0.5F : 0.5F) * Mth.TWO_PI;
 		this.particleTweaks$prevYRot = this.particleTweaks$yRot;
@@ -82,7 +82,7 @@ public abstract class FallingLeavesParticleMixin extends SingleQuadParticle impl
 
 	@Inject(method = "tick", at = @At("HEAD"))
 	public void particleTweaks$tick(CallbackInfo info) {
-		if (!ParticleTweaksConfig.TRAILER_LEAVES) return;
+		if (!ParticleTweaksConfig.TRAILER_LEAVES.get()) return;
 		this.oRoll = this.roll;
 
 		this.particleTweaks$prevYRot = this.particleTweaks$yRot;
@@ -104,9 +104,9 @@ public abstract class FallingLeavesParticleMixin extends SingleQuadParticle impl
 	}
 
 	@Override
-	public void extract(QuadParticleRenderState quadParticleRenderState, Camera camera, float partialTick) {
-		if (!ParticleTweaksConfig.TRAILER_LEAVES) {
-			super.extract(quadParticleRenderState, camera, partialTick);
+	public void extract(QuadParticleRenderState renderState, Camera camera, float partialTick) {
+		if (!ParticleTweaksConfig.TRAILER_LEAVES.get()) {
+			super.extract(renderState, camera, partialTick);
 			return;
 		}
 
@@ -136,7 +136,7 @@ public abstract class FallingLeavesParticleMixin extends SingleQuadParticle impl
 		final int color = ARGB.colorFromFloat(this.alpha, this.rCol, this.gCol, this.bCol);
 		final int lightColor = this.getLightCoords(partialTick);
 
-		quadParticleRenderState.add(
+		renderState.add(
 			layer,
 			x, y, z,
 			rotation.x, rotation.y, rotation.z, rotation.w,
@@ -146,7 +146,7 @@ public abstract class FallingLeavesParticleMixin extends SingleQuadParticle impl
 			lightColor
 		);
 
-		quadParticleRenderState.add(
+		renderState.add(
 			layer,
 			x, y, z,
 			flippedRotation.x, flippedRotation.y, flippedRotation.z, flippedRotation.w,

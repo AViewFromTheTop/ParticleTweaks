@@ -42,7 +42,7 @@ public class TrailerTorchParticleSpawner {
 	}
 
 	public static void tickTorches(ClientLevel level) {
-		if (!ParticleTweaksConfig.TRAILER_TORCHES) {
+		if (!ParticleTweaksConfig.TRAILER_TORCHES.get()) {
 			TORCH_TICKS.clear();
 			return;
 		}

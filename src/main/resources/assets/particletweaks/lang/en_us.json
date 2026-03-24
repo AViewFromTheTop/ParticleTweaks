@@ -37,7 +37,6 @@
   "option.particletweaks.trailer_bubble_poof": "Trailer Bubble Poofs",
   "tooltip.particletweaks.trailer_bubble_poof": "Poof particles will be replaced with Bubble particles underwater.\nPoof particles are created upon a mob dying, or spawning via spawner.",
 
-
   "option.particletweaks.trailer_spell": "Trailer Potions",
   "tooltip.particletweaks.trailer_spell": "Potion particles will act similarly to the Tricky Trials trailer.",
 

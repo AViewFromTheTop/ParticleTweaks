@@ -24,7 +24,7 @@ public class WaterFluidMixin {
 		)
 	)
 	public void particleTweaks$useSmallBubble(Level instance, ParticleOptions options, double x, double y, double z, double xd, double yd, double zd, Operation<Void> original) {
-		if (!ParticleTweaksConfig.TRAILER_AMBIENT_WATER) {
+		if (!ParticleTweaksConfig.TRAILER_AMBIENT_WATER.get()) {
 			original.call(instance, options, x, y, z, xd, yd, zd);
 			return;
 		}

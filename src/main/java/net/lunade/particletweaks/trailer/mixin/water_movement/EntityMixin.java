@@ -39,14 +39,14 @@ public abstract class EntityMixin {
 	)
 	public void particleTweaks$baseTick(CallbackInfo info) {
 		final Entity entity = Entity.class.cast(this);
-		if (!entity.isInWater() || !ParticleTweaksConfig.TRAILER_WATER_MOVEMENT) return;
+		if (!entity.isInWater() || !ParticleTweaksConfig.TRAILER_WATER_MOVEMENT.get()) return;
 
 		final Vec3 deltaMovement = entity.getDeltaMovement();
 		final double movementLength = deltaMovement.length();
 		if (movementLength == 0D) return;
 
 		trailerBubbles:{
-			if (!ParticleTweaksConfig.TRAILER_BUBBLES || entity.getRandom().nextFloat() >= movementLength * 0.655D) break trailerBubbles;
+			if (!ParticleTweaksConfig.TRAILER_BUBBLES.get() || entity.getRandom().nextFloat() >= movementLength * 0.655D) break trailerBubbles;
 
 			final Vec3 randomPosInside = new Vec3(entity.getRandomX(1D), entity.getRandomY(), entity.getRandomZ(1D));
 			if (!TrailerFluidParticleSpawner.isUnderFluid(entity.level(), randomPosInside.x, randomPosInside.y, randomPosInside.z)) break trailerBubbles;

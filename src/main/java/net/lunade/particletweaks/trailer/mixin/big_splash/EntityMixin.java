@@ -55,7 +55,7 @@ public abstract class EntityMixin {
 		)
 	)
 	public void particleTweaks$doWaterSplashEffect(CallbackInfo info) {
-		if (!ParticleTweaksConfig.TRAILER_WAVES) return;
+		if (!ParticleTweaksConfig.TRAILER_WAVES.get()) return;
 
 		final Entity entity = Entity.class.cast(this);
 		final Vec3 vec3 = entity.getDeltaMovement();

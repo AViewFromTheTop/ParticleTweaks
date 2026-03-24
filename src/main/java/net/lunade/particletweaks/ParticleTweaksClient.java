@@ -73,6 +73,6 @@ public class ParticleTweaksClient implements ClientModInitializer {
 		particleRegistry.register(ParticleTweaksParticleTypes.COMFY_SMOKE_A, ComfySmokeParticle.Factory::new);
 		particleRegistry.register(ParticleTweaksParticleTypes.COMFY_SMOKE_B, ComfySmokeParticle.Factory::new);
 
-		ParticleTweaksConfig.get();
+		ParticleTweaksConfig.CONFIG.load(true);
 	}
 }

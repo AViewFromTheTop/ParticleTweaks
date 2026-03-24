@@ -23,6 +23,6 @@ public class ClientLevelMixin {
 		CallbackInfo info,
 		@Local(argsOnly = true) LocalRef<ParticleOptions> options
 	) {
-		if (options.get() == ParticleTypes.POOF && ParticleTweaksConfig.TRAILER_POOF) options.set(ParticleTweaksParticleTypes.POOF);
+		if (options.get() == ParticleTypes.POOF && ParticleTweaksConfig.TRAILER_POOF.get()) options.set(ParticleTweaksParticleTypes.POOF);
 	}
 }

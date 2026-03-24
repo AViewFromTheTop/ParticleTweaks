@@ -45,7 +45,7 @@ public class TrailerFluidParticleSpawner {
 		final Vec3 flowVec = rawFlow.normalize();
 		final float fluidHeight = state.getHeight(level, pos);
 		final boolean isDown = state.getValue(FlowingFluid.FALLING);
-		if ((isDown || horizontalParticles) && random.nextInt(isDown ? downChance : horizontalChance) == 0 && ParticleTweaksConfig.TRAILER_FLOWING_FLUIDS) {
+		if ((isDown || horizontalParticles) && random.nextInt(isDown ? downChance : horizontalChance) == 0 && ParticleTweaksConfig.TRAILER_FLOWING_FLUIDS.get()) {
 			if (!isDown) {
 				final List<Direction> possibleFlowingDirections = new ArrayList<>();
 				Vec3 flow1 = new Vec3(flowVec.x, 0D, 0D);
@@ -89,7 +89,7 @@ public class TrailerFluidParticleSpawner {
 			}
 		}
 
-		if (!isSource && createCascades && ParticleTweaksConfig.TRAILER_CASCADES) {
+		if (!isSource && createCascades && ParticleTweaksConfig.TRAILER_CASCADES.get()) {
 			if (isDown) {
 				final FluidState belowFluidState = level.getFluidState(pos.below());
 				if (belowFluidState.isSource()) {
@@ -166,7 +166,7 @@ public class TrailerFluidParticleSpawner {
 	}
 
 	public static void tickCascades(ClientLevel level) {
-		if (!ParticleTweaksConfig.TRAILER_CASCADES) {
+		if (!ParticleTweaksConfig.TRAILER_CASCADES.get()) {
 			CASCADES.clear();
 			return;
 		}

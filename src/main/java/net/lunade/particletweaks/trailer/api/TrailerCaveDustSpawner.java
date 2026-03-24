@@ -15,7 +15,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 public class TrailerCaveDustSpawner {
 
 	public static void tick(ClientLevel level) {
-		if (!ParticleTweaksConfig.TRAILER_CAVE_DUST) return;
+		if (!ParticleTweaksConfig.TRAILER_CAVE_DUST.get()) return;
 		final Minecraft minecraft = Minecraft.getInstance();
 		final BlockPos pos = minecraft.gameRenderer.getMainCamera().blockPosition();
 		animateTick(level, pos.getX(), pos.getY(), pos.getZ());

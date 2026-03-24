@@ -41,8 +41,8 @@ public abstract class EntityMixin {
 	public void particleTweaks$replacePoppingBubbles(
 		Level instance, ParticleOptions options, double x, double y, double z, double xd, double yd, double zd, Operation<Void> original
 	) {
-		if ((ParticleTweaksConfig.TRAILER_BUBBLES || ParticleTweaksConfig.TRAILER_SPLASHES) && !TrailerFluidParticleSpawner.isUnderFluid(instance, x, y - 0.35D, z)) {
-			if (!ParticleTweaksConfig.TRAILER_SPLASHES) return;
+		if ((ParticleTweaksConfig.TRAILER_BUBBLES.get() || ParticleTweaksConfig.TRAILER_SPLASHES.get()) && !TrailerFluidParticleSpawner.isUnderFluid(instance, x, y - 0.35D, z)) {
+			if (!ParticleTweaksConfig.TRAILER_SPLASHES.get()) return;
 			options = ParticleTweaksParticleTypes.SPLASH;
 		}
 		original.call(instance, options, x, y, z, xd, yd, zd);

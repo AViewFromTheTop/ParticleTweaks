@@ -30,7 +30,7 @@ public class CampfireBlockMixin {
 		)
 	)
 	public boolean particleTweaks$removeLava(Level instance, ParticleOptions options, double x, double y, double z, double xd, double yd, double zd) {
-		return !ParticleTweaksConfig.TRAILER_CAMPFIRES;
+		return !ParticleTweaksConfig.TRAILER_CAMPFIRES.get();
 	}
 
 	@Inject(
@@ -43,7 +43,7 @@ public class CampfireBlockMixin {
 		)
 	)
 	public void particleTweaks$AddFlares(BlockState state, Level level, BlockPos pos, RandomSource random, CallbackInfo info) {
-		if (!ParticleTweaksConfig.TRAILER_CAMPFIRES) return;
+		if (!ParticleTweaksConfig.TRAILER_CAMPFIRES.get()) return;
 
 		ParticleOptions particle = ParticleTweaksParticleTypes.CAMPFIRE_FLARE;
 		if (!state.is(Blocks.CAMPFIRE)) {

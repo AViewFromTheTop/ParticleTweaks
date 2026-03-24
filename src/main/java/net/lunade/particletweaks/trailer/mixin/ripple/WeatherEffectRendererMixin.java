@@ -14,6 +14,7 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.material.FluidState;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -30,9 +31,9 @@ public class WeatherEffectRendererMixin {
 	)
 	public BlockPos particleTweaks$extendRainParticleRange(
 		BlockPos instance, int x, int y, int z, Operation<BlockPos> original,
-		@Local RandomSource random
+		@Local(name = "random") RandomSource random
 	) {
-		if (ParticleTweaksConfig.TRAILER_RIPPLES) {
+		if (ParticleTweaksConfig.TRAILER_RIPPLES.get()) {
 			x = random.nextIntBetweenInclusive(-30, 30);
 			z = random.nextIntBetweenInclusive(-30, 30);
 		}
@@ -43,14 +44,15 @@ public class WeatherEffectRendererMixin {
 		method = "tickRainParticles",
 		at = @At(
 			value = "FIELD",
-			target = "Lnet/minecraft/core/particles/ParticleTypes;RAIN:Lnet/minecraft/core/particles/SimpleParticleType;"
+			target = "Lnet/minecraft/core/particles/ParticleTypes;RAIN:Lnet/minecraft/core/particles/SimpleParticleType;",
+			opcode = Opcodes.GETSTATIC
 		)
 	)
 	public SimpleParticleType particleTweaks$useRippleOnWater(
 		SimpleParticleType original,
-		@Local FluidState fluidState
+		@Local(name = "fluid") FluidState fluid
 	) {
-		if (ParticleTweaksConfig.TRAILER_RIPPLES && fluidState.is(FluidTags.WATER)) return ParticleTweaksParticleTypes.RIPPLE;
+		if (ParticleTweaksConfig.TRAILER_RIPPLES.get() && fluid.is(FluidTags.WATER)) return ParticleTweaksParticleTypes.RIPPLE;
 		return original;
 	}
 }

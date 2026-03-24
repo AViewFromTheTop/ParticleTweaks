@@ -15,11 +15,11 @@ public class SpellParticleMixin implements ParticleScaleInterface {
 
 	@Override
 	public ParticleScaleHandler particleTweaks$createScaleHandler() {
-		final ParticleScaler entrance = new ParticleScaler(ParticleScaler.ScaleMethod.SIZE, ParticleTweaksConfig.TRAILER_SPELL ? 0.15F : 0.35F);
+		final ParticleScaler entrance = new ParticleScaler(ParticleScaler.ScaleMethod.SIZE, ParticleTweaksConfig.TRAILER_SPELL.get() ? 0.15F : 0.35F);
 		entrance.setToZero();
 		final ParticleScaler exit = new ParticleScaler(
-			ParticleTweaksConfig.TRAILER_SPELL ? ParticleScaler.ScaleMethod.SIZE : ParticleScaler.ScaleMethod.FADE,
-			ParticleTweaksConfig.TRAILER_SPELL ? 0.15F : 0.375F
+			ParticleTweaksConfig.TRAILER_SPELL.get() ? ParticleScaler.ScaleMethod.SIZE : ParticleScaler.ScaleMethod.FADE,
+			ParticleTweaksConfig.TRAILER_SPELL.get() ? 0.15F : 0.375F
 		);
 		return new ParticleScaleHandler(false, entrance, exit);
 	}

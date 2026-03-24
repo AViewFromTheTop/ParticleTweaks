@@ -5,7 +5,6 @@ import com.terraformersmc.modmenu.api.ModMenuApi;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.frozenblock.lib.FrozenBools;
-import net.lunade.particletweaks.config.cloth.ParticleTweaksConfigGui;
 import net.minecraft.client.gui.screens.Screen;
 import org.jetbrains.annotations.Contract;
 

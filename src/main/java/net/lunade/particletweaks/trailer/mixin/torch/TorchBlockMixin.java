@@ -30,7 +30,7 @@ public class TorchBlockMixin {
 		)
 	)
 	public boolean particleTweaks$trailerSmoke(Level instance, ParticleOptions options, double x, double y, double z, double xd, double yd, double zd) {
-		return !ParticleTweaksConfig.TRAILER_TORCHES;
+		return !ParticleTweaksConfig.TRAILER_TORCHES.get();
 	}
 
 	@WrapOperation(
@@ -45,7 +45,7 @@ public class TorchBlockMixin {
 		Level instance, ParticleOptions options, double x, double y, double z, double xd, double yd, double zd, Operation<Void> original,
 		BlockState state, Level world, BlockPos pos
 	) {
-		if (!ParticleTweaksConfig.TRAILER_TORCHES) {
+		if (!ParticleTweaksConfig.TRAILER_TORCHES.get()) {
 			original.call(instance, options, x, y, z, xd, yd, zd);
 			return;
 		}

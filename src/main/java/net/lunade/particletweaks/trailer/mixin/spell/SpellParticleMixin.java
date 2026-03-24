@@ -40,14 +40,14 @@ public abstract class SpellParticleMixin extends SingleQuadParticle {
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
 	private void particleTweaks$init(CallbackInfo info) {
-		if (!ParticleTweaksConfig.TRAILER_SPELL) return;
+		if (!ParticleTweaksConfig.TRAILER_SPELL.get()) return;
 		this.particleTweaks$yRotPerTick = (RANDOM.nextFloat() - 0.5F) * 0.075F;
 		this.particleTweaks$zRotPerTick = (RANDOM.nextFloat() - 0.5F) * 0.075F;
 	}
 
 	@Inject(method = "tick", at = @At("HEAD"))
 	public void particleTweaks$tick(CallbackInfo info) {
-		if (!ParticleTweaksConfig.TRAILER_SPELL) return;
+		if (!ParticleTweaksConfig.TRAILER_SPELL.get()) return;
 		this.oRoll = this.roll;
 		this.roll += this.particleTweaks$zRotPerTick;
 
@@ -57,7 +57,7 @@ public abstract class SpellParticleMixin extends SingleQuadParticle {
 
 	@Override
 	public FacingCameraMode getFacingCameraMode() {
-		if (!ParticleTweaksConfig.TRAILER_CAMPFIRES) return super.getFacingCameraMode();
+		if (!ParticleTweaksConfig.TRAILER_CAMPFIRES.get()) return super.getFacingCameraMode();
 		return (rotation, camera, partialTick) -> {
 			rotation.set(camera.rotation());
 			rotation.rotateZ(Mth.lerp(partialTick, SpellParticleMixin.this.oRoll, SpellParticleMixin.this.roll));

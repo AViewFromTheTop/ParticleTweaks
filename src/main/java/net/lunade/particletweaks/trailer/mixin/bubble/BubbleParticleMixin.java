@@ -15,7 +15,7 @@ public class BubbleParticleMixin {
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
 	private void particleTweaks$init(CallbackInfo info) {
-		if (ParticleTweaksConfig.TRAILER_BUBBLES) BubbleParticle.class.cast(this).lifetime *= 2;
+		if (ParticleTweaksConfig.TRAILER_BUBBLES.get()) BubbleParticle.class.cast(this).lifetime *= 2;
 	}
 
 }
