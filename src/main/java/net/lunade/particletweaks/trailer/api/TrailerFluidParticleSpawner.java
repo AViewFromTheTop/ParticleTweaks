@@ -136,7 +136,7 @@ public class TrailerFluidParticleSpawner {
 		if (!otherState.getCollisionShape(level, otherPos).isEmpty() || !(otherState.getFluidState().isEmpty() || !isFalling)) return;
 
 		final Vec3 directionOffset = Vec3.atLowerCornerOf(direction.getUnitVec3i()).scale(0.5D);
-		final Vec3 offsetPos = pos.getBottomCenter().add(isFalling ? directionOffset : Vec3.ZERO);
+		final Vec3 offsetPos = Vec3.atBottomCenterOf(pos).add(isFalling ? directionOffset : Vec3.ZERO);
 		for (int i = 0; i < count; i++) {
 			final double yOffset = isFalling ? random.nextDouble() * fluidHeight : fluidHeight;
 			final Vec3 particleOffsetPos = offsetPos.add(
@@ -172,7 +172,7 @@ public class TrailerFluidParticleSpawner {
 		}
 
 		final Minecraft minecraft = Minecraft.getInstance();
-		final BlockPos cameraPos = minecraft.gameRenderer.getMainCamera().blockPosition();
+		final BlockPos cameraPos = minecraft.gameRenderer.mainCamera().blockPosition();
 		CASCADES.removeIf(blockPos ->
 			!onCascadeTick(
 				level,

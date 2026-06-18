@@ -3,7 +3,7 @@
   "minVersion": "0.8.5",
   "package": "net.lunade.particletweaks.trailer.mixin",
   "plugin": "net.lunade.particletweaks.ParticleTweaksMixinPlugin",
-  "compatibilityLevel": "JAVA_21",
+  "compatibilityLevel": "JAVA_25",
   "client": [
     "ambient_water.WaterFluidMixin",
     "big_splash.EntityMixin",
@@ -16,7 +16,7 @@
     "flow.WaterFluidMixin",
     "poof.ClientLevelMixin",
     "poof.LivingEntityMixin",
-    "ripple.WeatherEffectRendererMixin",
+    "ripple.ClientLevelMixin",
     "spell.SpellParticleMixin",
     "splash.EntityMixin",
     "torch.TorchBlockMixin",

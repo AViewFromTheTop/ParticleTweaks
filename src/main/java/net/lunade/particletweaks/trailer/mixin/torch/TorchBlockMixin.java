@@ -29,7 +29,7 @@ public class TorchBlockMixin {
 			ordinal = 0
 		)
 	)
-	public boolean particleTweaks$trailerSmoke(Level instance, ParticleOptions options, double x, double y, double z, double xd, double yd, double zd) {
+	public boolean particleTweaks$trailerSmoke(Level instance, ParticleOptions particle, double x, double y, double z, double xd, double yd, double zd) {
 		return !ParticleTweaksConfig.TRAILER_TORCHES.get();
 	}
 
@@ -42,11 +42,11 @@ public class TorchBlockMixin {
 		)
 	)
 	public void particleTweaks$animateTick(
-		Level instance, ParticleOptions options, double x, double y, double z, double xd, double yd, double zd, Operation<Void> original,
-		BlockState state, Level world, BlockPos pos
+		Level instance, ParticleOptions particle, double x, double y, double z, double xd, double yd, double zd, Operation<Void> original,
+		BlockState state, Level level, BlockPos pos
 	) {
 		if (!ParticleTweaksConfig.TRAILER_TORCHES.get()) {
-			original.call(instance, options, x, y, z, xd, yd, zd);
+			original.call(instance, particle, x, y, z, xd, yd, zd);
 			return;
 		}
 
@@ -54,12 +54,12 @@ public class TorchBlockMixin {
 		if (instance.getRandom().nextBoolean()) return;
 
 		final Minecraft minecraft = Minecraft.getInstance();
-		final Vec3 cameraPos = minecraft.gameRenderer.getMainCamera().position();
+		final Vec3 cameraPos = minecraft.gameRenderer.mainCamera().position();
 		final Vec3 posDiff = cameraPos
 			.subtract(0D, cameraPos.y, 0D)
 			.subtract(new Vec3(x, 0D, z))
 			.normalize().scale(0.0625D);
-		original.call(instance, options, x + posDiff.x, y - 0.075D, z + posDiff.z, xd, yd, zd);
+		original.call(instance, particle, x + posDiff.x, y - 0.075D, z + posDiff.z, xd, yd, zd);
 	}
 
 }

@@ -20,16 +20,13 @@ package net.lunade.particletweaks.config.gui;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
-import me.shedaniel.clothconfig2.gui.entries.BooleanListEntry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.frozenblock.lib.config.clothconfig.FrozenClothConfig;
-import net.frozenblock.lib.config.v2.entry.ConfigEntry;
 import net.lunade.particletweaks.ParticleTweaksConstants;
 import net.lunade.particletweaks.config.ParticleTweaksConfig;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.Contract;
+import static net.frozenblock.lib.config.clothconfig.FrozenLibClothConfigGuiHelper.booleanEntry;
 
 @Environment(EnvType.CLIENT)
 public final class ParticleTweaksConfigGui {
@@ -61,28 +58,14 @@ public final class ParticleTweaksConfigGui {
 		return builder.build();
 	}
 
-	public static BooleanListEntry booleanEntry(ConfigEntryBuilder builder, String key, ConfigEntry<Boolean> configEntry) {
-		return booleanEntry(builder, text(key), configEntry, tooltip(key));
-	}
-
-	public static BooleanListEntry booleanEntry(ConfigEntryBuilder builder, Component name, ConfigEntry<Boolean> configEntry, Component... tooltip) {
-		return FrozenClothConfig.syncedEntry(
-			builder.startBooleanToggle(name, configEntry.get()).setTooltip(tooltip),
-			configEntry
-		);
-	}
-
-	@Contract(value = "_ -> new", pure = true)
 	public static Component text(String key) {
 		return Component.translatable("option." + ParticleTweaksConstants.MOD_ID + "." + key);
 	}
 
-	@Contract(value = "_ -> new", pure = true)
 	public static Component tooltip(String key) {
 		return Component.translatable("tooltip." + ParticleTweaksConstants.MOD_ID + "." + key);
 	}
 
-	@Contract(value = "_ -> new", pure = true)
 	public static Component enumNameProvider(String key) {
 		return Component.translatable("enum." + ParticleTweaksConstants.MOD_ID + "." + key);
 	}

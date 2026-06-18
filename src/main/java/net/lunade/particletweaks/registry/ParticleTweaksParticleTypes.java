@@ -39,9 +39,9 @@ public class ParticleTweaksParticleTypes {
 	public static final SimpleParticleType COPPER_CAMPFIRE_FLARE = register("copper_campfire_flare");
 	public static final SimpleParticleType COMFY_SMOKE_A = register("comfy_smoke_a");
 	public static final SimpleParticleType COMFY_SMOKE_B = register("comfy_smoke_b");
+	public static final SimpleParticleType SULFUR_BUBBLE_POP = register("sulfur_bubble_pop");
 
-	public static void init() {
-	}
+	public static void init() {}
 
 	private static SimpleParticleType register(String name, boolean alwaysShow) {
 		return Registry.register(BuiltInRegistries.PARTICLE_TYPE, ParticleTweaksConstants.id(name), FabricParticleTypes.simple(alwaysShow));
@@ -52,30 +52,30 @@ public class ParticleTweaksParticleTypes {
 	}
 
 	private static <T extends ParticleOptions> ParticleType<T> register(
-		String string,
+		String name,
 		boolean alwaysShow,
-		Function<ParticleType<T>, MapCodec<T>> function,
-		Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> function2
+		Function<ParticleType<T>, MapCodec<T>> codec,
+		Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> streamodec
 	) {
-		return register(ParticleTweaksConstants.id(string), alwaysShow, function, function2);
+		return register(ParticleTweaksConstants.id(name), alwaysShow, codec, streamodec);
 	}
 
 	@NotNull
 	private static <T extends ParticleOptions> ParticleType<T> register(
-		Identifier identifier,
+		Identifier id,
 		boolean alwaysShow,
-		Function<ParticleType<T>, MapCodec<T>> function,
-		Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> function2
+		Function<ParticleType<T>, MapCodec<T>> codec,
+		Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> streamCodec
 	) {
-		return Registry.register(BuiltInRegistries.PARTICLE_TYPE, identifier, new ParticleType<T>(alwaysShow) {
+		return Registry.register(BuiltInRegistries.PARTICLE_TYPE, id, new ParticleType<T>(alwaysShow) {
 			@Override
 			public MapCodec<T> codec() {
-				return function.apply(this);
+				return codec.apply(this);
 			}
 
 			@Override
 			public StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec() {
-				return function2.apply(this);
+				return streamCodec.apply(this);
 			}
 		});
 	}

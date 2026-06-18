@@ -20,5 +20,4 @@ public class MesogleaBubbleParticleMixin implements ParticleScaleInterface {
 		entrance.setToZero();
 		return new ParticleScaleHandler(0.5F, true, entrance, null);
 	}
-
 }

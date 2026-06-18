@@ -105,7 +105,7 @@ public class WaveSeedParticle extends NoRenderParticle {
 		}
 	}
 
-	public record Factory(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
+	public record Provider(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
 		public Particle createParticle(
 			SimpleParticleType options,

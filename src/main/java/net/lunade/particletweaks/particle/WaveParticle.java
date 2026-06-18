@@ -2,6 +2,7 @@ package net.lunade.particletweaks.particle;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.lunade.particletweaks.particle.api.WaterColorGetter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
@@ -51,7 +52,7 @@ public class WaveParticle extends SingleQuadParticle {
 		this.setSpriteFromAge(this.spriteSet);
 
 		final Minecraft minecraft = Minecraft.getInstance();
-		Vector3fc leftVector = minecraft.gameRenderer.getMainCamera().leftVector();
+		Vector3fc leftVector = minecraft.gameRenderer.mainCamera().leftVector();
 		leftVector = new Vector3f(leftVector.x(), 0F, leftVector.z()).normalize();
 
 		final double sin = Math.sin((this.age * Math.PI) / 19D);
@@ -115,7 +116,7 @@ public class WaveParticle extends SingleQuadParticle {
 		return WAVE;
 	}
 
-	public record OutlineFactory(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
+	public record OutlineProvider(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
 		public Particle createParticle(
 			SimpleParticleType options,
@@ -128,7 +129,7 @@ public class WaveParticle extends SingleQuadParticle {
 		}
 	}
 
-	public record Factory(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
+	public record Provider(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
 		public Particle createParticle(
 			SimpleParticleType options,
@@ -139,7 +140,7 @@ public class WaveParticle extends SingleQuadParticle {
 		) {
 			final WaveParticle waveParticle = new WaveParticle(level, x, y, z, (float) xd, (float) yd, this.spriteSet);
 
-			int waterColor = level.getBiome(BlockPos.containing(x, y, z)).value().getWaterColor();
+			final int waterColor = WaterColorGetter.getWaterColor(level, x, y - 0.1D, z);
 			waveParticle.rCol = ARGB.red(waterColor) / 255F;
 			waveParticle.bCol = ARGB.blue(waterColor) / 255F;
 			waveParticle.gCol = ARGB.green(waterColor) / 255F;
@@ -147,5 +148,4 @@ public class WaveParticle extends SingleQuadParticle {
 			return waveParticle;
 		}
 	}
-
 }

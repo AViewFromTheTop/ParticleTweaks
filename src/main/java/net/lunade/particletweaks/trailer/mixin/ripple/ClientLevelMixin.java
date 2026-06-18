@@ -8,7 +8,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.lunade.particletweaks.config.ParticleTweaksConfig;
 import net.lunade.particletweaks.registry.ParticleTweaksParticleTypes;
-import net.minecraft.client.renderer.WeatherEffectRenderer;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.tags.FluidTags;
@@ -19,11 +19,11 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Environment(EnvType.CLIENT)
-@Mixin(WeatherEffectRenderer.class)
-public class WeatherEffectRendererMixin {
+@Mixin(ClientLevel.class)
+public class ClientLevelMixin {
 
 	@WrapOperation(
-		method = "tickRainParticles",
+		method = "tickWeatherEffects",
 		at = @At(
 			value = "INVOKE",
 			target = "Lnet/minecraft/core/BlockPos;offset(III)Lnet/minecraft/core/BlockPos;"
@@ -34,14 +34,14 @@ public class WeatherEffectRendererMixin {
 		@Local(name = "random") RandomSource random
 	) {
 		if (ParticleTweaksConfig.TRAILER_RIPPLES.get()) {
-			x = random.nextIntBetweenInclusive(-30, 30);
-			z = random.nextIntBetweenInclusive(-30, 30);
+			x = (int) (x * 2.5D);
+			z = (int) (z * 2.5D);
 		}
 		return original.call(instance, x, y, z);
 	}
 
 	@ModifyExpressionValue(
-		method = "tickRainParticles",
+		method = "tickWeatherEffects",
 		at = @At(
 			value = "FIELD",
 			target = "Lnet/minecraft/core/particles/ParticleTypes;RAIN:Lnet/minecraft/core/particles/SimpleParticleType;",

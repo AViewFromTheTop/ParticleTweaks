@@ -28,7 +28,7 @@ pluginManagement {
 
 rootProject.name = "Particle Tweaks"
 
-localRepository("cloth-config", "me.shedaniel.cloth:cloth-config-fabric", kotlin = true, enabled = true)
+localRepository("cloth-config", "me.shedaniel.cloth:cloth-config-fabric", kotlin = true, enabled = false)
 localRepository("WilderWild", "maven.modrinth:wilder-wild", kotlin = true, enabled = false)
 
 fun localRepository(repo: String, dependencySub: String, kotlin: Boolean, enabled: Boolean) {

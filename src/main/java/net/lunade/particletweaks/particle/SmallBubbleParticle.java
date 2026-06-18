@@ -1,25 +1,8 @@
-/*
- * Copyright 2023-2024 FrozenBlock
- * This file is part of Wilder Wild.
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, see <https://www.gnu.org/licenses/>.
- */
-
 package net.lunade.particletweaks.particle;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.lunade.particletweaks.particle.api.WaterColorGetter;
 import net.lunade.particletweaks.scale.api.ParticleScaleHandler;
 import net.lunade.particletweaks.scale.api.ParticleScaler;
 import net.lunade.particletweaks.scale.impl.ParticleScaleInterface;
@@ -30,7 +13,6 @@ import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.RisingParticle;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
@@ -60,7 +42,7 @@ public class SmallBubbleParticle extends RisingParticle implements ParticleScale
 		this.swaySpeed = (0.125F - (float)yd) * 80F;
 		this.direction = new Vec3(1D, 0D, 0D).yRot((random.nextFloat() * 360F) * Mth.DEG_TO_RAD);
 
-		int waterColor = level.getBiome(BlockPos.containing(x, y, z)).value().getWaterColor();
+		final int waterColor = WaterColorGetter.getWaterColor(level, x, y, z);
 		this.rCol = Math.clamp(((ARGB.red(waterColor) / 255F) * (float) level.getRandom().triangle(1.3D, 0.3D)), 0F, 1F);
 		this.bCol = Math.clamp(((ARGB.blue(waterColor) / 255F) * (float) level.getRandom().triangle(1.3D, 0.3D)), 0F, 1F);
 		this.gCol = Math.clamp(((ARGB.green(waterColor) / 255F) * (float) level.getRandom().triangle(1.3D, 0.3D)), 0F, 1F);
@@ -91,7 +73,7 @@ public class SmallBubbleParticle extends RisingParticle implements ParticleScale
 		return Layer.OPAQUE;
 	}
 
-	public record Factory(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
+	public record Provider(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
 		public Particle createParticle(
 			SimpleParticleType options,

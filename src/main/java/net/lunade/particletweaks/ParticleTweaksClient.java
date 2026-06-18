@@ -23,6 +23,7 @@ import net.lunade.particletweaks.registry.ParticleTweaksParticleTypes;
 import net.lunade.particletweaks.trailer.api.TrailerCaveDustSpawner;
 import net.lunade.particletweaks.trailer.api.TrailerFluidParticleSpawner;
 import net.lunade.particletweaks.trailer.api.TrailerTorchParticleSpawner;
+import net.minecraft.client.particle.BubblePopParticle;
 
 @Environment(EnvType.CLIENT)
 public class ParticleTweaksClient implements ClientModInitializer {
@@ -51,27 +52,28 @@ public class ParticleTweaksClient implements ClientModInitializer {
 		ParticleTweaksParticleTypes.init();
 
 		final ParticleProviderRegistry particleRegistry = ParticleProviderRegistry.getInstance();
-		particleRegistry.register(ParticleTweaksParticleTypes.FLOWING_LAVA, FluidFlowParticle.LavaFactory::new);
-		particleRegistry.register(ParticleTweaksParticleTypes.FLOWING_WATER, FluidFlowParticle.WaterFactory::new);
-		particleRegistry.register(ParticleTweaksParticleTypes.SMALL_BUBBLE, SmallBubbleParticle.Factory::new);
-		particleRegistry.register(ParticleTweaksParticleTypes.SMALL_CASCADE, FluidFlowParticle.SmallCascadeFactory::new);
-		particleRegistry.register(ParticleTweaksParticleTypes.CASCADE_A, FluidFlowParticle.CascadeFactory::new);
-		particleRegistry.register(ParticleTweaksParticleTypes.CASCADE_B, FluidFlowParticle.CascadeFactory::new);
-		particleRegistry.register(ParticleTweaksParticleTypes.SPLASH, FluidFlowParticle.SplashFactory::new);
-		particleRegistry.register(ParticleTweaksParticleTypes.RIPPLE, RippleParticle.Factory::new);
-		particleRegistry.register(ParticleTweaksParticleTypes.WAVE_OUTLINE, WaveParticle.OutlineFactory::new);
-		particleRegistry.register(ParticleTweaksParticleTypes.WAVE, WaveParticle.Factory::new);
-		particleRegistry.register(ParticleTweaksParticleTypes.WAVE_SEED, WaveSeedParticle.Factory::new);
+		particleRegistry.register(ParticleTweaksParticleTypes.FLOWING_LAVA, FluidFlowParticle.LavaProvider::new);
+		particleRegistry.register(ParticleTweaksParticleTypes.FLOWING_WATER, FluidFlowParticle.WaterProvider::new);
+		particleRegistry.register(ParticleTweaksParticleTypes.SMALL_BUBBLE, SmallBubbleParticle.Provider::new);
+		particleRegistry.register(ParticleTweaksParticleTypes.SMALL_CASCADE, FluidFlowParticle.SmallCascadeProvider::new);
+		particleRegistry.register(ParticleTweaksParticleTypes.CASCADE_A, FluidFlowParticle.CascadeProvider::new);
+		particleRegistry.register(ParticleTweaksParticleTypes.CASCADE_B, FluidFlowParticle.CascadeProvider::new);
+		particleRegistry.register(ParticleTweaksParticleTypes.SPLASH, FluidFlowParticle.SplashProvider::new);
+		particleRegistry.register(ParticleTweaksParticleTypes.RIPPLE, RippleParticle.Provider::new);
+		particleRegistry.register(ParticleTweaksParticleTypes.WAVE_OUTLINE, WaveParticle.OutlineProvider::new);
+		particleRegistry.register(ParticleTweaksParticleTypes.WAVE, WaveParticle.Provider::new);
+		particleRegistry.register(ParticleTweaksParticleTypes.WAVE_SEED, WaveSeedParticle.Provider::new);
 		particleRegistry.register(ParticleTweaksParticleTypes.CAVE_DUST, CaveDustParticle.Factory::new);
-		particleRegistry.register(ParticleTweaksParticleTypes.POOF, PoofParticle.Factory::new);
-		particleRegistry.register(ParticleTweaksParticleTypes.FLARE, FlareParticle.Factory::new);
-		particleRegistry.register(ParticleTweaksParticleTypes.SOUL_FLARE, FlareParticle.SoulFactory::new);
-		particleRegistry.register(ParticleTweaksParticleTypes.COPPER_FLARE, FlareParticle.CopperFactory::new);
-		particleRegistry.register(ParticleTweaksParticleTypes.CAMPFIRE_FLARE, CampfireFlareParticle.Factory::new);
-		particleRegistry.register(ParticleTweaksParticleTypes.SOUL_CAMPFIRE_FLARE, CampfireFlareParticle.SoulFactory::new);
-		particleRegistry.register(ParticleTweaksParticleTypes.COPPER_CAMPFIRE_FLARE, CampfireFlareParticle.CopperFactory::new);
-		particleRegistry.register(ParticleTweaksParticleTypes.COMFY_SMOKE_A, ComfySmokeParticle.Factory::new);
-		particleRegistry.register(ParticleTweaksParticleTypes.COMFY_SMOKE_B, ComfySmokeParticle.Factory::new);
+		particleRegistry.register(ParticleTweaksParticleTypes.POOF, PoofParticle.Provider::new);
+		particleRegistry.register(ParticleTweaksParticleTypes.FLARE, FlareParticle.Provider::new);
+		particleRegistry.register(ParticleTweaksParticleTypes.SOUL_FLARE, FlareParticle.SoulProvider::new);
+		particleRegistry.register(ParticleTweaksParticleTypes.COPPER_FLARE, FlareParticle.CopperProvider::new);
+		particleRegistry.register(ParticleTweaksParticleTypes.CAMPFIRE_FLARE, CampfireFlareParticle.Provider::new);
+		particleRegistry.register(ParticleTweaksParticleTypes.SOUL_CAMPFIRE_FLARE, CampfireFlareParticle.SoulProvider::new);
+		particleRegistry.register(ParticleTweaksParticleTypes.COPPER_CAMPFIRE_FLARE, CampfireFlareParticle.CopperProvider::new);
+		particleRegistry.register(ParticleTweaksParticleTypes.COMFY_SMOKE_A, ComfySmokeParticle.Provider::new);
+		particleRegistry.register(ParticleTweaksParticleTypes.COMFY_SMOKE_B, ComfySmokeParticle.Provider::new);
+		particleRegistry.register(ParticleTweaksParticleTypes.SULFUR_BUBBLE_POP, BubblePopParticle.Provider::new);
 
 		ParticleTweaksConfig.CONFIG.load(true);
 	}

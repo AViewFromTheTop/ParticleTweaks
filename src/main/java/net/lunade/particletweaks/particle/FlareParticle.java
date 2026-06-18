@@ -72,7 +72,7 @@ public class FlareParticle extends RisingParticle {
 		return Layer.OPAQUE;
 	}
 
-	public record Factory(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
+	public record Provider(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
 		public Particle createParticle(
 			SimpleParticleType options,
@@ -90,7 +90,7 @@ public class FlareParticle extends RisingParticle {
 		}
 	}
 
-	public record SoulFactory(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
+	public record SoulProvider(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
 		public Particle createParticle(
 			SimpleParticleType options,
@@ -110,7 +110,7 @@ public class FlareParticle extends RisingParticle {
 		}
 	}
 
-	public record CopperFactory(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
+	public record CopperProvider(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
 		public Particle createParticle(
 			SimpleParticleType options,

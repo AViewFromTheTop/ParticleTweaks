@@ -75,15 +75,15 @@ public class SingleQuadParticleMixin {
 	)
 	public float particleTweaks$modifyQuadSize(
 		float original,
-		@Local(argsOnly = true, ordinal = 3) float partialTicks,
+		@Local(argsOnly = true, ordinal = 3) float partialTickTime,
 		@Share("particleTweaks$entrance") LocalRef<ParticleScaler> entranceRef,
 		@Share("particleTweaks$exit") LocalRef<ParticleScaler> exitRef
 	) {
 		final ParticleScaler entrance = entranceRef.get();
-		if (entrance != null && entrance.isSize()) original *= entrance.getScale(partialTicks);
+		if (entrance != null && entrance.isSize()) original *= entrance.getScale(partialTickTime);
 
 		final ParticleScaler exit = exitRef.get();
-		if (exit != null && exit.isSize()) original *= exit.getScale(partialTicks);
+		if (exit != null && exit.isSize()) original *= exit.getScale(partialTickTime);
 
 		return original;
 	}
@@ -98,17 +98,16 @@ public class SingleQuadParticleMixin {
 	)
 	public float particleTweaks$modifyAlpha(
 		float original,
-		@Local(argsOnly = true, ordinal = 3) float partialTicks,
+		@Local(argsOnly = true, ordinal = 3) float partialTickTime,
 		@Share("particleTweaks$entrance") LocalRef<ParticleScaler> entranceRef,
 		@Share("particleTweaks$exit") LocalRef<ParticleScaler> exitRef
 	) {
 		final ParticleScaler entrance = entranceRef.get();
-		if (entrance != null && entrance.isFade()) original *= entrance.getScale(partialTicks);
+		if (entrance != null && entrance.isFade()) original *= entrance.getScale(partialTickTime);
 
 		final ParticleScaler exit = exitRef.get();
-		if (exit != null && exit.isFade()) original *= exit.getScale(partialTicks);
+		if (exit != null && exit.isFade()) original *= exit.getScale(partialTickTime);
 
 		return original;
 	}
-
 }

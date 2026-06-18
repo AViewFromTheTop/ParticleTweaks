@@ -3,7 +3,7 @@
   "minVersion": "0.8.5",
   "package": "net.lunade.particletweaks.movement.mixin",
   "plugin": "net.lunade.particletweaks.ParticleTweaksMixinPlugin",
-  "compatibilityLevel": "JAVA_21",
+  "compatibilityLevel": "JAVA_25",
   "client": [
     "collision.ParticleMixin",
     "fluid.base.ParticleMixin",

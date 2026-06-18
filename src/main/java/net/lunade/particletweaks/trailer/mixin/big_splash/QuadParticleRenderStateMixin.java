@@ -2,11 +2,8 @@ package net.lunade.particletweaks.trailer.mixin.big_splash;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.llamalad7.mixinextras.sugar.Local;
-import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import java.util.Arrays;
-import java.util.Map;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.lunade.particletweaks.particle.WaveParticle;
@@ -26,25 +23,24 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class QuadParticleRenderStateMixin {
 
 	@Shadow
-	protected abstract void renderVertex(VertexConsumer vertexConsumer, Quaternionf quaternionf, float f, float g, float h, float i, float j, float k, float l, float m, int n, int o);
+	protected abstract void renderVertex(VertexConsumer builder, Quaternionf rotation, float x, float y, float z, float nx, float ny, float scale, float u, float v, int color, int lightCoords);
 
 	@Unique
 	private static final Vector3f PARTICLE_TWEAKS$NORMALIZED_QUAT_VECTOR = new Vector3f(0.5F, 0.5F, 0.5F).normalize();
 
 	@WrapOperation(
-		method = "prepare",
+		method = "buildLayer",
 		at = @At(
 			value = "INVOKE",
 			target = "Lnet/minecraft/client/renderer/state/level/QuadParticleRenderState$Storage;forEachParticle(Lnet/minecraft/client/renderer/state/level/QuadParticleRenderState$ParticleConsumer;)V"
 		)
 	)
 	public void particleTweaks$renderWaveParticles(
-		QuadParticleRenderState.Storage instance, QuadParticleRenderState.ParticleConsumer particleConsumer, Operation<Void> original,
-		@Local(name = "entry") Map.Entry<SingleQuadParticle.Layer, QuadParticleRenderState.Storage> entry,
-		@Local(name = "bufferBuilder") BufferBuilder bufferBuilder
+		QuadParticleRenderState.Storage instance, QuadParticleRenderState.ParticleConsumer consumer, Operation<Void> original,
+		SingleQuadParticle.Layer layer, VertexConsumer bufferBuilder
 	) {
-		if (entry.getKey() != WaveParticle.WAVE) {
-			original.call(instance, particleConsumer);
+		if (layer != WaveParticle.WAVE) {
+			original.call(instance, consumer);
 			return;
 		}
 
@@ -106,5 +102,4 @@ public abstract class QuadParticleRenderStateMixin {
 		this.renderVertex(vertexConsumer, rotation, x, y, z, -vertexWidth, height, quadSize, U0, V0, color, light);
 		this.renderVertex(vertexConsumer, rotation, x, y, z, -vertexWidth, -height, quadSize, U0, V1, color, light);
 	}
-
 }

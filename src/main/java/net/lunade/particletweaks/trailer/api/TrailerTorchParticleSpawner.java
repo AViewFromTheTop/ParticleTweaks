@@ -48,7 +48,7 @@ public class TrailerTorchParticleSpawner {
 		}
 
 		final Minecraft minecraft = Minecraft.getInstance();
-		final BlockPos cameraPos = minecraft.gameRenderer.getMainCamera().blockPosition();
+		final BlockPos cameraPos = minecraft.gameRenderer.mainCamera().blockPosition();
 
 		final List<BlockPos> posesToRemove = new ArrayList<>();
 		TORCH_TICKS.forEach((blockPos, tickCount) -> {

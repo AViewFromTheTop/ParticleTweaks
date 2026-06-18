@@ -1,4 +1,5 @@
 classTweaker v1 official
+
 accessible field net/minecraft/client/particle/Particle level Lnet/minecraft/client/multiplayer/ClientLevel;
 accessible field net/minecraft/client/particle/Particle xo D
 accessible field net/minecraft/client/particle/Particle yo D

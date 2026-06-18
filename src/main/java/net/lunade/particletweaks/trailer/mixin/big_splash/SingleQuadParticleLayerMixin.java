@@ -14,8 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class SingleQuadParticleLayerMixin {
 
 	@Inject(method = "equals", at = @At("HEAD"), cancellable = true)
-	public void particleTweaks$equals(Object object, CallbackInfoReturnable<Boolean> info) {
-		if (SingleQuadParticle.Layer.class.cast(this) == WaveParticle.WAVE != (object == WaveParticle.WAVE)) info.setReturnValue(false);
+	public void particleTweaks$equals(Object o, CallbackInfoReturnable<Boolean> info) {
+		if (SingleQuadParticle.Layer.class.cast(this) == WaveParticle.WAVE != (o == WaveParticle.WAVE)) info.setReturnValue(false);
 	}
-
 }

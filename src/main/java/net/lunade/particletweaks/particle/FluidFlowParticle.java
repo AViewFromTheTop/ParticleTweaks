@@ -4,6 +4,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.lunade.particletweaks.movement.impl.MutableParticleFluidMovementInterface;
 import net.lunade.particletweaks.movement.impl.ParticleFluidMovementInterface;
+import net.lunade.particletweaks.particle.api.WaterColorGetter;
 import net.lunade.particletweaks.registry.ParticleTweaksParticleTypes;
 import net.lunade.particletweaks.scale.api.ParticleScaleHandler;
 import net.lunade.particletweaks.scale.api.ParticleScaler;
@@ -133,7 +134,7 @@ public class FluidFlowParticle extends SingleQuadParticle implements ParticleSca
 		return true;
 	}
 
-	public record LavaFactory(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
+	public record LavaProvider(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
 		public Particle createParticle(
 			SimpleParticleType options,
@@ -166,7 +167,7 @@ public class FluidFlowParticle extends SingleQuadParticle implements ParticleSca
 		}
 	}
 
-	public record WaterFactory(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
+	public record WaterProvider(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
 		public Particle createParticle(
 			SimpleParticleType options,
@@ -177,7 +178,7 @@ public class FluidFlowParticle extends SingleQuadParticle implements ParticleSca
 		) {
 			final FluidFlowParticle waterParticle = new FluidFlowParticle(level, x, y, z, xd, yd, zd, this.spriteSet);
 
-			int waterColor = level.getBiome(BlockPos.containing(x, y, z)).value().getWaterColor();
+			final int waterColor = WaterColorGetter.getWaterColor(level, x, y, z);
 			waterParticle.rCol = Math.clamp(((ARGB.red(waterColor) / 255F) * (float)random.triangle(1.3D, 0.3D)), 0F, 1F);
 			waterParticle.bCol = Math.clamp(((ARGB.blue(waterColor) / 255F) * (float)random.triangle(1.3D, 0.3D)), 0F, 1F);
 			waterParticle.gCol = Math.clamp(((ARGB.green(waterColor) / 255F) * (float)random.triangle(1.3D, 0.3D)), 0F, 1F);
@@ -200,7 +201,7 @@ public class FluidFlowParticle extends SingleQuadParticle implements ParticleSca
 		}
 	}
 
-	public record SplashFactory(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
+	public record SplashProvider(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
 		public Particle createParticle(
 			SimpleParticleType options,
@@ -229,7 +230,7 @@ public class FluidFlowParticle extends SingleQuadParticle implements ParticleSca
 		}
 	}
 
-	public record SmallCascadeFactory(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
+	public record SmallCascadeProvider(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
 		public Particle createParticle(
 			SimpleParticleType options,
@@ -240,7 +241,7 @@ public class FluidFlowParticle extends SingleQuadParticle implements ParticleSca
 		) {
 			final FluidFlowParticle smallCascadeParticle = new FluidFlowParticle(level, x, y, z, xd, yd, zd, this.spriteSet);
 
-			final int waterColor = level.getBiome(BlockPos.containing(x, y, z)).value().getWaterColor();
+			final int waterColor = WaterColorGetter.getWaterColor(level, x, y - (random.nextBoolean() ? 0.1F : 0F), z);
 			smallCascadeParticle.rCol = Math.clamp(((ARGB.red(waterColor) / 255F) * (float)random.triangle(1.3D, 0.3D)), 0F, 1F);
 			smallCascadeParticle.bCol = Math.clamp(((ARGB.blue(waterColor) / 255F) * (float)random.triangle(1.3D, 0.3D)), 0F, 1F);
 			smallCascadeParticle.gCol = Math.clamp(((ARGB.green(waterColor) / 255F) * (float)random.triangle(1.3D, 0.3D)), 0F, 1F);
@@ -261,7 +262,7 @@ public class FluidFlowParticle extends SingleQuadParticle implements ParticleSca
 		}
 	}
 
-	public record CascadeFactory(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
+	public record CascadeProvider(SpriteSet spriteSet) implements ParticleProvider<SimpleParticleType> {
 		@Override
 		public Particle createParticle(
 			SimpleParticleType options,
