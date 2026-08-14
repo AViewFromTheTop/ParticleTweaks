@@ -1,71 +1,108 @@
+import com.possible_triangle.gradle.settings.localRepository
+import com.possible_triangle.gradle.settings.ResolutionStrategy
+
 pluginManagement {
     repositories {
-        maven {
-            setName("Quilt")
-            setUrl("https://maven.quiltmc.org/repository/release/")
+        mavenLocal()
+        maven("https://maven.quiltmc.org/repository/release") {
+            name = "Quilt"
         }
-        maven {
-            setName("Quilt Snapshot")
-            setUrl("https://maven.quiltmc.org/repository/snapshot/")
+        maven("https://maven.fabricmc.net") {
+            name = "Fabric"
         }
-        maven {
-            setName("Fabric")
-            setUrl("https://maven.fabricmc.net/")
+        maven("https://maven.neoforged.net/releases") {
+            name = "NeoForged"
         }
-        mavenCentral()
-        maven {
-            setName("Forge")
-            setUrl("https://files.minecraftforge.net/maven/")
+        maven("https://jitpack.io") {
+            name = "Jitpack"
         }
-        maven {
-            setName("Jitpack")
-            setUrl("https://jitpack.io/")
+        maven("https://registry.somethingcatchy.net/repository/maven-releases/") { // Candlelight & Triangle
+            name = "SomethingCatchy (MehVahdJukaar)"
+        }
+        maven("https://maven.frozenblock.net/snapshot") {
+            name = "FrozenBlock Snapshot"
         }
         mavenCentral()
         gradlePluginPortal()
     }
 }
 
+val neoforgeSnapshotMaven = settings.providers.gradleProperty("neoforge_snapshot_maven").orNull
+if (!neoforgeSnapshotMaven.isNullOrBlank()) {
+    pluginManagement {
+        repositories {
+            maven(neoforgeSnapshotMaven) { name = "NeoForge Snapshots" }
+        }
+    }
+}
+
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version("+")
+    id("net.frozenblock.triangle.helper") version("+")
+}
+
+helper {
+    versionStrategy = ResolutionStrategy.SNAPSHOT
+}
+
 rootProject.name = "Particle Tweaks"
 
-localRepository("cloth-config", "me.shedaniel.cloth:cloth-config-fabric", kotlin = true, enabled = false)
-localRepository("WilderWild", "maven.modrinth:wilder-wild", kotlin = true, enabled = false)
+object Constants {
+    const val FABRIC: Boolean = true
+    const val NEOFORGE: Boolean = true
+}
 
-fun localRepository(repo: String, dependencySub: String, kotlin: Boolean, enabled: Boolean) {
+include("pt-common")
+project(":pt-common").projectDir = file("common")
+
+if (Constants.FABRIC) {
+    include("pt-fabric")
+    project(":pt-fabric").projectDir = file("fabric")
+}
+
+if (Constants.NEOFORGE) {
+    include("pt-neoforge")
+    project(":pt-neoforge").projectDir = file("neoforge")
+}
+
+localRepository("cloth-config", "me.shedaniel.cloth:cloth-config-fabric", enabled = false)
+localRepository("WilderWild", "maven.modrinth:wilder-wild", multi = false, enabled = false)
+
+localRepository(
+    "FrozenLib",
+    "net.frozenblock:frozenlib",
+    prefix = "flib",
+    multi = true,
+    candlelight = true,
+    enabled = true,
+)
+
+localPluginRepository(
+    "GradleHelper",
+    enabled = true,
+)
+
+fun localPluginRepository(repo: String, enabled: Boolean = true) {
     if (!enabled) return
-    println("Attempting to include local repo $repo")
+    println("Attempting to include local plugin build $repo")
 
     val github = System.getenv("GITHUB_ACTIONS") == "true"
-
-    val allowLocalRepoUse = true
-    val allowLocalRepoInConsoleMode = true
-
-    val androidInjectedInvokedFromIde by extra("android.injected.invoked.from.ide")
-    val xpcServiceName by extra("XPC_SERVICE_NAME")
-    val ideaInitialDirectory by extra("IDEA_INITIAL_DIRECTORY")
-
-    val isIDE = androidInjectedInvokedFromIde != "" || (System.getenv(xpcServiceName) ?: "").contains("intellij") || (System.getenv(xpcServiceName) ?: "").contains(".idea") || System.getenv(ideaInitialDirectory) != null
 
     var path = "../$repo"
     var file = File(path)
 
-    if (allowLocalRepoUse && (isIDE || allowLocalRepoInConsoleMode)) {
-        if (github) {
-            path = repo
-            file = File(path)
-            println("Running on GitHub")
+    if (github) {
+        path = repo
+        file = File(path)
+        println("Running on GitHub")
+    }
+
+    if (file.exists()) {
+        pluginManagement {
+            includeBuild(path)
         }
-        if (file.exists()) {
-            includeBuild(path) {
-                dependencySubstitution {
-                    if (dependencySub != "") {
-                        substitute(module(dependencySub)).using(project(":"))
-                    }
-                }
-            }
-            println("Included local repo $repo")
-        } else {
-            println("Local repo $repo not found")
-        }
+        println("Included local plugin build $repo")
+    } else {
+        println("Local plugin build $repo not found")
     }
 }
