@@ -73,7 +73,6 @@ localRepository(
     "net.frozenblock:frozenlib",
     prefix = "flib",
     multi = true,
-    candlelight = true,
     enabled = true,
 )
 
