@@ -1,13 +1,18 @@
 {
   "schemaVersion": 1,
   "id": "${mod_id}",
-  "version": "${version}",
-  "name": "Particle Tweaks",
+  "version": "${mod_version}",
+  "name": "${mod_name}",
   "description": "Tweaks and improves particles.",
   "authors": [
-    "Lunade"
+    "Lunade/AViewFromTheTop"
   ],
-  "license": "GPL-3.0",
+  "contact": {
+    "homepage": "${mod_url}",
+    "sources": "${source_url}",
+    "issues": "${issues_url}"
+  },
+  "license": "${mod_license}",
   "icon": "assets/particletweaks/icon.png",
   "environment": "client",
   "entrypoints": {
@@ -25,10 +30,14 @@
   ],
   "accessWidener": "particletweaks.classtweaker",
   "depends": {
-    "frozenlib": "*",
+    "frozenlib": "${frozenlib_version}",
     "fabric-api": "*",
     "minecraft": "${minecraft_version}",
     "java": ">=25"
+  },
+  "suggests": {
+    "cloth-config": "*",
+    "modmenu": "*"
   },
   "custom": {
     "modmenu": {

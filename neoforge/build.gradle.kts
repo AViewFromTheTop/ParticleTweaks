@@ -1,15 +1,22 @@
 plugins {
     id("net.frozenblock.triangle.neoforge")
     id("org.quiltmc.gradle.licenser")
+    checkstyle
 }
 
-val mod_id: String by project
+checkstyle {
+    configFile = rootProject.file("checkstyle.xml")
+    toolVersion = "10.20.2"
+}
+
 val mod_version: String by project
 val minecraft_version: String by project
 val maven_group: String by project
 val archives_base_name: String by project
 
 val frozenlib_version: String by project
+val wilderwild_version: String by project
+val trailiertales_version: String by project
 val cloth_config_version: String by project
 
 val neoforge_version: String by project
@@ -49,6 +56,23 @@ neoForge {
     accessTransformers {} // Required for transitive AW to apply!
 }
 
+dependencies {
+    // FrozenLib
+    api("net.frozenblock:frozenlib-neoforge:${frozenlib_version}")?.let {
+        accessTransformers(it)
+        interfaceInjectionData(it)
+    }
+
+    // Wilder Wild
+    implementation("net.frozenblock:wilderwild-neoforge:${wilderwild_version}")
+
+    // Trailier Tales
+    implementation("net.frozenblock:trailiertales-neoforge:${trailiertales_version}")
+
+    // Cloth Config
+    implementation("me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}")
+}
+
 val githubActions: Boolean = System.getenv("GITHUB_ACTIONS") == "true"
 val licenseChecks: Boolean = githubActions
 
@@ -60,52 +84,6 @@ tasks {
             rule(rootProject.file("codeformat/HEADER"))
 
             include("**/*.java")
-        }
-    }
-
-    processResources {
-        val properties = mapOf("mod_version" to getModVersion())
-        inputs.properties(properties)
-        filesMatching("META-INF/neoforge.mods.toml") {
-            expand(properties)
-        }
-    }
-
-    withType(JavaCompile::class) {
-        options.encoding = "UTF-8"
-        options.release = 25
-        options.isFork = true
-        options.isIncremental = true
-    }
-}
-
-dependencies {
-    //"neoForge"("net.neoforged:neoforge:$neoforge_version")
-
-    // FrozenLib
-    implementation("net.frozenblock:frozenlib-neoforge:${frozenlib_version}")
-
-    // Cloth Config (NeoForge edition)
-    implementation("me.shedaniel.cloth:cloth-config-neoforge:$cloth_config_version") {
-        exclude(group = "net.neoforged")
-    }
-}
-
-val loaderAttribute = Attribute.of("io.github.mcgradleconventions.loader", String::class.java)
-val loaderVariants = setOf("apiElements", "runtimeElements", "sourcesElements", "javadocElements")
-configurations.all {
-    if (name in loaderVariants) {
-        attributes {
-            attribute(loaderAttribute, "neoforge")
-        }
-    }
-}
-sourceSets.configureEach {
-    listOf(compileClasspathConfigurationName, runtimeClasspathConfigurationName).forEach { variant ->
-        configurations.named(variant) {
-            attributes {
-                attribute(loaderAttribute, "neoforge")
-            }
         }
     }
 }

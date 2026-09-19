@@ -1,6 +1,12 @@
 plugins {
     id("net.frozenblock.triangle.fabric")
     id("org.quiltmc.gradle.licenser")
+    checkstyle
+}
+
+checkstyle {
+    configFile = rootProject.file("checkstyle.xml")
+    toolVersion = "10.20.2"
 }
 
 val githubActions: Boolean = System.getenv("GITHUB_ACTIONS") == "true"
@@ -8,7 +14,6 @@ val licenseChecks: Boolean = githubActions
 
 val fabric_loader_version: String by project
 
-val mod_id: String by project
 val mod_version: String by project
 val minecraft_version: String by project
 val maven_group: String by project
@@ -49,69 +54,25 @@ fabric {
 }
 
 loom {
-    runtimeOnlyLog4j.set(true)
     enableTransitiveAccessWideners = true
-
     interfaceInjection {
-        enableDependencyInterfaceInjection.set(false)
-    }
-
-    runs {
-        named("client") {
-            ideConfigGenerated(true)
-        }
-        named("server") {
-            ideConfigGenerated(true)
-        }
-    }
-}
-
-val includeImplementation by configurations.creating
-
-configurations {
-    include {
-        extendsFrom(includeImplementation)
-    }
-    implementation {
-        extendsFrom(includeImplementation)
+        enableDependencyInterfaceInjection = true
     }
 }
 
 repositories {
-    maven("https://maven.minecraftforge.net")
-    maven("https://maven.parchmentmc.org")
     flatDir {
         dirs("libs")
-    }
-    mavenCentral()
-}
-
-val loaderAttribute = Attribute.of("io.github.mcgradleconventions.loader", String::class.java)
-val loaderVariants = setOf("apiElements", "runtimeElements", "sourcesElements", "javadocElements", "includeInternal", "modCompileClasspath")
-configurations.all {
-    if (name in loaderVariants) {
-        attributes {
-            attribute(loaderAttribute, "fabric")
-        }
-    }
-}
-sourceSets.configureEach {
-    listOf(compileClasspathConfigurationName, runtimeClasspathConfigurationName).forEach { variant ->
-        configurations.named(variant) {
-            attributes {
-                attribute(loaderAttribute, "fabric")
-            }
-        }
     }
 }
 
 dependencies {
-    // To change the versions, see the gradle.properties file
-    implementation("net.fabricmc:fabric-loader:$fabric_loader_version")
-    implementation("net.fabricmc.fabric-api:fabric-api:$fabric_api_version")
+    // Fabric
+    implementation("net.fabricmc:fabric-loader:${fabric_loader_version}")
+    implementation("net.fabricmc.fabric-api:fabric-api:${fabric_api_version}")
 
     // FrozenLib
-    implementation("net.frozenblock:frozenlib-fabric:${frozenlib_version}")
+    api("net.frozenblock:frozenlib-fabric:${frozenlib_version}")
 
     // Mod Menu
     implementation("com.terraformersmc:modmenu:${modmenu_version}")
@@ -123,10 +84,10 @@ dependencies {
     }
 
     // Wilder Wild
-    implementation("maven.modrinth:wilder-wild:$wilderwild_version")
+    implementation("net.frozenblock:wilderwild-fabric:$wilderwild_version")
 
     // Trailier Tales
-    compileOnly("maven.modrinth:trailier-tales:$trailiertales_version")
+    compileOnly("net.frozenblock:trailiertales-fabric:$trailiertales_version")
 
     // Sodium
     if (shouldRunSodium)
@@ -136,45 +97,12 @@ dependencies {
 }
 
 tasks {
-    processResources {
-        val properties = mapOf(
-            "mod_id" to mod_id,
-            "version" to version,
-            "minecraft_version" to "~26.2-",//minecraft_version,
-
-            "fabric_api_version" to ">=$fabric_api_version"
-        )
-
-        properties.forEach { (a, b) -> inputs.property(a, b) }
-
-        filesNotMatching(
-            listOf(
-                "**/*.java",
-                "**/sounds.json",
-                "**/lang/*.json",
-                "**/.cache/*",
-                "**/*.accesswidener",
-                "**/*.classtweaker",
-                "**/*.nbt",
-                "**/*.png",
-                "**/*.ogg",
-                "**/*.mixins.json"
-            )
-        ) {
-            expand(properties)
-        }
-    }
-
     license {
         if (licenseChecks) {
             rule(rootProject.file("codeformat/HEADER"))
 
             include("**/*.java")
         }
-    }
-
-    withType(Test::class) {
-        maxParallelForks = Runtime.getRuntime().availableProcessors().div(2)
     }
 }
 
