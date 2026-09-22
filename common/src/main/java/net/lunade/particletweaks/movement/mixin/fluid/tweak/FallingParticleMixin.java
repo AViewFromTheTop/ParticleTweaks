@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.lunade.particletweaks.movement.impl.ParticleFluidMovementInterface;
 import net.mehvahdjukaar.candlelight.api.ClientOnly;
 import net.minecraft.client.particle.FallingLeavesParticle;
+import net.minecraft.client.particle.FallingParticle;
 import net.minecraft.client.particle.Particle;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,17 +15,18 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @ClientOnly
-@Mixin(value = FallingLeavesParticle.class, priority = 1001)
-public class FallingLeavesParticleMixin implements ParticleFluidMovementInterface {
-
+@Mixin(value = FallingParticle.class, priority = 1001)
+public class FallingParticleMixin implements ParticleFluidMovementInterface {
 	@Shadow
 	@Final
 	@Mutable
 	private float windBig;
+
 	@Shadow
 	@Final
 	@Mutable
 	private double zaFlowScale;
+
 	@Shadow
 	@Final
 	@Mutable
@@ -40,11 +42,11 @@ public class FallingLeavesParticleMixin implements ParticleFluidMovementInterfac
 		at = {
 			@At(
 				value = "FIELD",
-				target = "Lnet/minecraft/client/particle/FallingLeavesParticle;flowAway:Z"
+				target = "Lnet/minecraft/client/particle/FallingParticle;flowAway:Z"
 			),
 			@At(
 				value = "FIELD",
-				target = "Lnet/minecraft/client/particle/FallingLeavesParticle;swirl:Z"
+				target = "Lnet/minecraft/client/particle/FallingParticle;swirl:Z"
 			)
 		}
 	)

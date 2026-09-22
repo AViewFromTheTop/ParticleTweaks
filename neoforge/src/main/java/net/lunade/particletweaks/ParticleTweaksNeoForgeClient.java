@@ -17,7 +17,7 @@
 
 package net.lunade.particletweaks;
 
-import net.frozenblock.lib.FrozenBools;
+import net.frozenblock.lib.FrozenLibEarlyConstants;
 import net.lunade.particletweaks.config.gui.ParticleTweaksConfigGui;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -31,7 +31,7 @@ public final class ParticleTweaksNeoForgeClient {
 	public ParticleTweaksNeoForgeClient(IEventBus modBus) {
 		ParticleTweaksClient.init();
 
-		if (FrozenBools.HAS_CLOTH_CONFIG) {
+		if (FrozenLibEarlyConstants.HAS_CLOTH_CONFIG) {
 			ModLoadingContext.get().registerExtensionPoint(
 				IConfigScreenFactory.class,
 				() -> (container, parent) -> ParticleTweaksConfigGui.buildScreen(parent)

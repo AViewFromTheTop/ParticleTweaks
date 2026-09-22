@@ -6,7 +6,7 @@ import net.lunade.particletweaks.scale.api.ParticleScaleHandler;
 import net.lunade.particletweaks.scale.api.ParticleScaler;
 import net.lunade.particletweaks.scale.impl.ParticleScaleInterface;
 import net.mehvahdjukaar.candlelight.api.ClientOnly;
-import net.minecraft.client.particle.FallingLeavesParticle;
+import net.minecraft.client.particle.FallingParticle;
 import net.minecraft.client.particle.Particle;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,8 +14,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @ClientOnly
-@Mixin(value = FallingLeavesParticle.class, priority = 1001)
-public class FallingLeavesParticleMixin implements ParticleScaleInterface {
+@Mixin(value = FallingParticle.class, priority = 1001)
+public class FallingParticleMixin implements ParticleScaleInterface {
 
 	@Override
 	public ParticleScaleHandler particleTweaks$createScaleHandler() {
@@ -39,11 +39,11 @@ public class FallingLeavesParticleMixin implements ParticleScaleInterface {
 		method = "tick",
 		at = @At(
 			value = "INVOKE",
-			target = "Lnet/minecraft/client/particle/FallingLeavesParticle;remove()V",
+			target = "Lnet/minecraft/client/particle/FallingParticle;remove()V",
 			ordinal = 1
 		)
 	)
-	public void particleTweaks$startShrinkInsteadOfRemove(FallingLeavesParticle instance, Operation<Void> original) {
+	public void particleTweaks$startShrinkInsteadOfRemove(FallingParticle instance, Operation<Void> original) {
 		if (this.particleTweaks$hasExit()) {
 			instance.age = instance.lifetime;
 			return;

@@ -11,7 +11,7 @@
     "big_splash.SingleQuadParticleLayerMixin",
     "bubble.BubbleParticleMixin",
     "campfire.CampfireBlockMixin",
-    "falling_leaves.FallingLeavesParticleMixin",
+    "falling_leaves.FallingParticleMixin",
     "flow.LavaFluidMixin",
     "flow.WaterFluidMixin",
     "poof.ClientLevelMixin",

@@ -14,7 +14,7 @@
     "fluid.tweak.DustParticleBaseMixin",
     "fluid.tweak.FallAndLandParticleMixin",
     "fluid.tweak.FallingDustParticleMixin",
-    "fluid.tweak.FallingLeavesParticleMixin",
+    "fluid.tweak.FallingParticleMixin",
     "fluid.tweak.PlayerCloudParticleMixin",
     "fluid.tweak.SquidInkParticleMixin",
     "fluid.tweak.TerrainParticleMixin",

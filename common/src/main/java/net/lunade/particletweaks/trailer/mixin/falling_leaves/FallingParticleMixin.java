@@ -9,6 +9,7 @@ import net.mehvahdjukaar.candlelight.api.ClientOnly;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.FallingLeavesParticle;
+import net.minecraft.client.particle.FallingParticle;
 import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.client.renderer.state.level.QuadParticleRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -26,8 +27,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @ClientOnly
-@Mixin(value = FallingLeavesParticle.class, priority = 1002)
-public abstract class FallingLeavesParticleMixin extends SingleQuadParticle implements ParticleFluidMovementInterface {
+@Mixin(value = FallingParticle.class, priority = 1002)
+public abstract class FallingParticleMixin extends SingleQuadParticle implements ParticleFluidMovementInterface {
 
 	@Shadow
 	@Final
@@ -62,8 +63,13 @@ public abstract class FallingLeavesParticleMixin extends SingleQuadParticle impl
 	@Unique
 	private boolean particleTweaks$wasEverInFluid = false;
 
-	protected FallingLeavesParticleMixin(ClientLevel level, double d, double e, double f, TextureAtlasSprite sprite) {
+	protected FallingParticleMixin(ClientLevel level, double d, double e, double f, TextureAtlasSprite sprite) {
 		super(level, d, e, f, sprite);
+	}
+
+	@Unique
+	private boolean particleTweaks$isTrailerLeaf() {
+		return FallingParticle.class.cast(this) instanceof FallingLeavesParticle && ParticleTweaksConfig.TRAILER_LEAVES.get();
 	}
 
 	@Inject(method = "<init>*", at = @At("TAIL"))
@@ -71,7 +77,8 @@ public abstract class FallingLeavesParticleMixin extends SingleQuadParticle impl
 		CallbackInfo info,
 		@Local(name = "particleRandom") float particleRandom
 	) {
-		if (!ParticleTweaksConfig.TRAILER_LEAVES.get()) return;
+		if (!this.particleTweaks$isTrailerLeaf()) return;
+
 		this.particleTweaks$yRotPerTick = ((this.random.nextFloat() * particleRandom)) * 0.05F * (this.random.nextBoolean() ? -1F : 1F);
 		this.particleTweaks$yRot = ((this.random.nextFloat())) * (this.random.nextBoolean() ? -0.5F : 0.5F) * Mth.TWO_PI;
 		this.particleTweaks$prevYRot = this.particleTweaks$yRot;
@@ -83,7 +90,8 @@ public abstract class FallingLeavesParticleMixin extends SingleQuadParticle impl
 
 	@Inject(method = "tick", at = @At("HEAD"))
 	public void particleTweaks$tick(CallbackInfo info) {
-		if (!ParticleTweaksConfig.TRAILER_LEAVES.get()) return;
+		if (!this.particleTweaks$isTrailerLeaf()) return;
+
 		this.oRoll = this.roll;
 
 		this.particleTweaks$prevYRot = this.particleTweaks$yRot;
@@ -106,7 +114,7 @@ public abstract class FallingLeavesParticleMixin extends SingleQuadParticle impl
 
 	@Override
 	public void extract(QuadParticleRenderState renderState, Camera camera, float partialTickTime) {
-		if (!ParticleTweaksConfig.TRAILER_LEAVES.get()) {
+		if (!this.particleTweaks$isTrailerLeaf()) {
 			super.extract(renderState, camera, partialTickTime);
 			return;
 		}
