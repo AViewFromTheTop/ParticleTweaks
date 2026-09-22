@@ -1,6 +1,6 @@
 # Contributing
 
-By contributing to the Template Mod, you agree with the [Developer Certificate of Origin (DCO)][DCO].
+By contributing to the Particle Tweaks, you agree with the [Developer Certificate of Origin (DCO)][DCO].
 
 ## Conventions
 
@@ -22,7 +22,7 @@ than browsing files.
 
 ### Spelling
 
-Use American English to keep consistency across Template Mod.
+Use American English to keep consistency across Particle Tweaks.
 
 If there is more than one acceptable spelling of the same word, first check if one word is already
 being used in Wilder Wild, FrozenLib, or in Mojang's Mappings, and if not, use the spelling that is most commonly used.

@@ -60,10 +60,10 @@ dependencies {
     }
 
     // Wilder Wild
-    implementation("net.frozenblock:wilderwild-neoforge:$wilderwild_version")
+    compileOnly("net.frozenblock:wilderwild-neoforge:$wilderwild_version")
 
     // Trailier Tales
-    implementation("net.frozenblock:trailiertales-neoforge:$trailiertales_version}")
+    compileOnly("net.frozenblock:trailiertales-neoforge:$trailiertales_version")
 
     // Cloth Config
     implementation("me.shedaniel.cloth:cloth-config-neoforge:$cloth_config_version")
@@ -107,7 +107,7 @@ upload {
     }
 
     forEach {
-        changelog = changelogText
+        changelog.set(changelogText)
     }
 
     curseforge {

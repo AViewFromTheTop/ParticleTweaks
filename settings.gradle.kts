@@ -66,19 +66,29 @@ if (Constants.NEOFORGE) {
 }
 
 localRepository("cloth-config", "me.shedaniel.cloth:cloth-config-fabric", enabled = false)
-localRepository("WilderWild", "maven.modrinth:wilder-wild", multi = false, enabled = false)
 
-localRepository(
-    "FrozenLib",
+localRepository("FrozenLib",
     "net.frozenblock:frozenlib",
     prefix = "flib",
     multi = true,
-    enabled = true,
+    enabled = false
+)
+localRepository("WilderWild",
+    "net.frozenblock:wilderwild",
+    prefix = "ww",
+    multi = true,
+    enabled = false
+)
+localRepository("TrailierTales",
+    "net.frozenblock:trailiertales",
+    prefix = "tt",
+    multi = true,
+    enabled = false
 )
 
 localPluginRepository(
     "GradleHelper",
-    enabled = true,
+    enabled = true
 )
 
 fun localPluginRepository(repo: String, enabled: Boolean = true) {

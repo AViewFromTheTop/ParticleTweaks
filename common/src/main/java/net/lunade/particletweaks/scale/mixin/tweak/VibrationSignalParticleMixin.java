@@ -1,0 +1,34 @@
+package net.lunade.particletweaks.scale.mixin.tweak;
+
+import net.lunade.particletweaks.scale.api.ParticleScaleHandler;
+import net.lunade.particletweaks.scale.api.ParticleScaler;
+import net.lunade.particletweaks.scale.impl.ParticleScaleInterface;
+import net.mehvahdjukaar.candlelight.api.ClientOnly;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.VibrationSignalParticle;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+@ClientOnly
+@Mixin(value = VibrationSignalParticle.class, priority = 1001)
+public class VibrationSignalParticleMixin implements ParticleScaleInterface {
+
+	@Override
+	public ParticleScaleHandler particleTweaks$createScaleHandler() {
+		final ParticleScaler entrance = new ParticleScaler(ParticleScaler.ScaleMethod.SIZE, 0.75F);
+		entrance.setToZero();
+		return new ParticleScaleHandler(0F, false, entrance, null);
+	}
+
+	@Inject(method = "tick", at = @At("HEAD"))
+	public void particleTweaks$injectRunScaleTick(CallbackInfo info) {
+		this.particleTweaks$runScaleTick();
+	}
+
+	@Inject(method = "tick", at = @At("TAIL"), cancellable = true)
+	public void particleTweaks$injectRunScaleRemovalTick(CallbackInfo info) {
+		this.particleTweaks$runScaleRemovalTick(Particle.class.cast(this), info);
+	}
+}

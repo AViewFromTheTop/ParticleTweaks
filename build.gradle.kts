@@ -2,13 +2,14 @@ import org.kohsuke.github.GHReleaseBuilder
 import org.kohsuke.github.GitHub
 
 plugins {
-    id("net.frozenblock.triangle.core")
+    id("net.frozenblock.triangle.core") version("+")
     id("net.frozenblock.triangle.common") version("+") apply(false)
     id("net.frozenblock.triangle.fabric") version("+") apply(false)
     id("net.frozenblock.triangle.neoforge") version("+") apply(false)
     id("net.frozenblock.candlelight") version("+") apply(false)
 
     id("org.quiltmc.gradle.licenser") version("+") apply(false)
+    id("com.gradleup.shadow") version("+") apply(false)
     checkstyle
 }
 
@@ -34,7 +35,6 @@ val license: String by project
 val mod_url: String by project
 val source_url: String by project
 val issues_url: String by project
-val protocol_version: String by project
 val min_fabric_loader_version: String by project
 val minecraft_version: String by project
 
@@ -56,7 +56,7 @@ mod {
 }
 
 val changelogText = run {
-    val split = file("CHANGELOG.txt").readText().split("-----------------")
+    val split = file("CHANGELOG.md").readText().split("-----------------")
     check(split.size == 2) { "Malformed changelog" }
     split[1].trim()
 }
@@ -160,12 +160,21 @@ subprojects {
         maven("https://maven.minecraftforge.net/") {
             name = "Forge"
         }
+        maven("https://thedarkcolour.github.io/KotlinForForge/") {
+            name = "KotlinForForge"
+            content {
+                includeGroup("thedarkcolour")
+            }
+        }
         maven("https://registry.somethingcatchy.net/repository/maven-releases/") { // Candlelight & Triangle
             name = "SomethingCatchy (MehVahdJukaar)"
         }
 
         maven("https://maven.quiltmc.org/repository/release") {
             name = "Quilt"
+        }
+        maven("https://maven.blamejared.com") {
+            name = "BlameJared"
         }
         maven("https://maven.jamieswhiteshirt.com/libs-release") {
             name = "JamiesWhiteShirt"
@@ -175,6 +184,12 @@ subprojects {
         }
         maven("https://maven.shedaniel.me/") {
             name = "Shedaniel"
+        }
+        maven("https://maven.frozenblock.net/caffeinemc") {
+            name = "CaffeineMC"
+            content {
+                includeGroup("net.caffeinemc")
+            }
         }
         maven("https://maven.terraformersmc.com") {
             name = "TerraformersMC"

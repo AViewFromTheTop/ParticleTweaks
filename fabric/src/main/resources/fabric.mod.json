@@ -17,7 +17,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "net.lunade.particletweaks.ParticleTweaksClient"
+      "net.lunade.particletweaks.ParticleTweaksFabricClient"
     ],
     "modmenu": [
       "net.lunade.particletweaks.config.gui.ModMenuIntegration"

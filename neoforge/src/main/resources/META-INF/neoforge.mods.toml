@@ -1,0 +1,52 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="${mod_license}"
+issueTrackerURL="${issues_url}"
+
+[[mods]]
+    modId="${mod_id}"
+    version="${mod_version}"
+    displayName="${mod_name}"
+    displayURL="${mod_url}"
+    iconFile="assets/particletweaks/icon.png"
+    authors="Lunade/AViewFromTheTop"
+    description='''
+Tweaks and improves particles.
+    '''
+
+[[mixins]]
+config="particletweaks.movement.mixins.json"
+
+[[mixins]]
+config="particletweaks.scale.mixins.json"
+
+[[mixins]]
+config="particletweaks.trailer.mixins.json"
+
+[[ dependencies.particletweaks ]]
+    modId="neoforge"
+    type="required"
+    versionRange="[${minecraft_version},)"
+    ordering="NONE"
+    side="CLIENT"
+
+[[ dependencies.particletweaks ]]
+    modId="minecraft"
+    type="required"
+    versionRange="[${minecraft_version},)"
+    ordering="NONE"
+    side="CLIENT"
+
+[[ dependencies.particletweaks ]]
+    modId="frozenlib"
+    type="required"
+    versionRange="[${frozenlib_version},)"
+    ordering="NONE"
+    side="CLIENT"
+
+[[ dependencies.particletweaks ]]
+    modId="cloth-config"
+    type="optional"
+    versionRange="*"
+    ordering="NONE"
+    side="CLIENT"

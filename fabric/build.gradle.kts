@@ -17,7 +17,6 @@ val maven_group: String by project
 val archives_base_name: String by project
 val fabric_loader_version: String by project
 
-
 val fabric_api_version: String by project
 val frozenlib_version: String by project
 
@@ -80,7 +79,7 @@ dependencies {
     implementation("net.frozenblock:wilderwild-fabric:$wilderwild_version")
 
     // Trailier Tales
-    compileOnly("net.frozenblock:trailiertales-fabric:$trailiertales_version")
+    implementation("net.frozenblock:trailiertales-fabric:$trailiertales_version")
 }
 
 val githubActions: Boolean = System.getenv("GITHUB_ACTIONS") == "true"
@@ -122,7 +121,7 @@ fun getModVersion(): String {
 }
 
 val changelogText = run {
-    val split = rootProject.file("CHANGELOG.txt").readText().split("-----------------")
+    val split = rootProject.file("CHANGELOG.md").readText().split("-----------------")
     check(split.size == 2) { "Malformed changelog" }
     split[1].trim()
 }

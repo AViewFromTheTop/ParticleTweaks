@@ -11,6 +11,8 @@ checkstyle {
 
 val mod_id: String by project
 val frozenlib_version: String by project
+val wilderwild_version: String by project
+val trailiertales_version: String by project
 val cloth_config_version: String by project
 
 common {
@@ -23,10 +25,16 @@ neoForge {
 
 dependencies {
     // FrozenLib
-    compileOnly("net.frozenblock:frozenlib-common:$frozenlib_version")?.let {
+    compileOnlyApi("net.frozenblock:frozenlib-common:$frozenlib_version")?.let {
         accessTransformers(it)
         interfaceInjectionData(it)
     }
+
+    // Wilder Wild
+    compileOnly("net.frozenblock:wilderwild-common:$wilderwild_version")
+
+    // Trailier Tales
+    compileOnly("net.frozenblock:trailiertales-common:$trailiertales_version")
 
     // Cloth Config
     compileOnly("me.shedaniel.cloth:cloth-config:$cloth_config_version")
